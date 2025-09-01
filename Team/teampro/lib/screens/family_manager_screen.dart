@@ -1,8 +1,15 @@
 import 'package:flutter/material.dart';
 import 'family_details_screen.dart';
+import 'no_family_screen.dart';
 
-class FamilyManagerScreen extends StatelessWidget {
+class FamilyManagerScreen extends StatefulWidget {
   const FamilyManagerScreen({super.key});
+
+  @override
+  State<FamilyManagerScreen> createState() => _FamilyManagerScreenState();
+}
+
+class _FamilyManagerScreenState extends State<FamilyManagerScreen> {
 
   @override
   Widget build(BuildContext context) {
@@ -57,29 +64,42 @@ class FamilyManagerScreen extends StatelessWidget {
                       ),
                     ),
                   ),
-                  Row(
-                    children: [
-                      Container(
-                        width: 40,
-                        height: 40,
-                        decoration: BoxDecoration(
-                          color: Colors.red,
-                          shape: BoxShape.circle,
-                        ),
-                        child: Icon(
-                          Icons.close,
-                          color: Colors.white,
-                          size: 20,
-                        ),
-                      ),
-                      const SizedBox(width: 12),
-                      Icon(
-                        Icons.menu,
-                        color: Colors.black87,
-                        size: 24,
-                      ),
-                    ],
+                            Row(
+            children: [
+              GestureDetector(
+                onTap: () {
+                  Navigator.push(
+                    context,
+                    MaterialPageRoute(
+                      builder: (context) => NoFamilyScreen(),
+                    ),
+                  );
+                },
+                child: Container(
+                  width: 40,
+                  height: 40,
+                  decoration: BoxDecoration(
+                    color: Colors.red,
+                    shape: BoxShape.circle,
                   ),
+                  child: Icon(
+                    Icons.close,
+                    color: Colors.white,
+                    size: 20,
+                  ),
+                ),
+              ),
+              const SizedBox(width: 12),
+              GestureDetector(
+                onTap: _showPartSelectionModal,
+                child: Icon(
+                  Icons.tune,
+                  color: Colors.black87,
+                  size: 24,
+                ),
+              ),
+            ],
+          ),
                 ],
               ),
             ),
@@ -217,8 +237,8 @@ class FamilyManagerScreen extends StatelessWidget {
         );
       },
       child: Container(
-        width: 120,
-        height: 120,
+        width: 80,
+        height: 80,
         decoration: BoxDecoration(
           color: Colors.lightBlue[100],
           shape: BoxShape.circle,
@@ -231,7 +251,7 @@ class FamilyManagerScreen extends StatelessWidget {
           child: Text(
             number.toString(),
             style: TextStyle(
-              fontSize: 48,
+              fontSize: 32,
               fontWeight: FontWeight.bold,
               color: Colors.lightBlue[800],
             ),
@@ -259,6 +279,113 @@ class FamilyManagerScreen extends StatelessWidget {
           ),
         ),
       ],
+    );
+  }
+
+  void _showPartSelectionModal() {
+    showModalBottomSheet(
+      context: context,
+      backgroundColor: Colors.transparent,
+      isScrollControlled: true,
+      builder: (context) => Container(
+        height: MediaQuery.of(context).size.height * 0.7,
+        decoration: BoxDecoration(
+          color: Colors.white,
+          borderRadius: BorderRadius.only(
+            topLeft: Radius.circular(20),
+            topRight: Radius.circular(20),
+          ),
+        ),
+        child: Column(
+          children: [
+            // Close button
+            Container(
+              alignment: Alignment.topRight,
+              padding: EdgeInsets.all(16),
+              child: GestureDetector(
+                onTap: () => Navigator.pop(context),
+                child: Icon(
+                  Icons.close,
+                  size: 24,
+                  color: Colors.black54,
+                ),
+              ),
+            ),
+            
+            // Search bar
+            Container(
+              margin: EdgeInsets.symmetric(horizontal: 20, vertical: 10),
+              decoration: BoxDecoration(
+                color: Colors.grey[100],
+                borderRadius: BorderRadius.circular(25),
+                border: Border.all(color: Colors.grey[300]!),
+              ),
+              child: TextField(
+                decoration: InputDecoration(
+                  hintText: 'Search',
+                  border: InputBorder.none,
+                  contentPadding: EdgeInsets.symmetric(horizontal: 20, vertical: 12),
+                  hintStyle: TextStyle(color: Colors.grey[500]),
+                ),
+              ),
+            ),
+            
+            const SizedBox(height: 20),
+            
+            // Part list
+            Expanded(
+              child: ListView.builder(
+                padding: EdgeInsets.symmetric(horizontal: 20),
+                itemCount: 5, // Part 1 to Part 5
+                itemBuilder: (context, index) {
+                  int partNumber = index + 1;
+                  return _buildPartItem(partNumber);
+                },
+              ),
+            ),
+          ],
+        ),
+      ),
+    );
+  }
+
+  Widget _buildPartItem(int partNumber) {
+    return GestureDetector(
+      onTap: () {
+        Navigator.pop(context); // Dismiss modal when clicked
+        // Optionally navigate to that part or update current part
+        ScaffoldMessenger.of(context).showSnackBar(
+          SnackBar(
+            content: Text('Selected Part $partNumber'),
+            duration: Duration(seconds: 1),
+          ),
+        );
+      },
+      child: Container(
+        margin: EdgeInsets.only(bottom: 1),
+        padding: EdgeInsets.symmetric(vertical: 20, horizontal: 16),
+        decoration: BoxDecoration(
+          color: Colors.white,
+          border: Border(
+            bottom: BorderSide(
+              color: Colors.grey[300]!,
+              width: 1,
+            ),
+          ),
+        ),
+        child: Row(
+          children: [
+            Text(
+              'Part $partNumber',
+              style: TextStyle(
+                fontSize: 16,
+                color: Colors.black87,
+                fontWeight: FontWeight.w500,
+              ),
+            ),
+          ],
+        ),
+      ),
     );
   }
 }

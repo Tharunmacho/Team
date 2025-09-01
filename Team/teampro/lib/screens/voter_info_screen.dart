@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'share_screen.dart';
 
 class VoterInfoScreen extends StatefulWidget {
   final Map<String, dynamic> voterData;
@@ -48,6 +49,7 @@ class _VoterInfoScreenState extends State<VoterInfoScreen> with TickerProviderSt
   String selectedVoterHistory = 'Voter History';
   
   bool hasChanges = false;
+  bool isShareExpanded = false; // For expanded share view
 
   @override
   void initState() {
@@ -333,17 +335,16 @@ class _VoterInfoScreenState extends State<VoterInfoScreen> with TickerProviderSt
                   child: Column(
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
-                      _buildAgeFilter(setModalState),
-                      const SizedBox(height: 30),
+                      // Gender filter (simplified)
                       _buildGenderFilter(setModalState),
                       const SizedBox(height: 30),
+                      
+                      // Voter History filter (simplified)
                       _buildVoterHistoryFilter(setModalState),
                       const SizedBox(height: 30),
+                      
+                      // Voter Category filter (simplified)
                       _buildVoterCategoryFilter(setModalState),
-                      const SizedBox(height: 30),
-                      _buildPoliticalPartyFilter(setModalState),
-                      const SizedBox(height: 30),
-                      _buildReligionFilter(setModalState),
                       const SizedBox(height: 30),
                     ],
                   ),
@@ -359,13 +360,9 @@ class _VoterInfoScreenState extends State<VoterInfoScreen> with TickerProviderSt
                           child: ElevatedButton(
                             onPressed: () {
                               setModalState(() {
-                                minAge = 18;
-                                maxAge = 120;
                                 selectedGenders.clear();
                                 selectedVoterHistoryFilter.clear();
                                 selectedVoterCategory.clear();
-                                selectedPoliticalParty.clear();
-                                selectedReligionFilter.clear();
                               });
                             },
                             style: ElevatedButton.styleFrom(
@@ -675,18 +672,16 @@ class _VoterInfoScreenState extends State<VoterInfoScreen> with TickerProviderSt
       child: Container(
         padding: EdgeInsets.all(12),
         decoration: BoxDecoration(
-          color: isSelected ? color.withOpacity(0.2) : Colors.grey[100],
+          color: isSelected ? color.withOpacity(0.2) : color,
           borderRadius: BorderRadius.circular(8),
-          border: Border.all(
-            color: isSelected ? color : Colors.grey[300]!,
-          ),
+          border: isSelected ? Border.all(color: color, width: 2) : null,
         ),
         child: Column(
           children: [
             Text(
               year,
               style: TextStyle(
-                color: Colors.white,
+                color: isSelected ? color : Colors.white,
                 fontWeight: FontWeight.bold,
                 fontSize: 12,
               ),
@@ -695,7 +690,7 @@ class _VoterInfoScreenState extends State<VoterInfoScreen> with TickerProviderSt
               Text(
                 type,
                 style: TextStyle(
-                  color: Colors.white,
+                  color: isSelected ? color : Colors.white,
                   fontSize: 10,
                 ),
               ),
@@ -1121,7 +1116,14 @@ class _VoterInfoScreenState extends State<VoterInfoScreen> with TickerProviderSt
                 children: [
                   _buildTab('Basic', 0, Icons.person_outline, onTap: _showBasicInfoModal),
                   _buildTab('Family', 1, Icons.family_restroom),
-                  _buildTab('Share', 2, Icons.share_outlined, onTap: _showShareOptionsModal),
+                  _buildTab('Share', 2, Icons.share_outlined, onTap: () {
+                    Navigator.push(
+                      context,
+                      MaterialPageRoute(
+                        builder: (context) => ShareScreen(voterData: widget.voterData),
+                      ),
+                    );
+                  }),
                   _buildTab('Friends', 3, Icons.people_outline, onTap: _showFriendsModal),
                 ],
               ),
@@ -1474,6 +1476,10 @@ class _VoterInfoScreenState extends State<VoterInfoScreen> with TickerProviderSt
   }
 
   Widget _buildShareTab() {
+    if (isShareExpanded) {
+      return _buildExpandedShareView();
+    }
+    
     return Container(
       padding: EdgeInsets.symmetric(horizontal: 16),
       child: SingleChildScrollView(
@@ -2613,6 +2619,356 @@ Door No: ${widget.voterData['doorNo']}
             fontWeight: FontWeight.w500,
           ),
         ),
+      ),
+    );
+  }
+
+  Widget _buildExpandedShareView() {
+    return Container(
+      padding: EdgeInsets.symmetric(horizontal: 16),
+      child: SingleChildScrollView(
+        child: Column(
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: [
+            const SizedBox(height: 20),
+            
+            // Enhanced voter card matching image 2
+            Container(
+              padding: EdgeInsets.all(16),
+              decoration: BoxDecoration(
+                color: Colors.white,
+                borderRadius: BorderRadius.circular(12),
+                boxShadow: [
+                  BoxShadow(
+                    color: Colors.black.withOpacity(0.1),
+                    blurRadius: 8,
+                    offset: Offset(0, 2),
+                  ),
+                ],
+              ),
+              child: Column(
+                children: [
+                  // Voter details
+                  Row(
+                    children: [
+                      // Photo section
+                      Container(
+                        width: 80,
+                        height: 100,
+                        decoration: BoxDecoration(
+                          borderRadius: BorderRadius.circular(8),
+                          border: Border.all(color: Colors.grey[300]!),
+                        ),
+                        child: Column(
+                          children: [
+                            Expanded(
+                              child: Container(
+                                decoration: BoxDecoration(
+                                  color: Color(0xFF64B5F6),
+                                  borderRadius: BorderRadius.only(
+                                    topLeft: Radius.circular(8),
+                                    topRight: Radius.circular(8),
+                                  ),
+                                ),
+                                child: Stack(
+                                  children: [
+                                    Center(
+                                      child: Icon(
+                                        Icons.person,
+                                        color: Colors.white,
+                                        size: 32,
+                                      ),
+                                    ),
+                                    Positioned(
+                                      top: 4,
+                                      right: 4,
+                                      child: Container(
+                                        padding: EdgeInsets.all(2),
+                                        decoration: BoxDecoration(
+                                          color: Colors.black.withOpacity(0.6),
+                                          borderRadius: BorderRadius.circular(4),
+                                        ),
+                                        child: Icon(
+                                          Icons.camera_alt,
+                                          color: Colors.white,
+                                          size: 12,
+                                        ),
+                                      ),
+                                    ),
+                                  ],
+                                ),
+                              ),
+                            ),
+                            Container(
+                              width: double.infinity,
+                              padding: EdgeInsets.symmetric(vertical: 4),
+                              decoration: BoxDecoration(
+                                color: Color(0xFF1976D2),
+                                borderRadius: BorderRadius.only(
+                                  bottomLeft: Radius.circular(8),
+                                  bottomRight: Radius.circular(8),
+                                ),
+                              ),
+                              child: Text(
+                                widget.voterData['voterId'] ?? 'RIV1048099',
+                                style: TextStyle(
+                                  color: Colors.white,
+                                  fontSize: 10,
+                                  fontWeight: FontWeight.bold,
+                                ),
+                                textAlign: TextAlign.center,
+                              ),
+                            ),
+                          ],
+                        ),
+                      ),
+                      
+                      const SizedBox(width: 16),
+                      
+                      // Voter info
+                      Expanded(
+                        child: Column(
+                          crossAxisAlignment: CrossAxisAlignment.start,
+                          children: [
+                            Text(
+                              widget.voterData['name'] ?? 'anitha',
+                              style: TextStyle(
+                                fontSize: 18,
+                                fontWeight: FontWeight.bold,
+                                color: Colors.black87,
+                              ),
+                            ),
+                            Text(
+                              widget.voterData['tamilName'] ?? 'அனிதா',
+                              style: TextStyle(
+                                fontSize: 14,
+                                color: Colors.black54,
+                              ),
+                            ),
+                            const SizedBox(height: 8),
+                            Text(
+                              widget.voterData['fatherName'] ?? 'nataraj',
+                              style: TextStyle(
+                                fontSize: 16,
+                                color: Colors.black87,
+                              ),
+                            ),
+                            Text(
+                              widget.voterData['fatherTamilName'] ?? 'நடராஜ்',
+                              style: TextStyle(
+                                fontSize: 14,
+                                color: Colors.black54,
+                              ),
+                            ),
+                            const SizedBox(height: 8),
+                            Text(
+                              widget.voterData['doorNo'] ?? 'Door No 1-24',
+                              style: TextStyle(
+                                fontSize: 14,
+                                color: Colors.black87,
+                                fontWeight: FontWeight.w500,
+                              ),
+                            ),
+                          ],
+                        ),
+                      ),
+                    ],
+                  ),
+                  
+                  const SizedBox(height: 16),
+                  
+                  // Age and relation
+                  Row(
+                    children: [
+                      Container(
+                        padding: EdgeInsets.symmetric(horizontal: 8, vertical: 4),
+                        decoration: BoxDecoration(
+                          color: Colors.pink[100],
+                          borderRadius: BorderRadius.circular(12),
+                        ),
+                        child: Row(
+                          mainAxisSize: MainAxisSize.min,
+                          children: [
+                            Icon(
+                              Icons.person,
+                              color: Colors.pink,
+                              size: 16,
+                            ),
+                            const SizedBox(width: 4),
+                            Text(
+                              '${widget.voterData['age'] ?? 33}',
+                              style: TextStyle(
+                                color: Colors.pink,
+                                fontWeight: FontWeight.bold,
+                              ),
+                            ),
+                          ],
+                        ),
+                      ),
+                      const SizedBox(width: 12),
+                      Text(
+                        widget.voterData['relation'] ?? 'Husband',
+                        style: TextStyle(
+                          fontSize: 16,
+                          color: Colors.black87,
+                        ),
+                      ),
+                    ],
+                  ),
+                ],
+              ),
+            ),
+            
+            const SizedBox(height: 30),
+            
+            // Share action buttons (matching image 2)
+            Container(
+              padding: EdgeInsets.all(16),
+              decoration: BoxDecoration(
+                color: Colors.white,
+                borderRadius: BorderRadius.circular(12),
+                boxShadow: [
+                  BoxShadow(
+                    color: Colors.black.withOpacity(0.1),
+                    blurRadius: 8,
+                    offset: Offset(0, 2),
+                  ),
+                ],
+              ),
+              child: Row(
+                children: [
+                  Expanded(child: _buildActionButton('WhatsApp', Icons.message, Colors.green)),
+                  const SizedBox(width: 12),
+                  Expanded(child: _buildActionButton('SMS', Icons.chat_bubble, Colors.blue)),
+                  const SizedBox(width: 12),
+                  Expanded(child: _buildActionButton('Share', Icons.share, Color(0xFF1976D2))),
+                  const SizedBox(width: 12),
+                  Expanded(child: _buildActionButton('Take Print', Icons.print, Colors.grey[600]!)),
+                ],
+              ),
+            ),
+            
+            const SizedBox(height: 30),
+            
+            // Part & Section Info
+            Text(
+              'Part & Section Info',
+              style: TextStyle(
+                fontSize: 18,
+                fontWeight: FontWeight.bold,
+                color: Colors.black87,
+              ),
+            ),
+            
+            const SizedBox(height: 16),
+            
+            // Part info cards
+            _buildPartInfoCard(
+              '2 - Panchayat Union Ele. School,Thaliyur',
+              '2 - ஊராட்சி ஒன்றிய ஆரம்ப பள்ளி,தாளியூர்',
+            ),
+            
+            const SizedBox(height: 16),
+            
+            _buildPartInfoCard(
+              '1 - உலியம்பாளையம் மெயின்ரோடு வா.எண்.15',
+              '1 - ULIYAMPALAYAM MAIN ROAD WARD NO.15',
+            ),
+            
+            const SizedBox(height: 30),
+          ],
+        ),
+      ),
+    );
+  }
+
+
+
+  Widget _buildActionButton(String title, IconData icon, Color color) {
+    return GestureDetector(
+      onTap: () {
+        if (title == 'WhatsApp') {
+          _shareViaWhatsAppActual();
+        } else if (title == 'SMS') {
+          _shareViaSMS();
+        } else if (title == 'Share') {
+          _shareGeneral();
+        } else if (title == 'Take Print') {
+          _takePrint();
+        }
+      },
+      child: Container(
+        padding: EdgeInsets.symmetric(vertical: 12),
+        decoration: BoxDecoration(
+          color: Colors.white,
+          borderRadius: BorderRadius.circular(8),
+          border: Border.all(color: Colors.grey[300]!),
+        ),
+        child: Column(
+          children: [
+            Container(
+              padding: EdgeInsets.all(8),
+              decoration: BoxDecoration(
+                color: color.withOpacity(0.1),
+                shape: BoxShape.circle,
+              ),
+              child: Icon(
+                icon,
+                color: color,
+                size: 24,
+              ),
+            ),
+            const SizedBox(height: 8),
+            Text(
+              title,
+              style: TextStyle(
+                fontSize: 10,
+                color: Colors.black87,
+                fontWeight: FontWeight.w500,
+              ),
+              textAlign: TextAlign.center,
+            ),
+          ],
+        ),
+      ),
+    );
+  }
+
+  Widget _buildPartInfoCard(String title, String subtitle) {
+    return Container(
+      padding: EdgeInsets.all(16),
+      decoration: BoxDecoration(
+        color: Colors.white,
+        borderRadius: BorderRadius.circular(12),
+        boxShadow: [
+          BoxShadow(
+            color: Colors.black.withOpacity(0.05),
+            blurRadius: 8,
+            offset: Offset(0, 2),
+          ),
+        ],
+      ),
+      child: Column(
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: [
+          Text(
+            title,
+            style: TextStyle(
+              fontSize: 16,
+              fontWeight: FontWeight.bold,
+              color: Color(0xFF1976D2),
+            ),
+          ),
+          const SizedBox(height: 8),
+          Text(
+            subtitle,
+            style: TextStyle(
+              fontSize: 14,
+              color: Colors.black87,
+              height: 1.4,
+            ),
+          ),
+        ],
       ),
     );
   }

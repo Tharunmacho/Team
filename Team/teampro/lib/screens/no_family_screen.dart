@@ -1,16 +1,14 @@
 import 'package:flutter/material.dart';
-import 'voter_info_screen.dart';
+import 'family_manager_screen.dart';
 
-class PartDetailsScreen extends StatefulWidget {
-  final int partNumber;
-  
-  const PartDetailsScreen({super.key, required this.partNumber});
+class NoFamilyScreen extends StatefulWidget {
+  const NoFamilyScreen({super.key});
 
   @override
-  State<PartDetailsScreen> createState() => _PartDetailsScreenState();
+  State<NoFamilyScreen> createState() => _NoFamilyScreenState();
 }
 
-class _PartDetailsScreenState extends State<PartDetailsScreen> {
+class _NoFamilyScreenState extends State<NoFamilyScreen> {
   final TextEditingController _searchController = TextEditingController();
   
   // Filter state variables (comprehensive)
@@ -72,7 +70,7 @@ class _PartDetailsScreenState extends State<PartDetailsScreen> {
                   Expanded(
                     child: Center(
                       child: Text(
-                        'Part Number ${widget.partNumber}',
+                        'No Family',
                         style: TextStyle(
                           fontSize: 20,
                           fontWeight: FontWeight.bold,
@@ -81,14 +79,39 @@ class _PartDetailsScreenState extends State<PartDetailsScreen> {
                       ),
                     ),
                   ),
-                  Container(
-                    width: 40,
-                  ), // Spacer to center the title
+                  Row(
+                    children: [
+                      GestureDetector(
+                        onTap: () {
+                          Navigator.push(
+                            context,
+                            MaterialPageRoute(
+                              builder: (context) => FamilyManagerScreen(),
+                            ),
+                          );
+                        },
+                        child: Icon(
+                          Icons.family_restroom,
+                          color: Color(0xFF1976D2),
+                          size: 24,
+                        ),
+                      ),
+                      const SizedBox(width: 12),
+                      GestureDetector(
+                        onTap: _showFilterModal,
+                        child: Icon(
+                          Icons.tune,
+                          color: Colors.black87,
+                          size: 24,
+                        ),
+                      ),
+                    ],
+                  ),
                 ],
               ),
             ),
             
-            const SizedBox(height: 16),
+            const SizedBox(height: 20),
             
             // Search section
             Container(
@@ -104,7 +127,7 @@ class _PartDetailsScreenState extends State<PartDetailsScreen> {
                     padding: EdgeInsets.all(12),
                     child: Icon(
                       Icons.search,
-                      color: Colors.grey[600],
+                      color: Color(0xFF1976D2),
                       size: 24,
                     ),
                   ),
@@ -121,30 +144,11 @@ class _PartDetailsScreenState extends State<PartDetailsScreen> {
                       ),
                     ),
                   ),
-                  Container(
-                    padding: EdgeInsets.all(12),
-                    child: Icon(
-                      Icons.swap_vert,
-                      color: Colors.grey[600],
-                      size: 24,
-                    ),
-                  ),
-                  GestureDetector(
-                    onTap: _showFilterModal,
-                    child: Container(
-                      padding: EdgeInsets.all(12),
-                      child: Icon(
-                        Icons.tune,
-                        color: Colors.grey[600],
-                        size: 24,
-                      ),
-                    ),
-                  ),
                 ],
               ),
             ),
             
-            const SizedBox(height: 16),
+            const SizedBox(height: 20),
             
             // Statistics section
             Container(
@@ -152,57 +156,50 @@ class _PartDetailsScreenState extends State<PartDetailsScreen> {
               child: Row(
                 children: [
                   Expanded(
-                    child: _buildStatCard('Male:', '673', Color(0xFF4CAF50)),
+                    child: _buildStatCard(
+                      'Part Voter:',
+                      '931',
+                      Color(0xFF4CAF50),
+                    ),
                   ),
-                  const SizedBox(width: 8),
+                  const SizedBox(width: 12),
                   Expanded(
-                    child: _buildStatCard('Female:', '782', Colors.pink),
+                    child: _buildStatCard(
+                      'Family Voters:',
+                      '4',
+                      Colors.pink,
+                    ),
                   ),
-                  const SizedBox(width: 8),
+                  const SizedBox(width: 12),
                   Expanded(
-                    child: _buildStatCard('Other:', '0', Colors.grey),
-                  ),
-                  const SizedBox(width: 8),
-                  Expanded(
-                    child: _buildStatCard('Total:', '1455', Colors.lightBlue),
+                    child: _buildStatCard(
+                      'Total family:',
+                      '2',
+                      Color(0xFF1976D2),
+                    ),
                   ),
                 ],
               ),
             ),
             
-            const SizedBox(height: 20),
+            const SizedBox(height: 60),
             
-            // Voter cards section
+            // No Voters Found section
             Expanded(
-              child: ListView(
-                padding: EdgeInsets.symmetric(horizontal: 16),
-                children: [
-                  _buildVoterCard(
-                    serialNo: 1,
-                    name: 'prabhakar',
-                    tamilName: 'பிரபாகர்',
-                    fatherName: 'srinivasan',
-                    fatherTamilName: 'சீனிவாசன்',
-                    voterId: 'RIV0893552',
-                    doorNo: 'Door No 1',
-                    age: 72,
-                    relation: 'Father',
-                    familyCount: 1,
-                  ),
-                  const SizedBox(height: 16),
-                  _buildVoterCard(
-                    serialNo: 2,
-                    name: 'ramalingam',
-                    tamilName: 'ராமலிங்கம்',
-                    fatherName: 'prabakaran',
-                    fatherTamilName: 'பிரபாகரன்',
-                    voterId: 'RIV0893553',
-                    doorNo: 'Door No 2',
-                    age: 45,
-                    relation: 'Self',
-                    familyCount: 0,
-                  ),
-                ],
+              child: Center(
+                child: Column(
+                  mainAxisAlignment: MainAxisAlignment.center,
+                  children: [
+                    Text(
+                      'No Voters Found',
+                      style: TextStyle(
+                        fontSize: 18,
+                        color: Colors.grey[500],
+                        fontWeight: FontWeight.w500,
+                      ),
+                    ),
+                  ],
+                ),
               ),
             ),
             
@@ -239,10 +236,10 @@ class _PartDetailsScreenState extends State<PartDetailsScreen> {
 
   Widget _buildStatCard(String label, String value, Color color) {
     return Container(
-      padding: EdgeInsets.symmetric(vertical: 12, horizontal: 8),
+      padding: EdgeInsets.symmetric(vertical: 16, horizontal: 12),
       decoration: BoxDecoration(
         color: color.withOpacity(0.1),
-        borderRadius: BorderRadius.circular(8),
+        borderRadius: BorderRadius.circular(12),
         border: Border.all(color: color.withOpacity(0.3)),
       ),
       child: Column(
@@ -250,293 +247,22 @@ class _PartDetailsScreenState extends State<PartDetailsScreen> {
           Text(
             label,
             style: TextStyle(
-              fontSize: 12,
+              fontSize: 14,
               color: Colors.black87,
               fontWeight: FontWeight.w500,
             ),
+            textAlign: TextAlign.center,
           ),
-          const SizedBox(height: 4),
+          const SizedBox(height: 8),
           Text(
             value,
             style: TextStyle(
-              fontSize: 18,
+              fontSize: 24,
               color: color,
               fontWeight: FontWeight.bold,
             ),
           ),
         ],
-      ),
-    );
-  }
-
-  Widget _buildVoterCard({
-    required int serialNo,
-    required String name,
-    required String tamilName,
-    required String fatherName,
-    required String fatherTamilName,
-    required String voterId,
-    required String doorNo,
-    required int age,
-    required String relation,
-    required int familyCount,
-  }) {
-    return GestureDetector(
-      onTap: () {
-        // Navigate to Voter Info screen with voter data
-        Navigator.push(
-          context,
-          MaterialPageRoute(
-            builder: (context) => VoterInfoScreen(
-              voterData: {
-                'serialNo': serialNo,
-                'name': name,
-                'tamilName': tamilName,
-                'fatherName': fatherName,
-                'fatherTamilName': fatherTamilName,
-                'voterId': voterId,
-                'doorNo': doorNo,
-                'age': age,
-                'relation': relation,
-                'familyCount': familyCount,
-                'partNumber': widget.partNumber,
-                'section': 1, // Default section
-              },
-            ),
-          ),
-        );
-      },
-      child: Container(
-        padding: EdgeInsets.all(16),
-        decoration: BoxDecoration(
-          color: Colors.white,
-          borderRadius: BorderRadius.circular(12),
-          boxShadow: [
-            BoxShadow(
-              color: Colors.black.withOpacity(0.05),
-              blurRadius: 8,
-              offset: Offset(0, 2),
-            ),
-          ],
-        ),
-        child: Column(
-          crossAxisAlignment: CrossAxisAlignment.start,
-          children: [
-            // Header with serial number and star
-            Row(
-              children: [
-                Icon(
-                  Icons.star_outline,
-                  color: Colors.pink,
-                  size: 20,
-                ),
-                const SizedBox(width: 8),
-                Text(
-                  'Serial No: $serialNo',
-                  style: TextStyle(
-                    fontSize: 16,
-                    color: Color(0xFF1976D2),
-                    fontWeight: FontWeight.bold,
-                  ),
-                ),
-              ],
-            ),
-            
-            const SizedBox(height: 16),
-            
-            // Voter details row
-            Row(
-              crossAxisAlignment: CrossAxisAlignment.start,
-              children: [
-                // Profile image
-                Container(
-                  width: 80,
-                  height: 100,
-                  decoration: BoxDecoration(
-                    color: Colors.grey[200],
-                    borderRadius: BorderRadius.circular(8),
-                    border: Border.all(color: Colors.grey[300]!),
-                  ),
-                  child: Column(
-                    children: [
-                      Expanded(
-                        child: Container(
-                          decoration: BoxDecoration(
-                            color: Colors.blue[100],
-                            borderRadius: BorderRadius.only(
-                              topLeft: Radius.circular(8),
-                              topRight: Radius.circular(8),
-                            ),
-                          ),
-                          child: Center(
-                            child: Icon(
-                              Icons.image,
-                              color: Colors.blue,
-                              size: 32,
-                            ),
-                          ),
-                        ),
-                      ),
-                      Container(
-                        width: double.infinity,
-                        padding: EdgeInsets.symmetric(vertical: 4),
-                        decoration: BoxDecoration(
-                          color: Color(0xFF1976D2),
-                          borderRadius: BorderRadius.only(
-                            bottomLeft: Radius.circular(8),
-                            bottomRight: Radius.circular(8),
-                          ),
-                        ),
-                        child: Text(
-                          voterId,
-                          style: TextStyle(
-                            color: Colors.white,
-                            fontSize: 10,
-                            fontWeight: FontWeight.bold,
-                          ),
-                          textAlign: TextAlign.center,
-                        ),
-                      ),
-                    ],
-                  ),
-                ),
-                
-                const SizedBox(width: 16),
-                
-                // Voter information
-                Expanded(
-                  child: Column(
-                    crossAxisAlignment: CrossAxisAlignment.start,
-                    children: [
-                      Text(
-                        name,
-                        style: TextStyle(
-                          fontSize: 18,
-                          fontWeight: FontWeight.bold,
-                          color: Colors.black87,
-                        ),
-                      ),
-                      Text(
-                        tamilName,
-                        style: TextStyle(
-                          fontSize: 14,
-                          color: Colors.black54,
-                        ),
-                      ),
-                      const SizedBox(height: 8),
-                      Text(
-                        fatherName,
-                        style: TextStyle(
-                          fontSize: 16,
-                          color: Colors.black87,
-                        ),
-                      ),
-                      Text(
-                        fatherTamilName,
-                        style: TextStyle(
-                          fontSize: 14,
-                          color: Colors.black54,
-                        ),
-                      ),
-                      const SizedBox(height: 8),
-                      Text(
-                        doorNo,
-                        style: TextStyle(
-                          fontSize: 14,
-                          color: Colors.black87,
-                          fontWeight: FontWeight.w500,
-                        ),
-                      ),
-                    ],
-                  ),
-                ),
-              ],
-            ),
-            
-            const SizedBox(height: 12),
-            
-            // Age and relation row
-            Row(
-              children: [
-                Container(
-                  padding: EdgeInsets.symmetric(horizontal: 8, vertical: 4),
-                  decoration: BoxDecoration(
-                    color: Colors.blue[100],
-                    borderRadius: BorderRadius.circular(12),
-                  ),
-                  child: Row(
-                    mainAxisSize: MainAxisSize.min,
-                    children: [
-                      Icon(
-                        Icons.person,
-                        color: Colors.blue,
-                        size: 16,
-                      ),
-                      const SizedBox(width: 4),
-                      Text(
-                        '$age',
-                        style: TextStyle(
-                          color: Colors.blue,
-                          fontWeight: FontWeight.bold,
-                        ),
-                      ),
-                    ],
-                  ),
-                ),
-                const SizedBox(width: 12),
-                Text(
-                  relation,
-                  style: TextStyle(
-                    fontSize: 14,
-                    color: Colors.black87,
-                  ),
-                ),
-                Spacer(),
-                // Family count with badge
-                if (familyCount > 0)
-                  Stack(
-                    children: [
-                      Icon(
-                        Icons.family_restroom,
-                        color: Colors.blue,
-                        size: 24,
-                      ),
-                      Positioned(
-                        right: 0,
-                        top: 0,
-                        child: Container(
-                          padding: EdgeInsets.all(2),
-                          decoration: BoxDecoration(
-                            color: Colors.red,
-                            shape: BoxShape.circle,
-                          ),
-                          constraints: BoxConstraints(
-                            minWidth: 16,
-                            minHeight: 16,
-                          ),
-                          child: Text(
-                            familyCount.toString(),
-                            style: TextStyle(
-                              color: Colors.white,
-                              fontSize: 10,
-                              fontWeight: FontWeight.bold,
-                            ),
-                            textAlign: TextAlign.center,
-                          ),
-                        ),
-                      ),
-                    ],
-                  )
-                else
-                  Icon(
-                    Icons.cake,
-                    color: Colors.blue,
-                    size: 24,
-                  ),
-              ],
-            ),
-          ],
-        ),
       ),
     );
   }
@@ -562,6 +288,7 @@ class _PartDetailsScreenState extends State<PartDetailsScreen> {
     );
   }
 
+  // Guardian-style filter modal (simplified like image 3)
   void _showFilterModal() {
     showModalBottomSheet(
       context: context,
@@ -569,7 +296,7 @@ class _PartDetailsScreenState extends State<PartDetailsScreen> {
       backgroundColor: Colors.transparent,
       builder: (context) => StatefulBuilder(
         builder: (context, setModalState) => Container(
-          height: MediaQuery.of(context).size.height * 0.9,
+          height: MediaQuery.of(context).size.height * 0.8,
           decoration: BoxDecoration(
             color: Colors.white,
             borderRadius: BorderRadius.only(
@@ -717,6 +444,45 @@ class _PartDetailsScreenState extends State<PartDetailsScreen> {
     );
   }
 
+  Widget _buildAgeFilter(StateSetter setModalState) {
+    return Column(
+      crossAxisAlignment: CrossAxisAlignment.start,
+      children: [
+        Text(
+          'Age',
+          style: TextStyle(
+            fontSize: 18,
+            fontWeight: FontWeight.bold,
+          ),
+        ),
+        const SizedBox(height: 20),
+        Row(
+          children: [
+            Text('Age 18'),
+            Spacer(),
+            Text('Age 120'),
+          ],
+        ),
+        RangeSlider(
+          values: RangeValues(minAge, maxAge),
+          min: 0,
+          max: 120,
+          divisions: 120,
+          labels: RangeLabels(
+            minAge.round().toString(),
+            maxAge.round().toString(),
+          ),
+          onChanged: (RangeValues values) {
+            setModalState(() {
+              minAge = values.start;
+              maxAge = values.end;
+            });
+          },
+        ),
+      ],
+    );
+  }
+
   Widget _buildGenderFilter(StateSetter setModalState) {
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
@@ -735,7 +501,7 @@ class _PartDetailsScreenState extends State<PartDetailsScreen> {
             const SizedBox(width: 16),
             _buildGenderChip('Female', Icons.person, Colors.pink, setModalState),
             const SizedBox(width: 16),
-            _buildGenderChip('Other', Icons.transgender, Colors.orange, setModalState),
+            _buildGenderChip('Others', Icons.transgender, Colors.orange, setModalState),
           ],
         ),
       ],
@@ -755,7 +521,7 @@ class _PartDetailsScreenState extends State<PartDetailsScreen> {
         });
       },
       child: Container(
-        padding: EdgeInsets.symmetric(horizontal: 12, vertical: 8),
+        padding: EdgeInsets.symmetric(horizontal: 16, vertical: 8),
         decoration: BoxDecoration(
           color: isSelected ? color.withOpacity(0.2) : Colors.grey[100],
           borderRadius: BorderRadius.circular(20),
@@ -904,7 +670,7 @@ class _PartDetailsScreenState extends State<PartDetailsScreen> {
       ),
     );
   }
-
+  // Voter Category Filter
   Widget _buildVoterCategoryFilter(StateSetter setModalState) {
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
@@ -921,35 +687,35 @@ class _PartDetailsScreenState extends State<PartDetailsScreen> {
           spacing: 12,
           runSpacing: 12,
           children: [
-            _buildCategoryIcon(Icons.check_circle, Colors.green, 'Active', setModalState),
-            _buildCategoryIcon(Icons.cancel, Colors.red, 'Inactive', setModalState),
-            _buildCategoryIcon(Icons.help, Colors.grey, 'Unknown', setModalState),
-            _buildCategoryIcon(Icons.trending_up, Colors.blue, 'New', setModalState),
-            _buildCategoryIcon(Icons.delete, Colors.black, 'Deleted', setModalState),
-            _buildCategoryIcon(Icons.arrow_forward, Colors.blue, 'Shifted', setModalState),
-            _buildCategoryIcon(Icons.accessibility, Colors.grey, 'Disabled', setModalState),
-            _buildCategoryIcon(Icons.family_restroom, Colors.brown, 'Family', setModalState),
-            _buildCategoryIcon(Icons.calendar_today, Colors.blue, 'Birthday', setModalState),
-            _buildCategoryIcon(Icons.schedule, Colors.grey, 'Pending', setModalState),
-            _buildCategoryIcon(Icons.store, Colors.red, 'Business', setModalState),
-            _buildCategoryIcon(Icons.people, Colors.pink, 'Community', setModalState),
-            _buildCategoryIcon(Icons.school, Colors.green, 'Student', setModalState),
-            _buildCategoryIcon(Icons.work, Colors.orange, 'Professional', setModalState),
+            _buildCategoryIcon('verified', Icons.check_circle, Colors.green, setModalState),
+            _buildCategoryIcon('cancelled', Icons.cancel, Colors.red, setModalState),
+            _buildCategoryIcon('unknown', Icons.help, Colors.orange, setModalState),
+            _buildCategoryIcon('shifted', Icons.arrow_upward, Colors.blue, setModalState),
+            _buildCategoryIcon('dead', Icons.dangerous, Colors.black, setModalState),
+            _buildCategoryIcon('duplicate', Icons.content_copy, Colors.purple, setModalState),
+            _buildCategoryIcon('disabled', Icons.accessible, Colors.grey, setModalState),
+            _buildCategoryIcon('family', Icons.family_restroom, Colors.brown, setModalState),
+            _buildCategoryIcon('id-card', Icons.badge, Colors.cyan, setModalState),
+            _buildCategoryIcon('professional', Icons.work, Colors.indigo, setModalState),
+            _buildCategoryIcon('booth', Icons.location_on, Colors.red, setModalState),
+            _buildCategoryIcon('profile', Icons.account_circle, Colors.pink, setModalState),
+            _buildCategoryIcon('verified-alt', Icons.verified, Colors.green, setModalState),
+            _buildCategoryIcon('group', Icons.group, Colors.green, setModalState),
           ],
         ),
       ],
     );
   }
 
-  Widget _buildCategoryIcon(IconData icon, Color color, String label, StateSetter setModalState) {
-    bool isSelected = selectedVoterCategory.contains(label);
+  Widget _buildCategoryIcon(String category, IconData icon, Color color, StateSetter setModalState) {
+    bool isSelected = selectedVoterCategory.contains(category);
     return GestureDetector(
       onTap: () {
         setModalState(() {
           if (isSelected) {
-            selectedVoterCategory.remove(label);
+            selectedVoterCategory.remove(category);
           } else {
-            selectedVoterCategory.add(label);
+            selectedVoterCategory.add(category);
           }
         });
       },
@@ -970,46 +736,6 @@ class _PartDetailsScreenState extends State<PartDetailsScreen> {
           size: 24,
         ),
       ),
-    );
-  }
-
-  // Age Filter
-  Widget _buildAgeFilter(StateSetter setModalState) {
-    return Column(
-      crossAxisAlignment: CrossAxisAlignment.start,
-      children: [
-        Text(
-          'Age',
-          style: TextStyle(
-            fontSize: 18,
-            fontWeight: FontWeight.bold,
-          ),
-        ),
-        const SizedBox(height: 20),
-        Row(
-          children: [
-            Text('Age 18'),
-            Spacer(),
-            Text('Age 120'),
-          ],
-        ),
-        RangeSlider(
-          values: RangeValues(minAge, maxAge),
-          min: 0,
-          max: 120,
-          divisions: 120,
-          labels: RangeLabels(
-            minAge.round().toString(),
-            maxAge.round().toString(),
-          ),
-          onChanged: (RangeValues values) {
-            setModalState(() {
-              minAge = values.start;
-              maxAge = values.end;
-            });
-          },
-        ),
-      ],
     );
   }
 
