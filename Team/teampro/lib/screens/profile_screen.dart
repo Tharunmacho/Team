@@ -1,4 +1,6 @@
 import 'package:flutter/material.dart';
+import 'package:image_picker/image_picker.dart';
+import 'dart:io';
 import 'login_screen.dart';
 
 class ProfileScreen extends StatefulWidget {
@@ -10,6 +12,8 @@ class ProfileScreen extends StatefulWidget {
 
 class _ProfileScreenState extends State<ProfileScreen> {
   String _profileImageType = 'meeting'; // 'meeting', 'user', or 'camera'
+  File? _profileImage;
+  final ImagePicker _picker = ImagePicker();
 
   @override
   Widget build(BuildContext context) {
@@ -76,14 +80,45 @@ class _ProfileScreenState extends State<ProfileScreen> {
                               height: 100,
                               decoration: BoxDecoration(
                                 borderRadius: BorderRadius.circular(12),
-                                gradient: LinearGradient(
-                                  begin: Alignment.topLeft,
-                                  end: Alignment.bottomRight,
-                                  colors: _getProfileImageColors(),
-                                ),
+                                color: Color(0xFF4CAF50),
                               ),
-                              child: Center(
-                                child: _getProfileImageIcon(),
+                              child: ClipRRect(
+                                borderRadius: BorderRadius.circular(12),
+                                child: _profileImage != null
+                                    ? Image.file(
+                                        _profileImage!,
+                                        width: 140,
+                                        height: 100,
+                                        fit: BoxFit.cover,
+                                      )
+                                    : Image.asset(
+                                        'assets/images/political_meeting.jpg',
+                                        width: 140,
+                                        height: 100,
+                                        fit: BoxFit.cover,
+                                        errorBuilder: (context, error, stackTrace) {
+                                          return Container(
+                                            decoration: BoxDecoration(
+                                              borderRadius: BorderRadius.circular(12),
+                                              gradient: LinearGradient(
+                                                begin: Alignment.topLeft,
+                                                end: Alignment.bottomRight,
+                                                colors: [
+                                                  Color(0xFF4CAF50),
+                                                  Color(0xFF66BB6A),
+                                                ],
+                                              ),
+                                            ),
+                                            child: Center(
+                                              child: Icon(
+                                                Icons.campaign,
+                                                size: 48,
+                                                color: Colors.white,
+                                              ),
+                                            ),
+                                          );
+                                        },
+                                      ),
                               ),
                             ),
                             // Camera icon overlay
@@ -91,7 +126,7 @@ class _ProfileScreenState extends State<ProfileScreen> {
                               bottom: -5,
                               right: -5,
                               child: GestureDetector(
-                                onTap: _changeProfilePhoto,
+                                onTap: _showUploadProfilePictureModal,
                                 child: Container(
                                   padding: EdgeInsets.all(8),
                                   decoration: BoxDecoration(
@@ -115,7 +150,15 @@ class _ProfileScreenState extends State<ProfileScreen> {
                         const SizedBox(height: 20),
                         // User name
                         Text(
-                          'ramachandran ...',
+                          'ramach',
+                          style: TextStyle(
+                            fontSize: 24,
+                            fontWeight: FontWeight.bold,
+                            color: Colors.black87,
+                          ),
+                        ),
+                        Text(
+                          'andran A...',
                           style: TextStyle(
                             fontSize: 24,
                             fontWeight: FontWeight.bold,
@@ -153,8 +196,8 @@ class _ProfileScreenState extends State<ProfileScreen> {
             // Menu items section
             Expanded(
               child: Container(
-                padding: EdgeInsets.symmetric(horizontal: 20, vertical: 16),
-                child: ListView(
+                padding: EdgeInsets.symmetric(horizontal: 24, vertical: 16),
+                child: Column(
                   children: [
                     _buildMenuItem(Icons.person_outline, 'My Profile'),
                     _buildMenuItem(Icons.how_to_vote_outlined, 'Your Elections'),
@@ -165,18 +208,15 @@ class _ProfileScreenState extends State<ProfileScreen> {
                     _buildMenuItem(Icons.description_outlined, 'Terms & Conditions'),
                     _buildMenuItem(Icons.help_outline, 'Help'),
                     _buildMenuItem(Icons.info_outline, 'About'),
-                    const SizedBox(height: 20),
-                    _buildMenuItem(Icons.logout, 'Logout', isLogout: true),
-                    const SizedBox(height: 20),
+                    const Spacer(),
                     // Version info
-                    Center(
-                      child: Text(
-                        'V.3.1 | 21-May-2025',
-                        style: TextStyle(
-                          fontSize: 12,
-                          color: Colors.black54,
-                        ),
+                    Text(
+                      'V.3.1 |',
+                      style: TextStyle(
+                        fontSize: 14,
+                        color: Colors.black54,
                       ),
+                      textAlign: TextAlign.center,
                     ),
                   ],
                 ),
@@ -188,49 +228,7 @@ class _ProfileScreenState extends State<ProfileScreen> {
     );
   }
 
-  List<Color> _getProfileImageColors() {
-    switch (_profileImageType) {
-      case 'meeting':
-        return [Color(0xFF4CAF50), Color(0xFF66BB6A)];
-      case 'user':
-        return [Color(0xFF1976D2), Color(0xFF42A5F5)];
-      case 'camera':
-        return [Color(0xFFFF5722), Color(0xFFFF8A65)];
-      default:
-        return [Color(0xFF4CAF50), Color(0xFF66BB6A)];
-    }
-  }
-
-  Widget _getProfileImageIcon() {
-    switch (_profileImageType) {
-      case 'meeting':
-        return Icon(
-          Icons.campaign,
-          size: 48,
-          color: Colors.white,
-        );
-      case 'user':
-        return Icon(
-          Icons.person,
-          size: 48,
-          color: Colors.white,
-        );
-      case 'camera':
-        return Icon(
-          Icons.camera_alt,
-          size: 48,
-          color: Colors.white,
-        );
-      default:
-        return Icon(
-          Icons.campaign,
-          size: 48,
-          color: Colors.white,
-        );
-    }
-  }
-
-  void _changeProfilePhoto() {
+  void _showUploadProfilePictureModal() {
     showModalBottomSheet(
       context: context,
       backgroundColor: Colors.transparent,
@@ -245,73 +243,104 @@ class _ProfileScreenState extends State<ProfileScreen> {
           mainAxisSize: MainAxisSize.min,
           children: [
             Text(
-              'Change Profile Photo',
+              'Upload Profile Picture',
               style: TextStyle(
-                fontSize: 18,
+                fontSize: 20,
                 fontWeight: FontWeight.bold,
                 color: Colors.black87,
               ),
             ),
-            const SizedBox(height: 20),
-            Row(
-              mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-              children: [
-                _buildPhotoOption(
-                  'Meeting',
-                  Icons.campaign,
-                  Color(0xFF4CAF50),
-                  'meeting',
-                ),
-                _buildPhotoOption(
-                  'User',
-                  Icons.person,
-                  Color(0xFF1976D2),
-                  'user',
-                ),
-                _buildPhotoOption(
-                  'Camera',
-                  Icons.camera_alt,
-                  Color(0xFFFF5722),
-                  'camera',
-                ),
-              ],
+            const SizedBox(height: 10),
+            Text(
+              'Choose a method to update your profile',
+              style: TextStyle(
+                fontSize: 16,
+                color: Colors.black54,
+              ),
             ),
-            const SizedBox(height: 20),
-            Row(
-              children: [
-                Expanded(
-                  child: ElevatedButton(
-                    onPressed: () => Navigator.pop(context),
-                    style: ElevatedButton.styleFrom(
-                      backgroundColor: Colors.grey[300],
-                      foregroundColor: Colors.black87,
-                      padding: EdgeInsets.symmetric(vertical: 12),
-                      shape: RoundedRectangleBorder(
-                        borderRadius: BorderRadius.circular(8),
+            const SizedBox(height: 30),
+            // Take Photo Button
+            Container(
+              width: double.infinity,
+              height: 55,
+              child: ElevatedButton(
+                onPressed: () => _takePhoto(),
+                style: ElevatedButton.styleFrom(
+                  backgroundColor: Color(0xFF1976D2),
+                  foregroundColor: Colors.white,
+                  shape: RoundedRectangleBorder(
+                    borderRadius: BorderRadius.circular(8),
+                  ),
+                  elevation: 0,
+                ),
+                child: Row(
+                  mainAxisAlignment: MainAxisAlignment.center,
+                  children: [
+                    Icon(Icons.camera_alt, size: 24),
+                    const SizedBox(width: 12),
+                    Text(
+                      'Take',
+                      style: TextStyle(
+                        fontSize: 18,
+                        fontWeight: FontWeight.w500,
                       ),
                     ),
-                    child: Text('Cancel'),
-                  ),
+                  ],
                 ),
-                const SizedBox(width: 12),
-                Expanded(
-                  child: ElevatedButton(
-                    onPressed: () {
-                      Navigator.pop(context);
-                      // Photo change is handled by individual option taps
-                    },
-                    style: ElevatedButton.styleFrom(
-                      backgroundColor: Color(0xFF1976D2),
-                      foregroundColor: Colors.white,
-                      padding: EdgeInsets.symmetric(vertical: 12),
-                      shape: RoundedRectangleBorder(
-                        borderRadius: BorderRadius.circular(8),
+              ),
+            ),
+            const SizedBox(height: 16),
+            // Choose from Gallery Button
+            Container(
+              width: double.infinity,
+              height: 55,
+              child: ElevatedButton(
+                onPressed: () => _chooseFromGallery(),
+                style: ElevatedButton.styleFrom(
+                  backgroundColor: Color(0xFF1976D2),
+                  foregroundColor: Colors.white,
+                  shape: RoundedRectangleBorder(
+                    borderRadius: BorderRadius.circular(8),
+                  ),
+                  elevation: 0,
+                ),
+                child: Row(
+                  mainAxisAlignment: MainAxisAlignment.center,
+                  children: [
+                    Icon(Icons.image, size: 24),
+                    const SizedBox(width: 12),
+                    Text(
+                      'Choose from',
+                      style: TextStyle(
+                        fontSize: 18,
+                        fontWeight: FontWeight.w500,
                       ),
                     ),
-                    child: Text('Done'),
+                  ],
+                ),
+              ),
+            ),
+            const SizedBox(height: 30),
+            // Cancel Button
+            Container(
+              width: double.infinity,
+              height: 55,
+              child: TextButton(
+                onPressed: () => Navigator.pop(context),
+                style: TextButton.styleFrom(
+                  foregroundColor: Colors.black87,
+                  shape: RoundedRectangleBorder(
+                    borderRadius: BorderRadius.circular(8),
                   ),
                 ),
-              ],
+                child: Text(
+                  'Cancel',
+                  style: TextStyle(
+                    fontSize: 18,
+                    fontWeight: FontWeight.w500,
+                  ),
+                ),
+              ),
             ),
           ],
         ),
@@ -319,46 +348,54 @@ class _ProfileScreenState extends State<ProfileScreen> {
     );
   }
 
-  Widget _buildPhotoOption(String label, IconData icon, Color color, String type) {
-    bool isSelected = _profileImageType == type;
-    return GestureDetector(
-      onTap: () {
+  Future<void> _takePhoto() async {
+    Navigator.pop(context); // Close modal first
+    try {
+      final XFile? image = await _picker.pickImage(source: ImageSource.camera);
+      if (image != null) {
         setState(() {
-          _profileImageType = type;
+          _profileImage = File(image.path);
         });
-      },
-      child: Column(
-        children: [
-          Container(
-            width: 60,
-            height: 60,
-            decoration: BoxDecoration(
-              gradient: LinearGradient(
-                begin: Alignment.topLeft,
-                end: Alignment.bottomRight,
-                colors: [color, color.withOpacity(0.7)],
-              ),
-              borderRadius: BorderRadius.circular(12),
-              border: isSelected ? Border.all(color: Colors.black87, width: 3) : null,
-            ),
-            child: Icon(
-              icon,
-              color: Colors.white,
-              size: 28,
-            ),
+        ScaffoldMessenger.of(context).showSnackBar(
+          SnackBar(
+            content: Text('Profile picture updated successfully!'),
+            backgroundColor: Color(0xFF4CAF50),
           ),
-          const SizedBox(height: 8),
-          Text(
-            label,
-            style: TextStyle(
-              fontSize: 12,
-              color: isSelected ? Colors.black87 : Colors.black54,
-              fontWeight: isSelected ? FontWeight.bold : FontWeight.normal,
-            ),
+        );
+      }
+    } catch (e) {
+      ScaffoldMessenger.of(context).showSnackBar(
+        SnackBar(
+          content: Text('Error taking photo: $e'),
+          backgroundColor: Colors.red,
+        ),
+      );
+    }
+  }
+
+  Future<void> _chooseFromGallery() async {
+    Navigator.pop(context); // Close modal first
+    try {
+      final XFile? image = await _picker.pickImage(source: ImageSource.gallery);
+      if (image != null) {
+        setState(() {
+          _profileImage = File(image.path);
+        });
+        ScaffoldMessenger.of(context).showSnackBar(
+          SnackBar(
+            content: Text('Profile picture updated successfully!'),
+            backgroundColor: Color(0xFF4CAF50),
           ),
-        ],
-      ),
-    );
+        );
+      }
+    } catch (e) {
+      ScaffoldMessenger.of(context).showSnackBar(
+        SnackBar(
+          content: Text('Error choosing photo: $e'),
+          backgroundColor: Colors.red,
+        ),
+      );
+    }
   }
 
   Widget _buildActionButton(IconData icon, String label) {
@@ -391,57 +428,70 @@ class _ProfileScreenState extends State<ProfileScreen> {
 
   Widget _buildMenuItem(IconData icon, String title, {bool isLogout = false}) {
     return Container(
-      margin: EdgeInsets.symmetric(vertical: 6),
-      decoration: BoxDecoration(
-        color: Colors.white,
-        borderRadius: BorderRadius.circular(12),
-        boxShadow: [
-          BoxShadow(
-            color: Colors.black.withOpacity(0.05),
-            blurRadius: 8,
-            offset: Offset(0, 2),
-          ),
-        ],
-      ),
-      child: ListTile(
-        leading: Icon(
-          icon,
-          color: isLogout ? Colors.red : Color(0xFF1976D2),
-          size: 24,
-        ),
-        title: Text(
-          title,
-          style: TextStyle(
-            fontSize: 16,
-            color: isLogout ? Colors.red : Colors.black87,
-            fontWeight: FontWeight.w500,
-          ),
-        ),
-        trailing: Icon(
-          Icons.arrow_forward_ios,
-          color: Colors.grey[400],
-          size: 16,
-        ),
+      margin: EdgeInsets.symmetric(vertical: 8),
+      child: InkWell(
         onTap: () {
           if (isLogout) {
-            // Handle logout - navigate back to login screen
-            Navigator.pushReplacement(
-              context,
-              MaterialPageRoute(builder: (context) => LoginScreen()),
-            );
+            _showLogoutDialog();
           } else {
-            // Handle other menu items
-            // Add specific navigation logic for each menu item here
             ScaffoldMessenger.of(context).showSnackBar(
               SnackBar(
-                content: Text('$title clicked'),
-                duration: Duration(seconds: 1),
+                content: Text('$title - Feature coming soon!'),
+                backgroundColor: Color(0xFF1976D2),
               ),
             );
           }
         },
-        contentPadding: EdgeInsets.symmetric(horizontal: 16, vertical: 4),
+        child: Container(
+          padding: EdgeInsets.symmetric(vertical: 16, horizontal: 4),
+          child: Row(
+            children: [
+              Icon(
+                icon,
+                color: isLogout ? Colors.red : Color(0xFF1976D2),
+                size: 24,
+              ),
+              const SizedBox(width: 20),
+              Text(
+                title,
+                style: TextStyle(
+                  fontSize: 18,
+                  color: isLogout ? Colors.red : Colors.black87,
+                  fontWeight: FontWeight.w500,
+                ),
+              ),
+            ],
+          ),
+        ),
       ),
+    );
+  }
+
+  void _showLogoutDialog() {
+    showDialog(
+      context: context,
+      builder: (BuildContext context) {
+        return AlertDialog(
+          title: Text('Logout'),
+          content: Text('Are you sure you want to logout?'),
+          actions: [
+            TextButton(
+              onPressed: () => Navigator.pop(context),
+              child: Text('Cancel'),
+            ),
+            TextButton(
+              onPressed: () {
+                Navigator.pop(context);
+                Navigator.pushReplacement(
+                  context,
+                  MaterialPageRoute(builder: (context) => LoginScreen()),
+                );
+              },
+              child: Text('Logout'),
+            ),
+          ],
+        );
+      },
     );
   }
 }

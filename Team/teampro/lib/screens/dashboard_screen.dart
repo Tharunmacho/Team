@@ -12,6 +12,7 @@ import 'notifications_screen.dart';
 import 'transgender_screen.dart';
 import 'fatherless_screen.dart';
 import 'new_voters_screen.dart';
+import 'guardian_screen.dart';
 
 class DashboardScreen extends StatefulWidget {
   const DashboardScreen({super.key});
@@ -24,12 +25,13 @@ class _DashboardScreenState extends State<DashboardScreen> {
   final TextEditingController _searchController = TextEditingController();
   final PageController _pageController = PageController();
   int _currentPage = 0;
+  final GlobalKey<ScaffoldState> _scaffoldKey = GlobalKey<ScaffoldState>();
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+      key: _scaffoldKey,
       backgroundColor: Color(0xFFF5F7FA),
-      drawer: _buildNavigationDrawer(),
       body: SafeArea(
         child: Column(
           children: [
@@ -40,7 +42,7 @@ class _DashboardScreenState extends State<DashboardScreen> {
                 children: [
                   // Menu icon
                   GestureDetector(
-                    onTap: () => Scaffold.of(context).openDrawer(),
+                    onTap: () => _showCustomDrawer(),
                     child: Icon(
                       Icons.menu,
                       size: 28,
@@ -536,6 +538,11 @@ class _DashboardScreenState extends State<DashboardScreen> {
             context,
             MaterialPageRoute(builder: (context) => FatherlessScreen()),
           );
+        } else if (title == 'Guardian') {
+          Navigator.push(
+            context,
+            MaterialPageRoute(builder: (context) => GuardianScreen()),
+          );
         } else {
           // Show coming soon message for other categories
           ScaffoldMessenger.of(context).showSnackBar(
@@ -791,158 +798,215 @@ class _DashboardScreenState extends State<DashboardScreen> {
     );
   }
 
-  Widget _buildNavigationDrawer() {
-    return Drawer(
-      child: Container(
-        color: Color(0xFFF5F7FA),
-        child: Column(
-          children: [
-            // Profile section with curved background
-            Container(
-              height: 280,
-              child: Stack(
-                children: [
-                  // Curved background
-                  Container(
-                    height: 240,
-                    decoration: BoxDecoration(
-                      gradient: LinearGradient(
-                        begin: Alignment.topLeft,
-                        end: Alignment.bottomRight,
-                        colors: [
-                          Color(0xFFE3F2FD),
-                          Color(0xFFBBDEFB),
-                        ],
-                      ),
-                      borderRadius: BorderRadius.only(
-                        bottomLeft: Radius.circular(50),
-                        bottomRight: Radius.circular(50),
-                      ),
-                    ),
-                  ),
-                  // Close button
-                  Positioned(
-                    top: 40,
-                    right: 16,
-                    child: GestureDetector(
-                      onTap: () => Navigator.pop(context),
-                      child: Container(
-                        padding: EdgeInsets.all(8),
-                        decoration: BoxDecoration(
-                          color: Colors.white.withOpacity(0.3),
-                          borderRadius: BorderRadius.circular(20),
-                        ),
-                        child: Icon(
-                          Icons.close,
-                          color: Colors.black54,
-                          size: 24,
-                        ),
-                      ),
-                    ),
-                  ),
-                  // Profile content
-                  Positioned(
-                    top: 80,
-                    left: 0,
-                    right: 0,
-                    child: Column(
-                      children: [
-                        // Profile image with political meeting background
-                        Container(
-                          width: 120,
-                          height: 80,
-                          decoration: BoxDecoration(
-                            borderRadius: BorderRadius.circular(12),
-                            gradient: LinearGradient(
-                              begin: Alignment.topLeft,
-                              end: Alignment.bottomRight,
-                              colors: [
-                                Color(0xFF4CAF50),
-                                Color(0xFF66BB6A),
-                              ],
-                            ),
-                          ),
-                          child: Center(
-                            child: Icon(
-                              Icons.campaign,
-                              size: 40,
-                              color: Colors.white,
-                            ),
-                          ),
-                        ),
-                        const SizedBox(height: 16),
-                        // User name
-                        Text(
-                          'ramachandran ...',
-                          style: TextStyle(
-                            fontSize: 20,
-                            fontWeight: FontWeight.bold,
-                            color: Colors.black87,
-                          ),
-                        ),
-                        const SizedBox(height: 4),
-                        // Role
-                        Text(
-                          'Super Admin',
-                          style: TextStyle(
-                            fontSize: 14,
-                            color: Colors.black54,
-                          ),
-                        ),
-                        const SizedBox(height: 16),
-                        // Action buttons
-                        Row(
-                          mainAxisAlignment: MainAxisAlignment.center,
+  void _showCustomDrawer() {
+    showGeneralDialog(
+      context: context,
+      barrierDismissible: true,
+      barrierLabel: '',
+      barrierColor: Colors.black.withOpacity(0.5),
+      transitionDuration: Duration(milliseconds: 300),
+      pageBuilder: (context, animation, secondaryAnimation) {
+        return SlideTransition(
+          position: animation.drive(
+            Tween(begin: Offset(-1.0, 0.0), end: Offset.zero).chain(
+              CurveTween(curve: Curves.easeInOut),
+            ),
+          ),
+          child: Align(
+            alignment: Alignment.centerLeft,
+            child: Material(
+              color: Colors.transparent,
+              child: Container(
+                width: MediaQuery.of(context).size.width,
+                height: MediaQuery.of(context).size.height,
+                color: Colors.white,
+                child: SafeArea(
+                  child: Column(
+                    children: [
+                      // Header section with curved background design
+                      Container(
+                        height: 340,
+                        child: Stack(
                           children: [
-                            _buildActionButton(Icons.list_alt, 'Overview'),
-                            const SizedBox(width: 20),
-                            _buildActionButton(Icons.home, 'Home'),
-                            const SizedBox(width: 20),
-                            _buildActionButton(Icons.camera_alt, 'Camera'),
+                            // Main curved background container
+                            Container(
+                              height: 300,
+                              decoration: BoxDecoration(
+                                gradient: LinearGradient(
+                                  begin: Alignment.topCenter,
+                                  end: Alignment.bottomCenter,
+                                  colors: [
+                                    Color(0xFFF5E9A3), // Yellow gradient top
+                                    Color(0xFFE8F4FD), // Light blue gradient bottom
+                                  ],
+                                ),
+                              ),
+                            ),
+                            // Curved white overlay for design effect
+                            Positioned(
+                              bottom: 0,
+                              left: 0,
+                              right: 0,
+                              child: Container(
+                                height: 100,
+                                decoration: BoxDecoration(
+                                  color: Colors.white,
+                                  borderRadius: BorderRadius.only(
+                                    topLeft: Radius.circular(50),
+                                    topRight: Radius.circular(50),
+                                  ),
+                                ),
+                              ),
+                            ),
+                            // Close button
+                            Positioned(
+                              top: 20,
+                              right: 20,
+                              child: GestureDetector(
+                                onTap: () => Navigator.pop(context),
+                                child: Icon(
+                                  Icons.close,
+                                  color: Colors.black87,
+                                  size: 28,
+                                ),
+                              ),
+                            ),
+                            // Profile content
+                            Positioned(
+                              top: 70,
+                              left: 0,
+                              right: 0,
+                              child: Column(
+                                children: [
+                                  // Profile image with political meeting photo
+                                  Container(
+                                    width: 120,
+                                    height: 80,
+                                    decoration: BoxDecoration(
+                                      borderRadius: BorderRadius.circular(12),
+                                      boxShadow: [
+                                        BoxShadow(
+                                          color: Colors.black.withOpacity(0.2),
+                                          blurRadius: 8,
+                                          offset: Offset(0, 4),
+                                        ),
+                                      ],
+                                    ),
+                                    child: ClipRRect(
+                                      borderRadius: BorderRadius.circular(12),
+                                      child: Image.asset(
+                                        'assets/images/political_meeting.jpg',
+                                        width: 120,
+                                        height: 80,
+                                        fit: BoxFit.cover,
+                                        errorBuilder: (context, error, stackTrace) {
+                                          return Container(
+                                            decoration: BoxDecoration(
+                                              borderRadius: BorderRadius.circular(12),
+                                              gradient: LinearGradient(
+                                                begin: Alignment.topLeft,
+                                                end: Alignment.bottomRight,
+                                                colors: [
+                                                  Color(0xFF4CAF50),
+                                                  Color(0xFF66BB6A),
+                                                ],
+                                              ),
+                                            ),
+                                            child: Center(
+                                              child: Icon(
+                                                Icons.campaign,
+                                                size: 40,
+                                                color: Colors.white,
+                                              ),
+                                            ),
+                                          );
+                                        },
+                                      ),
+                                    ),
+                                  ),
+                                  const SizedBox(height: 16),
+                                  // User name
+                                  Text(
+                                    'ramach',
+                                    style: TextStyle(
+                                      fontSize: 24,
+                                      fontWeight: FontWeight.bold,
+                                      color: Colors.black87,
+                                    ),
+                                  ),
+                                  Text(
+                                    'andran A...',
+                                    style: TextStyle(
+                                      fontSize: 24,
+                                      fontWeight: FontWeight.bold,
+                                      color: Colors.black87,
+                                    ),
+                                  ),
+                                  const SizedBox(height: 8),
+                                  // Role
+                                  Text(
+                                    'Super Admin',
+                                    style: TextStyle(
+                                      fontSize: 16,
+                                      color: Colors.black54,
+                                    ),
+                                  ),
+                                  const SizedBox(height: 16),
+                                  // Action buttons row
+                                  Row(
+                                    mainAxisAlignment: MainAxisAlignment.center,
+                                    children: [
+                                      _buildActionButton(Icons.list_alt, 'Overview'),
+                                      const SizedBox(width: 16),
+                                      _buildActionButton(Icons.home, 'Home'),
+                                      const SizedBox(width: 16),
+                                      _buildActionButton(Icons.camera_alt, 'Camera'),
+                                    ],
+                                  ),
+                                ],
+                              ),
+                            ),
                           ],
                         ),
-                      ],
-                    ),
+                      ),
+                      
+                      // Menu items
+                      Expanded(
+                        child: Container(
+                          padding: EdgeInsets.symmetric(horizontal: 24, vertical: 16),
+                          child: Column(
+                            children: [
+                              _buildFullPageMenuItem(Icons.person_outline, 'My Profile'),
+                              _buildFullPageMenuItem(Icons.how_to_vote_outlined, 'Your Elections'),
+                              _buildFullPageMenuItem(Icons.settings_outlined, 'Settings'),
+                              _buildFullPageMenuItem(Icons.language_outlined, 'App Language'),
+                              _buildFullPageMenuItem(Icons.lock_outline, 'Change Password'),
+                              _buildFullPageMenuItem(Icons.privacy_tip_outlined, 'Privacy Policy'),
+                              _buildFullPageMenuItem(Icons.description_outlined, 'Terms & Conditions'),
+                              _buildFullPageMenuItem(Icons.help_outline, 'Help'),
+                              _buildFullPageMenuItem(Icons.info_outline, 'About'),
+                              const Spacer(),
+                              // Version info
+                              Text(
+                                'V.3.1 |',
+                                style: TextStyle(
+                                  fontSize: 14,
+                                  color: Colors.black54,
+                                ),
+                                textAlign: TextAlign.center,
+                              ),
+                            ],
+                          ),
+                        ),
+                      ),
+                    ],
                   ),
-                ],
-              ),
-            ),
-            
-            // Menu items
-            Expanded(
-              child: ListView(
-                padding: EdgeInsets.symmetric(horizontal: 16, vertical: 8),
-                children: [
-                  _buildMenuItem(Icons.person_outline, 'My Profile'),
-                  _buildMenuItem(Icons.how_to_vote_outlined, 'Your Elections'),
-                  _buildMenuItem(Icons.settings_outlined, 'Settings'),
-                  _buildMenuItem(Icons.language_outlined, 'App Language'),
-                  _buildMenuItem(Icons.lock_outline, 'Change Password'),
-                  _buildMenuItem(Icons.privacy_tip_outlined, 'Privacy Policy'),
-                  _buildMenuItem(Icons.description_outlined, 'Terms & Conditions'),
-                  _buildMenuItem(Icons.help_outline, 'Help'),
-                  _buildMenuItem(Icons.info_outline, 'About'),
-                  const SizedBox(height: 20),
-                  _buildMenuItem(Icons.logout, 'Logout', isLogout: true),
-                ],
-              ),
-            ),
-            
-            // Version info
-            Container(
-              padding: EdgeInsets.all(16),
-              child: Text(
-                'V.3.1 | 21-May-2025',
-                style: TextStyle(
-                  fontSize: 12,
-                  color: Colors.black54,
                 ),
-                textAlign: TextAlign.center,
               ),
             ),
-          ],
-        ),
-      ),
+          ),
+        );
+      },
     );
   }
 
@@ -974,40 +1038,44 @@ class _DashboardScreenState extends State<DashboardScreen> {
     );
   }
 
-  Widget _buildMenuItem(IconData icon, String title, {bool isLogout = false}) {
+  Widget _buildFullPageMenuItem(IconData icon, String title) {
     return Container(
-      margin: EdgeInsets.symmetric(vertical: 4),
-      child: ListTile(
-        leading: Icon(
-          icon,
-          color: isLogout ? Colors.red : Color(0xFF1976D2),
-          size: 24,
-        ),
-        title: Text(
-          title,
-          style: TextStyle(
-            fontSize: 16,
-            color: isLogout ? Colors.red : Colors.black87,
-            fontWeight: FontWeight.w500,
-          ),
-        ),
+      margin: EdgeInsets.symmetric(vertical: 8),
+      child: InkWell(
         onTap: () {
-          if (isLogout) {
-            // Handle logout - navigate back to login screen
-            Navigator.pushReplacement(
-              context,
-              MaterialPageRoute(builder: (context) => LoginScreen()),
-            );
-          } else {
+          Navigator.pop(context); // Close overlay first
+          if (title == 'My Profile') {
             // Navigate to profile screen for all menu items
-            Navigator.pop(context); // Close drawer first
             Navigator.push(
               context,
               MaterialPageRoute(builder: (context) => ProfileScreen()),
             );
+          } else {
+            // Handle other menu items
+            _showMessage('$title feature coming soon!');
           }
         },
-        contentPadding: EdgeInsets.symmetric(horizontal: 0, vertical: 4),
+        child: Container(
+          padding: EdgeInsets.symmetric(vertical: 16, horizontal: 4),
+          child: Row(
+            children: [
+              Icon(
+                icon,
+                color: Color(0xFF1976D2),
+                size: 24,
+              ),
+              const SizedBox(width: 20),
+              Text(
+                title,
+                style: TextStyle(
+                  fontSize: 18,
+                  color: Colors.black87,
+                  fontWeight: FontWeight.w500,
+                ),
+              ),
+            ],
+          ),
+        ),
       ),
     );
   }
