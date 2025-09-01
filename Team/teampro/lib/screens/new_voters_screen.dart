@@ -47,7 +47,7 @@ class _NewVotersScreenState extends State<NewVotersScreen> {
                     child: Container(
                       padding: EdgeInsets.all(8),
                       decoration: BoxDecoration(
-                        color: Colors.white.withOpacity(0.3),
+                        color: Colors.white.withValues(alpha: 0.3),
                         borderRadius: BorderRadius.circular(8),
                       ),
                       child: Icon(
@@ -219,7 +219,7 @@ class _NewVotersScreenState extends State<NewVotersScreen> {
         color: backgroundColor,
         borderRadius: BorderRadius.circular(12),
         border: Border.all(
-          color: textColor?.withOpacity(0.3) ?? Colors.grey[300]!,
+          color: textColor?.withValues(alpha: 0.3) ?? Colors.grey[300]!,
           width: 1,
         ),
       ),

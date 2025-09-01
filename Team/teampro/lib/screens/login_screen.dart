@@ -13,7 +13,7 @@ class LoginScreen extends StatelessWidget {
           children: [
             // Top section with illustrations
             Expanded(
-              flex: 3,
+              flex: 4,
               child: Container(
                 width: double.infinity,
                 decoration: const BoxDecoration(
@@ -182,10 +182,10 @@ class LoginScreen extends StatelessWidget {
             ),
             // Bottom section with title and login button
             Expanded(
-              flex: 2,
+              flex: 3,
               child: Container(
                 width: double.infinity,
-                padding: const EdgeInsets.all(30),
+                padding: const EdgeInsets.symmetric(horizontal: 30, vertical: 20),
                 child: Column(
                   mainAxisAlignment: MainAxisAlignment.center,
                   children: [
@@ -194,28 +194,28 @@ class LoginScreen extends StatelessWidget {
                       'Thedal Election\nAnalytics Manager',
                       textAlign: TextAlign.center,
                       style: TextStyle(
-                        fontSize: 28,
+                        fontSize: 24,
                         fontWeight: FontWeight.bold,
                         color: Color(0xFF1A237E),
                         height: 1.2,
                       ),
                     ),
-                    const SizedBox(height: 20),
+                    const SizedBox(height: 16),
                     // Subtitle
                     Text(
                       'The first-ever SaaS-based comprehensive\nelection campaign management tool for all\ncandidates',
                       textAlign: TextAlign.center,
                       style: TextStyle(
-                        fontSize: 14,
+                        fontSize: 13,
                         color: Colors.grey[600],
-                        height: 1.4,
+                        height: 1.3,
                       ),
                     ),
-                    const SizedBox(height: 40),
+                    const SizedBox(height: 30),
                     // Login button
-                    Container(
+                    SizedBox(
                       width: double.infinity,
-                      height: 55,
+                      height: 50,
                       child: ElevatedButton(
                         onPressed: () {
                           // Handle login action
@@ -232,7 +232,7 @@ class LoginScreen extends StatelessWidget {
                         child: Text(
                           'Login',
                           style: TextStyle(
-                            fontSize: 18,
+                            fontSize: 16,
                             fontWeight: FontWeight.w500,
                           ),
                         ),
@@ -427,7 +427,7 @@ class PencilPainter extends CustomPainter {
     );
 
     // Add white highlight on pencil body
-    paint.color = Colors.white.withOpacity(0.3);
+    paint.color = Colors.white.withValues(alpha: 0.3);
     canvas.drawRRect(
       RRect.fromRectAndRadius(
         Rect.fromLTWH(size.width * 0.32, size.height * 0.18, size.width * 0.1, size.height * 0.3),

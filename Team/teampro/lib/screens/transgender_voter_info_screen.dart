@@ -79,7 +79,7 @@ class _TransgenderVoterInfoScreenState extends State<TransgenderVoterInfoScreen>
                     child: Container(
                       padding: EdgeInsets.all(8),
                       decoration: BoxDecoration(
-                        color: Colors.white.withOpacity(0.3),
+                        color: Colors.white.withValues(alpha: 0.3),
                         borderRadius: BorderRadius.circular(8),
                       ),
                       child: Icon(
@@ -119,7 +119,7 @@ class _TransgenderVoterInfoScreenState extends State<TransgenderVoterInfoScreen>
                 borderRadius: BorderRadius.circular(12),
                 boxShadow: [
                   BoxShadow(
-                    color: Colors.black.withOpacity(0.05),
+                    color: Colors.black.withValues(alpha: 0.05),
                     blurRadius: 8,
                     offset: Offset(0, 2),
                   ),
@@ -751,7 +751,7 @@ class _TransgenderVoterInfoScreenState extends State<TransgenderVoterInfoScreen>
               borderRadius: BorderRadius.circular(12),
               boxShadow: [
                 BoxShadow(
-                  color: Colors.black.withOpacity(0.05),
+                  color: Colors.black.withValues(alpha: 0.05),
                   blurRadius: 8,
                   offset: Offset(0, 2),
                 ),
@@ -807,7 +807,7 @@ class _TransgenderVoterInfoScreenState extends State<TransgenderVoterInfoScreen>
               borderRadius: BorderRadius.circular(16),
               boxShadow: [
                 BoxShadow(
-                  color: Colors.black.withOpacity(0.05),
+                  color: Colors.black.withValues(alpha: 0.05),
                   blurRadius: 10,
                   offset: Offset(0, 2),
                 ),
@@ -944,7 +944,7 @@ class _TransgenderVoterInfoScreenState extends State<TransgenderVoterInfoScreen>
             width: 60,
             height: 60,
             decoration: BoxDecoration(
-              color: color.withOpacity(0.1),
+              color: color.withValues(alpha: 0.1),
               borderRadius: BorderRadius.circular(12),
             ),
             child: Icon(
@@ -975,7 +975,7 @@ class _TransgenderVoterInfoScreenState extends State<TransgenderVoterInfoScreen>
         borderRadius: BorderRadius.circular(12),
         boxShadow: [
           BoxShadow(
-            color: Colors.black.withOpacity(0.05),
+            color: Colors.black.withValues(alpha: 0.05),
             blurRadius: 8,
             offset: Offset(0, 2),
           ),
@@ -1029,7 +1029,7 @@ class _TransgenderVoterInfoScreenState extends State<TransgenderVoterInfoScreen>
           ),
           Expanded(
             child: DropdownButtonFormField<String>(
-              value: value,
+              initialValue: value,
               decoration: InputDecoration(
                 border: InputBorder.none,
                 contentPadding: EdgeInsets.symmetric(horizontal: 16, vertical: 15),

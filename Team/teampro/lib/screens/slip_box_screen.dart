@@ -45,7 +45,7 @@ class _SlipBoxScreenState extends State<SlipBoxScreen> {
                         child: Container(
                           padding: EdgeInsets.all(8),
                           decoration: BoxDecoration(
-                            color: Colors.white.withOpacity(0.3),
+                            color: Colors.white.withValues(alpha: 0.3),
                             borderRadius: BorderRadius.circular(8),
                           ),
                           child: Icon(
@@ -193,7 +193,7 @@ class _SlipBoxScreenState extends State<SlipBoxScreen> {
             // Bluetooth dialog overlay
             if (_showBluetoothDialog)
               Container(
-                color: Colors.black.withOpacity(0.5),
+                color: Colors.black.withValues(alpha: 0.5),
                 child: Center(
                   child: Container(
                     margin: EdgeInsets.symmetric(horizontal: 20),
@@ -347,9 +347,9 @@ class _SlipBoxScreenState extends State<SlipBoxScreen> {
             Container(
               padding: EdgeInsets.all(12),
               decoration: BoxDecoration(
-                color: Colors.blue.withOpacity(0.1),
+                color: Colors.blue.withValues(alpha: 0.1),
                 borderRadius: BorderRadius.circular(8),
-                border: Border.all(color: Colors.blue.withOpacity(0.3)),
+                border: Border.all(color: Colors.blue.withValues(alpha: 0.3)),
               ),
               child: Row(
                 children: [

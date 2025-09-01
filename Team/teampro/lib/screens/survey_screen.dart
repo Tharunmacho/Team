@@ -41,7 +41,7 @@ class _SurveyScreenState extends State<SurveyScreen> {
                     child: Container(
                       padding: EdgeInsets.all(8),
                       decoration: BoxDecoration(
-                        color: Colors.white.withOpacity(0.3),
+                        color: Colors.white.withValues(alpha: 0.3),
                         borderRadius: BorderRadius.circular(8),
                       ),
                       child: Icon(
@@ -81,7 +81,7 @@ class _SurveyScreenState extends State<SurveyScreen> {
                 borderRadius: BorderRadius.circular(12),
                 boxShadow: [
                   BoxShadow(
-                    color: Colors.black.withOpacity(0.05),
+                    color: Colors.black.withValues(alpha: 0.05),
                     blurRadius: 8,
                     offset: Offset(0, 2),
                   ),
@@ -124,7 +124,7 @@ class _SurveyScreenState extends State<SurveyScreen> {
                             ),
                           );
                         },
-                        activeColor: Colors.white,
+                        activeThumbColor: Colors.white,
                         activeTrackColor: Colors.green,
                         inactiveThumbColor: Colors.white,
                         inactiveTrackColor: Colors.grey[300],
@@ -151,10 +151,10 @@ class _SurveyScreenState extends State<SurveyScreen> {
                     Container(
                       padding: EdgeInsets.all(16),
                       decoration: BoxDecoration(
-                        color: Colors.green.withOpacity(0.1),
+                        color: Colors.green.withValues(alpha: 0.1),
                         borderRadius: BorderRadius.circular(8),
                         border: Border.all(
-                          color: Colors.green.withOpacity(0.3),
+                          color: Colors.green.withValues(alpha: 0.3),
                         ),
                       ),
                       child: Column(
@@ -193,10 +193,10 @@ class _SurveyScreenState extends State<SurveyScreen> {
                     Container(
                       padding: EdgeInsets.all(16),
                       decoration: BoxDecoration(
-                        color: Colors.grey.withOpacity(0.1),
+                        color: Colors.grey.withValues(alpha: 0.1),
                         borderRadius: BorderRadius.circular(8),
                         border: Border.all(
-                          color: Colors.grey.withOpacity(0.3),
+                          color: Colors.grey.withValues(alpha: 0.3),
                         ),
                       ),
                       child: Column(
@@ -316,7 +316,7 @@ class _SurveyScreenState extends State<SurveyScreen> {
         borderRadius: BorderRadius.circular(12),
         boxShadow: [
           BoxShadow(
-            color: Colors.black.withOpacity(0.05),
+            color: Colors.black.withValues(alpha: 0.05),
             blurRadius: 8,
             offset: Offset(0, 2),
           ),

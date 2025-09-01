@@ -22,7 +22,7 @@ class _SignInScreenState extends State<SignInScreen> {
           children: [
             // Top section with illustrations (same as login screen)
             Expanded(
-              flex: 2,
+              flex: 3,
               child: Container(
                 width: double.infinity,
                 decoration: const BoxDecoration(
@@ -191,23 +191,24 @@ class _SignInScreenState extends State<SignInScreen> {
             ),
             // Bottom section with sign-in form
             Expanded(
-              flex: 3,
+              flex: 4,
               child: Container(
                 width: double.infinity,
-                padding: const EdgeInsets.all(30),
-                child: Column(
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  children: [
-                    // Title
-                    Text(
-                      'Sign In to your account',
-                      style: TextStyle(
-                        fontSize: 24,
-                        fontWeight: FontWeight.bold,
-                        color: Colors.black,
+                padding: const EdgeInsets.symmetric(horizontal: 30, vertical: 20),
+                child: SingleChildScrollView(
+                  child: Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: [
+                      // Title
+                      Text(
+                        'Sign In to your account',
+                        style: TextStyle(
+                          fontSize: 22,
+                          fontWeight: FontWeight.bold,
+                          color: Colors.black,
+                        ),
                       ),
-                    ),
-                    const SizedBox(height: 30),
+                      const SizedBox(height: 25),
                     
                     // Mobile number input
                     Container(
@@ -280,7 +281,7 @@ class _SignInScreenState extends State<SignInScreen> {
                     const SizedBox(height: 20),
                     
                     // Login button
-                    Container(
+                    SizedBox(
                       width: double.infinity,
                       height: 55,
                       child: ElevatedButton(
@@ -319,7 +320,7 @@ class _SignInScreenState extends State<SignInScreen> {
                     const SizedBox(height: 20),
                     
                     // Login with OTP button
-                    Container(
+                    SizedBox(
                       width: double.infinity,
                       height: 55,
                       child: ElevatedButton(
@@ -347,7 +348,7 @@ class _SignInScreenState extends State<SignInScreen> {
                 ),
               ),
             ),
-          ],
+        )],
         ),
       ),
     );
@@ -582,7 +583,7 @@ class PencilPainter extends CustomPainter {
     );
 
     // Add white highlight on pencil body
-    paint.color = Colors.white.withOpacity(0.3);
+    paint.color = Colors.white.withValues(alpha: 0.3);
     canvas.drawRRect(
       RRect.fromRectAndRadius(
         Rect.fromLTWH(size.width * 0.32, size.height * 0.18, size.width * 0.1, size.height * 0.3),

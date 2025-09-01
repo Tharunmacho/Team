@@ -1,6 +1,4 @@
 import 'package:flutter/material.dart';
-import 'login_screen.dart';
-import 'profile_screen.dart';
 import 'cadre_manager_screen.dart';
 import 'part_numbers_screen.dart';
 import 'family_manager_screen.dart';
@@ -12,6 +10,7 @@ import 'notifications_screen.dart';
 import 'transgender_screen.dart';
 import 'fatherless_screen.dart';
 import 'new_voters_screen.dart';
+import 'drawer_screen.dart';
 
 class DashboardScreen extends StatefulWidget {
   const DashboardScreen({super.key});
@@ -27,10 +26,9 @@ class _DashboardScreenState extends State<DashboardScreen> {
 
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-      backgroundColor: Color(0xFFF5F7FA),
-      drawer: _buildNavigationDrawer(),
-      body: SafeArea(
+         return Scaffold(
+       backgroundColor: Color(0xFFF5F7FA),
+       body: SafeArea(
         child: Column(
           children: [
             // Header section
@@ -38,15 +36,15 @@ class _DashboardScreenState extends State<DashboardScreen> {
               padding: const EdgeInsets.all(16),
               child: Row(
                 children: [
-                  // Menu icon
-                  GestureDetector(
-                    onTap: () => Scaffold.of(context).openDrawer(),
-                    child: Icon(
-                      Icons.menu,
-                      size: 28,
-                      color: Colors.black87,
-                    ),
-                  ),
+                                     // Menu icon
+                   GestureDetector(
+                     onTap: () => _showFullScreenDrawer(),
+                     child: Icon(
+                       Icons.menu,
+                       size: 28,
+                       color: Colors.black87,
+                     ),
+                   ),
                   const SizedBox(width: 16),
                   // Location dropdown
                   Expanded(
@@ -215,7 +213,7 @@ class _DashboardScreenState extends State<DashboardScreen> {
                     const SizedBox(height: 20),
                     
                     // Image carousel section
-                    Container(
+                    SizedBox(
                       height: 200,
                       child: PageView(
                         controller: _pageController,
@@ -552,7 +550,7 @@ class _DashboardScreenState extends State<DashboardScreen> {
             width: 60,
             height: 60,
             decoration: BoxDecoration(
-              color: color.withOpacity(0.1),
+              color: color.withValues(alpha: 0.1),
               borderRadius: BorderRadius.circular(12),
             ),
             child: Icon(
@@ -584,7 +582,7 @@ class _DashboardScreenState extends State<DashboardScreen> {
         borderRadius: BorderRadius.circular(12),
         boxShadow: [
           BoxShadow(
-            color: Colors.black.withOpacity(0.05),
+            color: Colors.black.withValues(alpha: 0.05),
             blurRadius: 10,
             offset: Offset(0, 2),
           ),
@@ -725,7 +723,7 @@ class _DashboardScreenState extends State<DashboardScreen> {
                 ),
               ),
               const SizedBox(height: 30),
-              Container(
+              SizedBox(
                 width: double.infinity,
                 height: 50,
                 child: ElevatedButton(
@@ -751,7 +749,7 @@ class _DashboardScreenState extends State<DashboardScreen> {
                 ),
               ),
               const SizedBox(height: 12),
-              Container(
+              SizedBox(
                 width: double.infinity,
                 height: 50,
                 child: OutlinedButton(
@@ -791,226 +789,16 @@ class _DashboardScreenState extends State<DashboardScreen> {
     );
   }
 
-  Widget _buildNavigationDrawer() {
-    return Drawer(
-      child: Container(
-        color: Color(0xFFF5F7FA),
-        child: Column(
-          children: [
-            // Profile section with curved background
-            Container(
-              height: 280,
-              child: Stack(
-                children: [
-                  // Curved background
-                  Container(
-                    height: 240,
-                    decoration: BoxDecoration(
-                      gradient: LinearGradient(
-                        begin: Alignment.topLeft,
-                        end: Alignment.bottomRight,
-                        colors: [
-                          Color(0xFFE3F2FD),
-                          Color(0xFFBBDEFB),
-                        ],
-                      ),
-                      borderRadius: BorderRadius.only(
-                        bottomLeft: Radius.circular(50),
-                        bottomRight: Radius.circular(50),
-                      ),
-                    ),
-                  ),
-                  // Close button
-                  Positioned(
-                    top: 40,
-                    right: 16,
-                    child: GestureDetector(
-                      onTap: () => Navigator.pop(context),
-                      child: Container(
-                        padding: EdgeInsets.all(8),
-                        decoration: BoxDecoration(
-                          color: Colors.white.withOpacity(0.3),
-                          borderRadius: BorderRadius.circular(20),
-                        ),
-                        child: Icon(
-                          Icons.close,
-                          color: Colors.black54,
-                          size: 24,
-                        ),
-                      ),
-                    ),
-                  ),
-                  // Profile content
-                  Positioned(
-                    top: 80,
-                    left: 0,
-                    right: 0,
-                    child: Column(
-                      children: [
-                        // Profile image with political meeting background
-                        Container(
-                          width: 120,
-                          height: 80,
-                          decoration: BoxDecoration(
-                            borderRadius: BorderRadius.circular(12),
-                            gradient: LinearGradient(
-                              begin: Alignment.topLeft,
-                              end: Alignment.bottomRight,
-                              colors: [
-                                Color(0xFF4CAF50),
-                                Color(0xFF66BB6A),
-                              ],
-                            ),
-                          ),
-                          child: Center(
-                            child: Icon(
-                              Icons.campaign,
-                              size: 40,
-                              color: Colors.white,
-                            ),
-                          ),
-                        ),
-                        const SizedBox(height: 16),
-                        // User name
-                        Text(
-                          'ramachandran ...',
-                          style: TextStyle(
-                            fontSize: 20,
-                            fontWeight: FontWeight.bold,
-                            color: Colors.black87,
-                          ),
-                        ),
-                        const SizedBox(height: 4),
-                        // Role
-                        Text(
-                          'Super Admin',
-                          style: TextStyle(
-                            fontSize: 14,
-                            color: Colors.black54,
-                          ),
-                        ),
-                        const SizedBox(height: 16),
-                        // Action buttons
-                        Row(
-                          mainAxisAlignment: MainAxisAlignment.center,
-                          children: [
-                            _buildActionButton(Icons.list_alt, 'Overview'),
-                            const SizedBox(width: 20),
-                            _buildActionButton(Icons.home, 'Home'),
-                            const SizedBox(width: 20),
-                            _buildActionButton(Icons.camera_alt, 'Camera'),
-                          ],
-                        ),
-                      ],
-                    ),
-                  ),
-                ],
-              ),
-            ),
-            
-            // Menu items
-            Expanded(
-              child: ListView(
-                padding: EdgeInsets.symmetric(horizontal: 16, vertical: 8),
-                children: [
-                  _buildMenuItem(Icons.person_outline, 'My Profile'),
-                  _buildMenuItem(Icons.how_to_vote_outlined, 'Your Elections'),
-                  _buildMenuItem(Icons.settings_outlined, 'Settings'),
-                  _buildMenuItem(Icons.language_outlined, 'App Language'),
-                  _buildMenuItem(Icons.lock_outline, 'Change Password'),
-                  _buildMenuItem(Icons.privacy_tip_outlined, 'Privacy Policy'),
-                  _buildMenuItem(Icons.description_outlined, 'Terms & Conditions'),
-                  _buildMenuItem(Icons.help_outline, 'Help'),
-                  _buildMenuItem(Icons.info_outline, 'About'),
-                  const SizedBox(height: 20),
-                  _buildMenuItem(Icons.logout, 'Logout', isLogout: true),
-                ],
-              ),
-            ),
-            
-            // Version info
-            Container(
-              padding: EdgeInsets.all(16),
-              child: Text(
-                'V.3.1 | 21-May-2025',
-                style: TextStyle(
-                  fontSize: 12,
-                  color: Colors.black54,
-                ),
-                textAlign: TextAlign.center,
-              ),
-            ),
-          ],
-        ),
-      ),
-    );
-  }
+     void _showFullScreenDrawer() {
+     Navigator.push(
+       context,
+       MaterialPageRoute(
+         builder: (context) => DrawerScreen(),
+       ),
+     );
+   }
 
-  Widget _buildActionButton(IconData icon, String label) {
-    return Container(
-      padding: EdgeInsets.all(12),
-      decoration: BoxDecoration(
-        color: Colors.white.withOpacity(0.3),
-        borderRadius: BorderRadius.circular(12),
-      ),
-      child: Column(
-        mainAxisSize: MainAxisSize.min,
-        children: [
-          Icon(
-            icon,
-            size: 20,
-            color: Colors.black87,
-          ),
-          const SizedBox(height: 4),
-          Text(
-            label,
-            style: TextStyle(
-              fontSize: 10,
-              color: Colors.black87,
-            ),
-          ),
-        ],
-      ),
-    );
-  }
 
-  Widget _buildMenuItem(IconData icon, String title, {bool isLogout = false}) {
-    return Container(
-      margin: EdgeInsets.symmetric(vertical: 4),
-      child: ListTile(
-        leading: Icon(
-          icon,
-          color: isLogout ? Colors.red : Color(0xFF1976D2),
-          size: 24,
-        ),
-        title: Text(
-          title,
-          style: TextStyle(
-            fontSize: 16,
-            color: isLogout ? Colors.red : Colors.black87,
-            fontWeight: FontWeight.w500,
-          ),
-        ),
-        onTap: () {
-          if (isLogout) {
-            // Handle logout - navigate back to login screen
-            Navigator.pushReplacement(
-              context,
-              MaterialPageRoute(builder: (context) => LoginScreen()),
-            );
-          } else {
-            // Navigate to profile screen for all menu items
-            Navigator.pop(context); // Close drawer first
-            Navigator.push(
-              context,
-              MaterialPageRoute(builder: (context) => ProfileScreen()),
-            );
-          }
-        },
-        contentPadding: EdgeInsets.symmetric(horizontal: 0, vertical: 4),
-      ),
-    );
-  }
 
   @override
   void dispose() {

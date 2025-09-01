@@ -11,10 +11,10 @@ class PollDayDetailsScreen extends StatefulWidget {
 
 class _PollDayDetailsScreenState extends State<PollDayDetailsScreen> {
   final TextEditingController _searchController = TextEditingController();
-  Map<int, bool> _votingStatus = {}; // Track voting status for each booth
+  final Map<int, bool> _votingStatus = {}; // Track voting status for each booth
   int _votedCount = 2;
   int _notVotedCount = 1453;
-  int _totalCount = 1455;
+  final int _totalCount = 1455;
 
   @override
   void initState() {
@@ -72,7 +72,7 @@ class _PollDayDetailsScreenState extends State<PollDayDetailsScreen> {
                     child: Container(
                       padding: EdgeInsets.all(8),
                       decoration: BoxDecoration(
-                        color: Colors.white.withOpacity(0.3),
+                        color: Colors.white.withValues(alpha: 0.3),
                         borderRadius: BorderRadius.circular(8),
                       ),
                       child: Icon(
@@ -221,9 +221,9 @@ class _PollDayDetailsScreenState extends State<PollDayDetailsScreen> {
     return Container(
       padding: EdgeInsets.symmetric(vertical: 12, horizontal: 8),
       decoration: BoxDecoration(
-        color: color.withOpacity(0.1),
+        color: color.withValues(alpha: 0.1),
         borderRadius: BorderRadius.circular(20),
-        border: Border.all(color: color.withOpacity(0.3)),
+        border: Border.all(color: color.withValues(alpha: 0.3)),
       ),
       child: Text(
         text,
@@ -242,7 +242,7 @@ class _PollDayDetailsScreenState extends State<PollDayDetailsScreen> {
       onTap: () => _toggleVotingStatus(boothNumber),
       child: Container(
         decoration: BoxDecoration(
-          color: isVoted ? Colors.green.withOpacity(0.1) : Colors.pink.withOpacity(0.1),
+          color: isVoted ? Colors.green.withValues(alpha: 0.1) : Colors.pink.withValues(alpha: 0.1),
           borderRadius: BorderRadius.circular(20),
           border: Border.all(
             color: isVoted ? Colors.green : Colors.pink,
