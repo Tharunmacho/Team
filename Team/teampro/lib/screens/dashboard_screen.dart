@@ -13,6 +13,12 @@ import 'transgender_screen.dart';
 import 'fatherless_screen.dart';
 import 'new_voters_screen.dart';
 import 'guardian_screen.dart';
+import 'birthday_screen.dart';
+import 'overseas_screen.dart';
+import 'star_screen.dart';
+import 'mobile_screen.dart';
+import 'above80_screen.dart';
+import 'my_cadre_screen.dart';
 
 class DashboardScreen extends StatefulWidget {
   const DashboardScreen({super.key});
@@ -347,29 +353,53 @@ class _DashboardScreenState extends State<DashboardScreen> {
                           Row(
                             children: [
                               Expanded(
-                                child: _buildStatCard(
-                                  'Total\nCadres',
-                                  '0',
-                                  Color(0xFF1976D2),
-                                  Icons.directions_walk,
+                                child: GestureDetector(
+                                  onTap: () {
+                                    Navigator.push(
+                                      context,
+                                      MaterialPageRoute(builder: (context) => MyCadreScreen()),
+                                    );
+                                  },
+                                  child: _buildStatCard(
+                                    'Total\nCadres',
+                                    '0',
+                                    Color(0xFF1976D2),
+                                    Icons.directions_walk,
+                                  ),
                                 ),
                               ),
                               const SizedBox(width: 12),
                               Expanded(
-                                child: _buildStatCard(
-                                  'Cadre\nActive',
-                                  '0',
-                                  Color(0xFF4CAF50),
-                                  null,
+                                child: GestureDetector(
+                                  onTap: () {
+                                    Navigator.push(
+                                      context,
+                                      MaterialPageRoute(builder: (context) => MyCadreScreen()),
+                                    );
+                                  },
+                                  child: _buildStatCard(
+                                    'Cadre\nActive',
+                                    '0',
+                                    Color(0xFF4CAF50),
+                                    null,
+                                  ),
                                 ),
                               ),
                               const SizedBox(width: 12),
                               Expanded(
-                                child: _buildStatCard(
-                                  'Cadre\nInActive',
-                                  '0',
-                                  Color(0xFFF44336),
-                                  null,
+                                child: GestureDetector(
+                                  onTap: () {
+                                    Navigator.push(
+                                      context,
+                                      MaterialPageRoute(builder: (context) => MyCadreScreen()),
+                                    );
+                                  },
+                                  child: _buildStatCard(
+                                    'Cadre\nInActive',
+                                    '0',
+                                    Color(0xFFF44336),
+                                    null,
+                                  ),
                                 ),
                               ),
                             ],
@@ -446,7 +476,7 @@ class _DashboardScreenState extends State<DashboardScreen> {
           if (title == 'Cadre\nManager') {
             Navigator.push(
               context,
-              MaterialPageRoute(builder: (context) => CadreManagerScreen()),
+              MaterialPageRoute(builder: (context) => MyCadreScreen()),
             );
           } else if (title == 'Voter\nManager') {
             Navigator.push(
@@ -511,7 +541,7 @@ class _DashboardScreenState extends State<DashboardScreen> {
         if (title == 'Cadre') {
           Navigator.push(
             context,
-            MaterialPageRoute(builder: (context) => CadreManagerScreen()),
+            MaterialPageRoute(builder: (context) => MyCadreScreen()),
           );
         } else if (title == 'Voter') {
           Navigator.push(
@@ -542,6 +572,31 @@ class _DashboardScreenState extends State<DashboardScreen> {
           Navigator.push(
             context,
             MaterialPageRoute(builder: (context) => GuardianScreen()),
+          );
+        } else if (title == 'Birthday') {
+          Navigator.push(
+            context,
+            MaterialPageRoute(builder: (context) => BirthdayScreen()),
+          );
+        } else if (title == 'Overseas') {
+          Navigator.push(
+            context,
+            MaterialPageRoute(builder: (context) => OverseasScreen()),
+          );
+        } else if (title == 'Star') {
+          Navigator.push(
+            context,
+            MaterialPageRoute(builder: (context) => StarScreen()),
+          );
+        } else if (title == 'Mobile') {
+          Navigator.push(
+            context,
+            MaterialPageRoute(builder: (context) => MobileScreen()),
+          );
+        } else if (title == '80 Above') {
+          Navigator.push(
+            context,
+            MaterialPageRoute(builder: (context) => Above80Screen()),
           );
         } else {
           // Show coming soon message for other categories
