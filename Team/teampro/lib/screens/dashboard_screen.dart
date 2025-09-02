@@ -1,5 +1,4 @@
 import 'package:flutter/material.dart';
-import 'cadre_manager_screen.dart';
 import 'part_numbers_screen.dart';
 import 'family_manager_screen.dart';
 import 'survey_screen.dart';
@@ -10,6 +9,14 @@ import 'notifications_screen.dart';
 import 'transgender_screen.dart';
 import 'fatherless_screen.dart';
 import 'new_voters_screen.dart';
+import 'guardian_screen.dart';
+import 'birthday_screen.dart';
+import 'overseas_screen.dart';
+import 'star_screen.dart';
+import 'mobile_screen.dart';
+import 'above80_screen.dart';
+import 'my_cadre_screen.dart';
+import 'drawer_screen.dart';
 
 class DashboardScreen extends StatefulWidget {
   const DashboardScreen({super.key});
@@ -22,13 +29,11 @@ class _DashboardScreenState extends State<DashboardScreen> {
   final TextEditingController _searchController = TextEditingController();
   final PageController _pageController = PageController();
   int _currentPage = 0;
-  final GlobalKey<ScaffoldState> _scaffoldKey = GlobalKey<ScaffoldState>();
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       backgroundColor: Color(0xFFF5F7FA),
-      drawer: _buildNavigationDrawer(),
       body: SafeArea(
         child: Column(
           children: [
@@ -39,7 +44,14 @@ class _DashboardScreenState extends State<DashboardScreen> {
                 children: [
                   // Menu icon
                   GestureDetector(
-                    onTap: () => Scaffold.of(context).openDrawer(),
+                    onTap: () {
+                      Navigator.push(
+                        context,
+                        MaterialPageRoute(
+                          builder: (context) => DrawerScreen(),
+                        ),
+                      );
+                    },
                     child: Icon(
                       Icons.menu,
                       size: 28,
@@ -171,13 +183,13 @@ class _DashboardScreenState extends State<DashboardScreen> {
                       padding: const EdgeInsets.symmetric(horizontal: 16),
                       child: Row(
                         children: [
-                          _buildManagerCard('Cadre\nManager', Icons.person_outline),
+                          _buildManagerCard('Cadre\nManager', 'assets/icons/cadre.png'),
                           const SizedBox(width: 12),
-                          _buildManagerCard('Voter\nManager', Icons.how_to_vote_outlined),
+                          _buildManagerCard('Voter\nManager', 'assets/icons/voter.png'),
                           const SizedBox(width: 12),
-                          _buildManagerCard('Family\nManager', Icons.family_restroom_outlined),
+                          _buildManagerCard('Family\nManager', 'assets/icons/part.png'),
                           const SizedBox(width: 12),
-                          _buildManagerCard('Survey\nManager', Icons.assignment_outlined),
+                          _buildManagerCard('Survey\nManager', 'assets/icons/New.png'),
                         ],
                       ),
                     ),
@@ -195,18 +207,18 @@ class _DashboardScreenState extends State<DashboardScreen> {
                         mainAxisSpacing: 16,
                         childAspectRatio: 0.85,
                         children: [
-                          _buildCategoryItem('Cadre', Icons.person_pin_circle_outlined, Color(0xFF2196F3)),
-                          _buildCategoryItem('Part', Icons.location_on_outlined, Color(0xFFF44336)),
-                          _buildCategoryItem('Voter', Icons.home_outlined, Color(0xFFFF9800)),
-                          _buildCategoryItem('New', Icons.people_outline, Color(0xFF4CAF50)),
-                          _buildCategoryItem('Transgender', Icons.person_outline, Color(0xFFFFEB3B)),
-                          _buildCategoryItem('Fatherless', Icons.person_off_outlined, Color(0xFF9C27B0)),
-                          _buildCategoryItem('Guardian', Icons.security_outlined, Color(0xFF00BCD4)),
-                          _buildCategoryItem('Overseas', Icons.public_outlined, Color(0xFF607D8B)),
-                          _buildCategoryItem('Birthday', Icons.cake_outlined, Color(0xFFE91E63)),
-                          _buildCategoryItem('Star', Icons.star_outline, Color(0xFFFF5722)),
-                          _buildCategoryItem('Mobile', Icons.phone_android_outlined, Color(0xFF3F51B5)),
-                          _buildCategoryItem('80 Above', Icons.elderly_outlined, Color(0xFF795548)),
+                          _buildCategoryItem('Cadre', 'assets/icons/cadre.png', Color(0xFF2196F3)),
+                          _buildCategoryItem('Part', 'assets/icons/part.png', Color(0xFFF44336)),
+                          _buildCategoryItem('Voter', 'assets/icons/voter.png', Color(0xFFFF9800)),
+                          _buildCategoryItem('New', 'assets/icons/New.png', Color(0xFF4CAF50)),
+                          _buildCategoryItem('Transgender', 'assets/icons/transegender.png', Color(0xFFFFEB3B)),
+                          _buildCategoryItem('Fatherless', 'assets/icons/fatherless.png', Color(0xFF9C27B0)),
+                          _buildCategoryItem('Guardian', 'assets/icons/guardian.png', Color(0xFF00BCD4)),
+                          _buildCategoryItem('Overseas', 'assets/icons/overseas.png', Color(0xFF607D8B)),
+                          _buildCategoryItem('Birthday', 'assets/icons/birthday.png', Color(0xFFE91E63)),
+                          _buildCategoryItem('Star', 'assets/icons/star.png', Color(0xFFFF5722)),
+                          _buildCategoryItem('Mobile', 'assets/icons/Mobile.png', Color(0xFF3F51B5)),
+                          _buildCategoryItem('80 Above', 'assets/icons/80 Above.png', Color(0xFF795548)),
                         ],
                       ),
                     ),
@@ -460,7 +472,7 @@ class _DashboardScreenState extends State<DashboardScreen> {
     );
   }
 
-  Widget _buildManagerCard(String title, IconData icon) {
+  Widget _buildManagerCard(String title, String iconPath) {
     return Expanded(
       child: GestureDetector(
         onTap: () {
@@ -503,9 +515,10 @@ class _DashboardScreenState extends State<DashboardScreen> {
           ),
           child: Column(
             children: [
-              Icon(
-                icon,
-                size: 32,
+              Image.asset(
+                iconPath,
+                width: 32,
+                height: 32,
                 color: Color(0xFF1976D2),
               ),
               const SizedBox(height: 8),
@@ -525,7 +538,7 @@ class _DashboardScreenState extends State<DashboardScreen> {
     );
   }
 
-  Widget _buildCategoryItem(String title, IconData icon, Color color) {
+  Widget _buildCategoryItem(String title, String iconPath, Color color) {
     return GestureDetector(
       onTap: () {
         // Handle navigation for different categories
@@ -608,10 +621,11 @@ class _DashboardScreenState extends State<DashboardScreen> {
               color: color.withValues(alpha: 0.1),
               borderRadius: BorderRadius.circular(12),
             ),
-            child: Icon(
-              icon,
+            child: Image.asset(
+              iconPath,
+              width: 28,
+              height: 28,
               color: color,
-              size: 28,
             ),
           ),
           const SizedBox(height: 8),
@@ -840,227 +854,6 @@ class _DashboardScreenState extends State<DashboardScreen> {
         content: Text(message),
         duration: Duration(seconds: 2),
         backgroundColor: Color(0xFF1976D2),
-      ),
-    );
-  }
-
-  Widget _buildNavigationDrawer() {
-    return Drawer(
-      child: Container(
-        color: Color(0xFFF5F7FA),
-        child: Column(
-          children: [
-            // Profile section with curved background
-            Container(
-              height: 280,
-              child: Stack(
-                children: [
-                  // Curved background
-                  Container(
-                    height: 240,
-                    decoration: BoxDecoration(
-                      gradient: LinearGradient(
-                        begin: Alignment.topLeft,
-                        end: Alignment.bottomRight,
-                        colors: [
-                          Color(0xFFE3F2FD),
-                          Color(0xFFBBDEFB),
-                        ],
-                      ),
-                      borderRadius: BorderRadius.only(
-                        bottomLeft: Radius.circular(50),
-                        bottomRight: Radius.circular(50),
-                      ),
-                    ),
-                  ),
-                  // Close button
-                  Positioned(
-                    top: 40,
-                    right: 16,
-                    child: GestureDetector(
-                      onTap: () => Navigator.pop(context),
-                      child: Container(
-                        padding: EdgeInsets.all(8),
-                        decoration: BoxDecoration(
-                          color: Colors.white.withOpacity(0.3),
-                          borderRadius: BorderRadius.circular(20),
-                        ),
-                        child: Icon(
-                          Icons.close,
-                          color: Colors.black54,
-                          size: 24,
-                        ),
-                      ),
-                    ),
-                  ),
-                  // Profile content
-                  Positioned(
-                    top: 80,
-                    left: 0,
-                    right: 0,
-                    child: Column(
-                      children: [
-                        // Profile image with political meeting background
-                        Container(
-                          width: 120,
-                          height: 80,
-                          decoration: BoxDecoration(
-                            borderRadius: BorderRadius.circular(12),
-                            gradient: LinearGradient(
-                              begin: Alignment.topLeft,
-                              end: Alignment.bottomRight,
-                              colors: [
-                                Color(0xFF4CAF50),
-                                Color(0xFF66BB6A),
-                              ],
-                            ),
-                          ),
-                          child: Center(
-                            child: Icon(
-                              Icons.campaign,
-                              size: 40,
-                              color: Colors.white,
-                            ),
-                          ),
-                        ),
-                        const SizedBox(height: 16),
-                        // User name
-                        Text(
-                          'ramachandran ...',
-                          style: TextStyle(
-                            fontSize: 20,
-                            fontWeight: FontWeight.bold,
-                            color: Colors.black87,
-                          ),
-                        ),
-                        const SizedBox(height: 4),
-                        // Role
-                        Text(
-                          'Super Admin',
-                          style: TextStyle(
-                            fontSize: 14,
-                            color: Colors.black54,
-                          ),
-                        ),
-                        const SizedBox(height: 16),
-                        // Action buttons
-                        Row(
-                          mainAxisAlignment: MainAxisAlignment.center,
-                          children: [
-                            _buildActionButton(Icons.list_alt, 'Overview'),
-                            const SizedBox(width: 20),
-                            _buildActionButton(Icons.home, 'Home'),
-                            const SizedBox(width: 20),
-                            _buildActionButton(Icons.camera_alt, 'Camera'),
-                          ],
-                        ),
-                      ],
-                    ),
-                  ),
-                ],
-              ),
-            ),
-            
-            // Menu items
-            Expanded(
-              child: ListView(
-                padding: EdgeInsets.symmetric(horizontal: 16, vertical: 8),
-                children: [
-                  _buildMenuItem(Icons.person_outline, 'My Profile'),
-                  _buildMenuItem(Icons.how_to_vote_outlined, 'Your Elections'),
-                  _buildMenuItem(Icons.settings_outlined, 'Settings'),
-                  _buildMenuItem(Icons.language_outlined, 'App Language'),
-                  _buildMenuItem(Icons.lock_outline, 'Change Password'),
-                  _buildMenuItem(Icons.privacy_tip_outlined, 'Privacy Policy'),
-                  _buildMenuItem(Icons.description_outlined, 'Terms & Conditions'),
-                  _buildMenuItem(Icons.help_outline, 'Help'),
-                  _buildMenuItem(Icons.info_outline, 'About'),
-                  const SizedBox(height: 20),
-                  _buildMenuItem(Icons.logout, 'Logout', isLogout: true),
-                ],
-              ),
-            ),
-            
-            // Version info
-            Container(
-              padding: EdgeInsets.all(16),
-              child: Text(
-                'V.3.1 | 21-May-2025',
-                style: TextStyle(
-                  fontSize: 12,
-                  color: Colors.black54,
-                ),
-                textAlign: TextAlign.center,
-              ),
-            ),
-          ],
-        ),
-      ),
-    );
-  }
-
-  Widget _buildActionButton(IconData icon, String label) {
-    return Container(
-      padding: EdgeInsets.all(12),
-      decoration: BoxDecoration(
-        color: Colors.white.withOpacity(0.3),
-        borderRadius: BorderRadius.circular(12),
-      ),
-      child: Column(
-        mainAxisSize: MainAxisSize.min,
-        children: [
-          Icon(
-            icon,
-            size: 20,
-            color: Colors.black87,
-          ),
-          const SizedBox(height: 4),
-          Text(
-            label,
-            style: TextStyle(
-              fontSize: 10,
-              color: Colors.black87,
-            ),
-          ),
-        ],
-      ),
-    );
-  }
-
-  Widget _buildMenuItem(IconData icon, String title, {bool isLogout = false}) {
-    return Container(
-      margin: EdgeInsets.symmetric(vertical: 4),
-      child: ListTile(
-        leading: Icon(
-          icon,
-          color: isLogout ? Colors.red : Color(0xFF1976D2),
-          size: 24,
-        ),
-        title: Text(
-          title,
-          style: TextStyle(
-            fontSize: 16,
-            color: isLogout ? Colors.red : Colors.black87,
-            fontWeight: FontWeight.w500,
-          ),
-        ),
-        onTap: () {
-          if (isLogout) {
-            // Handle logout - navigate back to login screen
-            Navigator.pushReplacement(
-              context,
-              MaterialPageRoute(builder: (context) => LoginScreen()),
-            );
-          } else {
-            // Navigate to profile screen for all menu items
-            Navigator.pop(context); // Close drawer first
-            Navigator.push(
-              context,
-              MaterialPageRoute(builder: (context) => ProfileScreen()),
-            );
-          }
-        },
-        contentPadding: EdgeInsets.symmetric(horizontal: 0, vertical: 4),
       ),
     );
   }

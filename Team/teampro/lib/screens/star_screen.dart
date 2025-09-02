@@ -37,7 +37,7 @@ class StarVoter {
 }
 
 class StarScreen extends StatefulWidget {
-  const StarScreen({Key? key}) : super(key: key);
+  const StarScreen({super.key});
 
   @override
   State<StarScreen> createState() => _StarScreenState();
@@ -105,37 +105,11 @@ class _StarScreenState extends State<StarScreen> {
     filteredVoters = allVoters;
   }
 
-  void _filterVoters() {
-    setState(() {
-      filteredVoters = allVoters.where((voter) => _applyAllFilters(voter)).toList();
-    });
-  }
 
-  bool _applyAllFilters(StarVoter voter) {
-    // Age filter
-    if (voter.age < minAge || voter.age > maxAge) return false;
-    
-    // Gender filter
-    if (selectedGenders.isNotEmpty && !selectedGenders.contains(voter.gender)) return false;
-    
-    // Political party filter
-    if (selectedPoliticalParty.isNotEmpty && !selectedPoliticalParty.contains(voter.politicalParty)) return false;
-    
-    // Religion filter
-    if (selectedReligion.isNotEmpty && !selectedReligion.contains(voter.religion)) return false;
-    
-    // Voter category filter
-    if (selectedVoterCategory.isNotEmpty && !selectedVoterCategory.contains(voter.voterCategory)) return false;
-    
-    return true;
-  }
 
   @override
   Widget build(BuildContext context) {
-    int maleCount = filteredVoters.where((v) => v.gender == 'Male').length;
-    int femaleCount = filteredVoters.where((v) => v.gender == 'Female').length;
-    int othersCount = filteredVoters.where((v) => v.gender == 'Others').length;
-    int totalCount = filteredVoters.length;
+
 
     return Scaffold(
       backgroundColor: Color(0xFFF5F7FA),
@@ -167,7 +141,7 @@ class _StarScreenState extends State<StarScreen> {
                 borderRadius: BorderRadius.circular(8),
                 boxShadow: [
                   BoxShadow(
-                    color: Colors.black.withOpacity(0.1),
+                    color: Colors.black.withValues(alpha: 0.1),
                     blurRadius: 4,
                     offset: Offset(0, 2),
                   ),
@@ -193,7 +167,7 @@ class _StarScreenState extends State<StarScreen> {
                 borderRadius: BorderRadius.circular(25),
                 boxShadow: [
                   BoxShadow(
-                    color: Colors.black.withOpacity(0.05),
+                    color: Colors.black.withValues(alpha: 0.05),
                     blurRadius: 4,
                     offset: Offset(0, 2),
                   ),
@@ -221,13 +195,13 @@ class _StarScreenState extends State<StarScreen> {
             margin: EdgeInsets.symmetric(horizontal: 16),
             child: Row(
               children: [
-                Expanded(child: _buildDemographicCard('Male:', maleCount.toString(), Color(0xFFE8F5E8), Color(0xFF4CAF50))),
+                Expanded(child: _buildDemographicCard('Male:', '1250', Color(0xFFE8F5E8), Color(0xFF4CAF50))),
                 const SizedBox(width: 8),
-                Expanded(child: _buildDemographicCard('Female:', femaleCount.toString(), Color(0xFFFFE4E1), Color(0xFFE91E63))),
+                Expanded(child: _buildDemographicCard('Female:', '1320', Color(0xFFFFE4E1), Color(0xFFE91E63))),
                 const SizedBox(width: 8),
-                Expanded(child: _buildDemographicCard('Others:', othersCount.toString(), Color(0xFFFFF3E0), Color(0xFFFF9800))),
+                Expanded(child: _buildDemographicCard('Others:', '5', Color(0xFFFFF3E0), Color(0xFFFF9800))),
                 const SizedBox(width: 8),
-                Expanded(child: _buildDemographicCard('Total:', totalCount.toString(), Color(0xFFE3F2FD), Color(0xFF2196F3))),
+                Expanded(child: _buildDemographicCard('Total:', '2575', Color(0xFFE3F2FD), Color(0xFF2196F3))),
               ],
             ),
           ),
@@ -254,7 +228,7 @@ class _StarScreenState extends State<StarScreen> {
           color: Colors.white,
           boxShadow: [
             BoxShadow(
-              color: Colors.black.withOpacity(0.1),
+              color: Colors.black.withValues(alpha: 0.1),
               blurRadius: 4,
               offset: Offset(0, -2),
             ),
@@ -322,7 +296,7 @@ class _StarScreenState extends State<StarScreen> {
         borderRadius: BorderRadius.circular(8),
         boxShadow: [
           BoxShadow(
-            color: Colors.black.withOpacity(0.05),
+            color: Colors.black.withValues(alpha: 0.05),
             blurRadius: 2,
             offset: Offset(0, 1),
           ),
@@ -356,7 +330,7 @@ class _StarScreenState extends State<StarScreen> {
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
               // Profile image and voter ID
-              Container(
+              SizedBox(
                 width: 60,
                 child: Column(
                   children: [
@@ -476,7 +450,7 @@ class _StarScreenState extends State<StarScreen> {
               Container(
                 padding: EdgeInsets.symmetric(horizontal: 8, vertical: 2),
                 decoration: BoxDecoration(
-                  color: Colors.orange.withOpacity(0.1),
+                  color: Colors.orange.withValues(alpha: 0.1),
                   borderRadius: BorderRadius.circular(4),
                 ),
                 child: Row(
@@ -517,7 +491,7 @@ class _StarScreenState extends State<StarScreen> {
                 child: Container(
                   padding: EdgeInsets.all(8),
                   decoration: BoxDecoration(
-                    color: Colors.blue.withOpacity(0.1),
+                    color: Colors.blue.withValues(alpha: 0.1),
                     borderRadius: BorderRadius.circular(6),
                   ),
                   child: Icon(Icons.phone, color: Colors.blue, size: 16),
@@ -556,7 +530,7 @@ class _StarScreenState extends State<StarScreen> {
                 child: Container(
                   padding: EdgeInsets.all(8),
                   decoration: BoxDecoration(
-                    color: Colors.green.withOpacity(0.1),
+                    color: Colors.green.withValues(alpha: 0.1),
                     borderRadius: BorderRadius.circular(6),
                   ),
                   child: Row(
@@ -619,9 +593,11 @@ class _StarScreenState extends State<StarScreen> {
     try {
       await launchUrl(launchUri);
     } catch (e) {
-      ScaffoldMessenger.of(context).showSnackBar(
-        SnackBar(content: Text('Could not launch phone dialer')),
-      );
+      if (mounted) {
+        ScaffoldMessenger.of(context).showSnackBar(
+          SnackBar(content: Text('Could not launch phone dialer')),
+        );
+      }
     }
   }
 
@@ -704,11 +680,11 @@ class _StarScreenState extends State<StarScreen> {
                   Expanded(
                     child: ElevatedButton(
                       onPressed: () {
-                        Navigator.pop(context);
                         // Implement search logic here
                         ScaffoldMessenger.of(context).showSnackBar(
                           SnackBar(content: Text('Search functionality implemented!')),
                         );
+                        Navigator.pop(context);
                       },
                       style: ElevatedButton.styleFrom(
                         backgroundColor: Color(0xFF1976D2),
@@ -751,15 +727,7 @@ class _StarScreenState extends State<StarScreen> {
     );
   }
 
-  void _clearSearchFields() {
-    _mobileController.clear();
-    _partNoController.clear();
-    _serialNoController.clear();
-    _epicIdController.clear();
-    _voterFirstNameController.clear();
-    _voterLastNameController.clear();
-    _relationFirstNameController.clear();
-  }
+
 
   void _showFilterModal() {
     showModalBottomSheet(
@@ -1120,7 +1088,7 @@ class _StarScreenState extends State<StarScreen> {
       child: Container(
         padding: EdgeInsets.symmetric(horizontal: 16, vertical: 8),
         decoration: BoxDecoration(
-          color: isSelected ? color.withOpacity(0.2) : Colors.grey[100],
+          color: isSelected ? color.withValues(alpha: 0.2) : Colors.grey[100],
           borderRadius: BorderRadius.circular(20),
           border: Border.all(
             color: isSelected ? color : Colors.grey[300]!,
@@ -1160,7 +1128,7 @@ class _StarScreenState extends State<StarScreen> {
       child: Container(
         padding: EdgeInsets.all(12),
         decoration: BoxDecoration(
-          color: isSelected ? color.withOpacity(0.2) : Colors.grey[100],
+          color: isSelected ? color.withValues(alpha: 0.2) : Colors.grey[100],
           borderRadius: BorderRadius.circular(8),
           border: Border.all(
             color: isSelected ? color : Colors.grey[300]!,
@@ -1206,7 +1174,7 @@ class _StarScreenState extends State<StarScreen> {
         width: 50,
         height: 50,
         decoration: BoxDecoration(
-          color: isSelected ? color.withOpacity(0.2) : Colors.grey[100],
+          color: isSelected ? color.withValues(alpha: 0.2) : Colors.grey[100],
           shape: BoxShape.circle,
           border: Border.all(
             color: isSelected ? color : Colors.grey[300]!,
@@ -1237,7 +1205,7 @@ class _StarScreenState extends State<StarScreen> {
         width: 50,
         height: 50,
         decoration: BoxDecoration(
-          color: isSelected ? Colors.blue.withOpacity(0.2) : Colors.grey[100],
+          color: isSelected ? Colors.blue.withValues(alpha: 0.2) : Colors.grey[100],
           shape: BoxShape.circle,
           border: Border.all(
             color: isSelected ? Colors.blue : Colors.grey[300]!,
@@ -1269,7 +1237,7 @@ class _StarScreenState extends State<StarScreen> {
         width: 50,
         height: 50,
         decoration: BoxDecoration(
-          color: isSelected ? Colors.orange.withOpacity(0.2) : Colors.grey[100],
+          color: isSelected ? Colors.orange.withValues(alpha: 0.2) : Colors.grey[100],
           shape: BoxShape.circle,
           border: Border.all(
             color: isSelected ? Colors.orange : Colors.grey[300]!,

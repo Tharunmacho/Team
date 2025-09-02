@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 import 'create_cadre_screen.dart';
 
 class MyCadreScreen extends StatefulWidget {
-  const MyCadreScreen({Key? key}) : super(key: key);
+  const MyCadreScreen({super.key});
 
   @override
   State<MyCadreScreen> createState() => _MyCadreScreenState();
@@ -94,7 +94,7 @@ class _MyCadreScreenState extends State<MyCadreScreen> with SingleTickerProvider
                       borderRadius: BorderRadius.circular(25),
                       boxShadow: [
                         BoxShadow(
-                          color: Colors.black.withOpacity(0.05),
+                          color: Colors.black.withValues(alpha: 0.05),
                           blurRadius: 4,
                           offset: Offset(0, 2),
                         ),
@@ -139,7 +139,7 @@ class _MyCadreScreenState extends State<MyCadreScreen> with SingleTickerProvider
                       shape: BoxShape.circle,
                       boxShadow: [
                         BoxShadow(
-                          color: Colors.black.withOpacity(0.1),
+                          color: Colors.black.withValues(alpha: 0.1),
                           blurRadius: 4,
                           offset: Offset(0, 2),
                         ),
@@ -164,7 +164,7 @@ class _MyCadreScreenState extends State<MyCadreScreen> with SingleTickerProvider
               borderRadius: BorderRadius.circular(8),
               boxShadow: [
                 BoxShadow(
-                  color: Colors.black.withOpacity(0.05),
+                  color: Colors.black.withValues(alpha: 0.05),
                   blurRadius: 4,
                   offset: Offset(0, 2),
                 ),
@@ -414,7 +414,7 @@ class _MyCadreScreenState extends State<MyCadreScreen> with SingleTickerProvider
                             child: Container(
                               padding: EdgeInsets.symmetric(horizontal: 16, vertical: 8),
                               decoration: BoxDecoration(
-                                color: isSelected ? Color(0xFF1976D2).withOpacity(0.2) : Colors.grey[100],
+                                color: isSelected ? Color(0xFF1976D2).withValues(alpha: 0.2) : Colors.grey[100],
                                 borderRadius: BorderRadius.circular(20),
                                 border: Border.all(
                                   color: isSelected ? Color(0xFF1976D2) : Colors.grey[300]!,
@@ -451,7 +451,7 @@ class _MyCadreScreenState extends State<MyCadreScreen> with SingleTickerProvider
                           border: Border.all(color: Colors.grey[300]!),
                         ),
                         child: DropdownButtonFormField<String>(
-                          value: selectedRole.isEmpty ? null : selectedRole,
+                          initialValue: selectedRole.isEmpty ? null : selectedRole,
                           hint: Text(
                             'Select Role',
                             style: TextStyle(color: Colors.grey[500]),
@@ -493,7 +493,7 @@ class _MyCadreScreenState extends State<MyCadreScreen> with SingleTickerProvider
                           border: Border.all(color: Colors.grey[300]!),
                         ),
                         child: DropdownButtonFormField<String>(
-                          value: selectedBooth.isEmpty ? null : selectedBooth,
+                          initialValue: selectedBooth.isEmpty ? null : selectedBooth,
                           hint: Text(
                             'Select Booth',
                             style: TextStyle(color: Colors.grey[500]),

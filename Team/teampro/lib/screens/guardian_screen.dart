@@ -1,5 +1,4 @@
 import 'package:flutter/material.dart';
-import 'package:url_launcher/url_launcher.dart';
 import 'voter_info_screen.dart';
 import 'phone_call_screen.dart';
 
@@ -109,61 +108,7 @@ class _GuardianScreenState extends State<GuardianScreen> {
     filteredVoters = voters;
   }
 
-  void _filterVoters(String query) {
-    setState(() {
-      filteredVoters = _applyAllFilters(query);
-    });
-  }
 
-  List<GuardianVoter> _applyAllFilters([String? searchQuery]) {
-    List<GuardianVoter> result = List.from(voters);
-
-    // Apply search query filter
-    if (searchQuery != null && searchQuery.isNotEmpty) {
-      result = result.where((voter) =>
-        voter.name.toLowerCase().contains(searchQuery.toLowerCase()) ||
-        voter.voterId.toLowerCase().contains(searchQuery.toLowerCase()) ||
-        voter.serialNo.toString().contains(searchQuery) ||
-        voter.mobileNumber.contains(searchQuery) ||
-        voter.doorNo.toLowerCase().contains(searchQuery.toLowerCase())
-      ).toList();
-    }
-
-    // Apply age filter
-    result = result.where((voter) => 
-      voter.age >= minAge && voter.age <= maxAge
-    ).toList();
-
-    // Apply gender filter
-    if (selectedGenders.isNotEmpty) {
-      result = result.where((voter) => 
-        selectedGenders.contains(voter.gender)
-      ).toList();
-    }
-
-    // Apply political party filter
-    if (selectedPoliticalParty.isNotEmpty) {
-      result = result.where((voter) => 
-        selectedPoliticalParty.contains(voter.politicalParty)
-      ).toList();
-    }
-
-    // Apply religion filter
-    if (selectedReligion.isNotEmpty) {
-      result = result.where((voter) => 
-        selectedReligion.contains(voter.religion)
-      ).toList();
-    }
-
-    // Apply voter category filter
-    if (selectedVoterCategory.isNotEmpty) {
-      result = result.where((voter) => 
-        selectedVoterCategory.contains(voter.voterCategory)
-      ).toList();
-    }
-
-    return result;
-  }
 
   @override
   Widget build(BuildContext context) {
@@ -340,7 +285,7 @@ class _GuardianScreenState extends State<GuardianScreen> {
           color: Colors.white,
           boxShadow: [
             BoxShadow(
-              color: Colors.black.withOpacity(0.1),
+              color: Colors.black.withValues(alpha: 0.1),
               blurRadius: 10,
               offset: Offset(0, -2),
             ),
@@ -379,7 +324,7 @@ class _GuardianScreenState extends State<GuardianScreen> {
         borderRadius: BorderRadius.circular(16),
         boxShadow: [
           BoxShadow(
-            color: Colors.black.withOpacity(0.05),
+            color: Colors.black.withValues(alpha: 0.05),
             blurRadius: 8,
             offset: Offset(0, 2),
           ),
@@ -388,7 +333,7 @@ class _GuardianScreenState extends State<GuardianScreen> {
       child: Column(
         children: [
           Text(
-            title + ':',
+            '$title:',
             style: TextStyle(
               fontSize: 13,
               fontWeight: FontWeight.w600,
@@ -418,7 +363,7 @@ class _GuardianScreenState extends State<GuardianScreen> {
         borderRadius: BorderRadius.circular(12),
         boxShadow: [
           BoxShadow(
-            color: Colors.black.withOpacity(0.05),
+            color: Colors.black.withValues(alpha: 0.05),
             blurRadius: 10,
             offset: Offset(0, 2),
           ),
@@ -743,23 +688,7 @@ class _GuardianScreenState extends State<GuardianScreen> {
     );
   }
 
-  // Phone call functionality
-  void _makePhoneCall(String phoneNumber) async {
-    final Uri launchUri = Uri(
-      scheme: 'tel',
-      path: phoneNumber,
-    );
-    if (await canLaunchUrl(launchUri)) {
-      await launchUrl(launchUri);
-    } else {
-      ScaffoldMessenger.of(context).showSnackBar(
-        SnackBar(
-          content: Text('Could not launch phone dialer'),
-          backgroundColor: Colors.red,
-        ),
-      );
-    }
-  }
+
 
   // Advanced search modal
   void _showAdvancedSearch() {
@@ -1039,7 +968,6 @@ class _GuardianScreenState extends State<GuardianScreen> {
                     Expanded(
                       child: ElevatedButton(
                         onPressed: () {
-                          _applyFilters();
                           Navigator.pop(context);
                         },
                         style: ElevatedButton.styleFrom(
@@ -1221,7 +1149,7 @@ class _GuardianScreenState extends State<GuardianScreen> {
       child: Container(
         padding: EdgeInsets.symmetric(horizontal: 16, vertical: 8),
         decoration: BoxDecoration(
-          color: isSelected ? color.withOpacity(0.2) : Colors.grey[100],
+          color: isSelected ? color.withValues(alpha: 0.2) : Colors.grey[100],
           borderRadius: BorderRadius.circular(20),
           border: Border.all(
             color: isSelected ? color : Colors.grey[300]!,
@@ -1258,18 +1186,14 @@ class _GuardianScreenState extends State<GuardianScreen> {
     });
   }
 
-  void _applyFilters() {
-    setState(() {
-      filteredVoters = _applyAllFilters();
-    });
-  }
+
 
   void _showCustomDrawer() {
     showGeneralDialog(
       context: context,
       barrierDismissible: true,
       barrierLabel: '',
-      barrierColor: Colors.black.withOpacity(0.5),
+      barrierColor: Colors.black.withValues(alpha: 0.5),
       transitionDuration: Duration(milliseconds: 300),
       pageBuilder: (context, animation, secondaryAnimation) {
         return SlideTransition(
@@ -1290,7 +1214,7 @@ class _GuardianScreenState extends State<GuardianScreen> {
                   child: Column(
                     children: [
                       // Header section with curved background design
-                      Container(
+                      SizedBox(
                         height: 340,
                         child: Stack(
                           children: [
@@ -1352,7 +1276,7 @@ class _GuardianScreenState extends State<GuardianScreen> {
                                       borderRadius: BorderRadius.circular(12),
                                       boxShadow: [
                                         BoxShadow(
-                                          color: Colors.black.withOpacity(0.2),
+                                          color: Colors.black.withValues(alpha: 0.2),
                                           blurRadius: 8,
                                           offset: Offset(0, 4),
                                         ),
@@ -1480,7 +1404,7 @@ class _GuardianScreenState extends State<GuardianScreen> {
     return Container(
       padding: EdgeInsets.all(12),
       decoration: BoxDecoration(
-        color: Colors.white.withOpacity(0.3),
+        color: Colors.white.withValues(alpha: 0.3),
         borderRadius: BorderRadius.circular(12),
       ),
       child: Column(
@@ -1512,20 +1436,24 @@ class _GuardianScreenState extends State<GuardianScreen> {
           Navigator.pop(context); // Close overlay first
           if (title == 'My Profile') {
             // Navigate to profile screen for all menu items
-            ScaffoldMessenger.of(context).showSnackBar(
-              SnackBar(
-                content: Text('$title - Feature coming soon!'),
-                backgroundColor: Color(0xFF1976D2),
-              ),
-            );
+            if (mounted) {
+              ScaffoldMessenger.of(context).showSnackBar(
+                SnackBar(
+                  content: Text('$title - Feature coming soon!'),
+                  backgroundColor: Color(0xFF1976D2),
+                ),
+              );
+            }
           } else {
             // Handle other menu items
-            ScaffoldMessenger.of(context).showSnackBar(
-              SnackBar(
-                content: Text('$title - Feature coming soon!'),
-                backgroundColor: Color(0xFF1976D2),
-              ),
-            );
+            if (mounted) {
+              ScaffoldMessenger.of(context).showSnackBar(
+                SnackBar(
+                  content: Text('$title - Feature coming soon!'),
+                  backgroundColor: Color(0xFF1976D2),
+                ),
+              );
+            }
           }
         },
         child: Container(
@@ -1553,40 +1481,7 @@ class _GuardianScreenState extends State<GuardianScreen> {
     );
   }
 
-  void _showLogoutDialog() {
-    showDialog(
-      context: context,
-      builder: (BuildContext context) {
-        return AlertDialog(
-          title: Text('Logout'),
-          content: Text('Are you sure you want to logout?'),
-          actions: [
-            TextButton(
-              onPressed: () => Navigator.pop(context),
-              child: Text('Cancel'),
-            ),
-            TextButton(
-              onPressed: () {
-                Navigator.pop(context); // Close dialog
-                Navigator.pop(context); // Close drawer
-                Navigator.pop(context); // Go back to previous screen
-                ScaffoldMessenger.of(context).showSnackBar(
-                  SnackBar(
-                    content: Text('Logged out successfully'),
-                    backgroundColor: Colors.green,
-                  ),
-                );
-              },
-              child: Text(
-                'Logout',
-                style: TextStyle(color: Colors.red),
-              ),
-            ),
-          ],
-        );
-      },
-    );
-  }
+
 
   @override
   void dispose() {

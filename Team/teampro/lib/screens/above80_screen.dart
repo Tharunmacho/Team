@@ -37,7 +37,7 @@ class Above80Voter {
 }
 
 class Above80Screen extends StatefulWidget {
-  const Above80Screen({Key? key}) : super(key: key);
+  const Above80Screen({super.key});
 
   @override
   State<Above80Screen> createState() => _Above80ScreenState();
@@ -105,37 +105,11 @@ class _Above80ScreenState extends State<Above80Screen> {
     filteredVoters = allVoters;
   }
 
-  void _filterVoters() {
-    setState(() {
-      filteredVoters = allVoters.where((voter) => _applyAllFilters(voter)).toList();
-    });
-  }
 
-  bool _applyAllFilters(Above80Voter voter) {
-    // Age filter
-    if (voter.age < minAge || voter.age > maxAge) return false;
-    
-    // Gender filter
-    if (selectedGenders.isNotEmpty && !selectedGenders.contains(voter.gender)) return false;
-    
-    // Political party filter
-    if (selectedPoliticalParty.isNotEmpty && !selectedPoliticalParty.contains(voter.politicalParty)) return false;
-    
-    // Religion filter
-    if (selectedReligion.isNotEmpty && !selectedReligion.contains(voter.religion)) return false;
-    
-    // Voter category filter
-    if (selectedVoterCategory.isNotEmpty && !selectedVoterCategory.contains(voter.voterCategory)) return false;
-    
-    return true;
-  }
 
   @override
   Widget build(BuildContext context) {
-    int maleCount = filteredVoters.where((v) => v.gender == 'Male').length;
-    int femaleCount = filteredVoters.where((v) => v.gender == 'Female').length;
-    int othersCount = filteredVoters.where((v) => v.gender == 'Others').length;
-    int totalCount = filteredVoters.length;
+
 
     // Calculate total counts from all voters (matching the image)
     int totalMale = 4035;
@@ -173,7 +147,7 @@ class _Above80ScreenState extends State<Above80Screen> {
                 borderRadius: BorderRadius.circular(8),
                 boxShadow: [
                   BoxShadow(
-                    color: Colors.black.withOpacity(0.1),
+                    color: Colors.black.withValues(alpha: 0.1),
                     blurRadius: 4,
                     offset: Offset(0, 2),
                   ),
@@ -199,7 +173,7 @@ class _Above80ScreenState extends State<Above80Screen> {
                 borderRadius: BorderRadius.circular(25),
                 boxShadow: [
                   BoxShadow(
-                    color: Colors.black.withOpacity(0.05),
+                    color: Colors.black.withValues(alpha: 0.05),
                     blurRadius: 4,
                     offset: Offset(0, 2),
                   ),
@@ -260,7 +234,7 @@ class _Above80ScreenState extends State<Above80Screen> {
           color: Colors.white,
           boxShadow: [
             BoxShadow(
-              color: Colors.black.withOpacity(0.1),
+              color: Colors.black.withValues(alpha: 0.1),
               blurRadius: 4,
               offset: Offset(0, -2),
             ),
@@ -328,7 +302,7 @@ class _Above80ScreenState extends State<Above80Screen> {
         borderRadius: BorderRadius.circular(8),
         boxShadow: [
           BoxShadow(
-            color: Colors.black.withOpacity(0.05),
+            color: Colors.black.withValues(alpha: 0.05),
             blurRadius: 2,
             offset: Offset(0, 1),
           ),
@@ -362,7 +336,7 @@ class _Above80ScreenState extends State<Above80Screen> {
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
               // Profile image and voter ID
-              Container(
+              SizedBox(
                 width: 60,
                 child: Column(
                   children: [
@@ -482,7 +456,7 @@ class _Above80ScreenState extends State<Above80Screen> {
               Container(
                 padding: EdgeInsets.symmetric(horizontal: 8, vertical: 2),
                 decoration: BoxDecoration(
-                  color: Colors.orange.withOpacity(0.1),
+                  color: Colors.orange.withValues(alpha: 0.1),
                   borderRadius: BorderRadius.circular(4),
                 ),
                 child: Row(
@@ -523,7 +497,7 @@ class _Above80ScreenState extends State<Above80Screen> {
                 child: Container(
                   padding: EdgeInsets.all(8),
                   decoration: BoxDecoration(
-                    color: Colors.blue.withOpacity(0.1),
+                    color: Colors.blue.withValues(alpha: 0.1),
                     borderRadius: BorderRadius.circular(6),
                   ),
                   child: Icon(Icons.phone, color: Colors.blue, size: 16),
@@ -562,7 +536,7 @@ class _Above80ScreenState extends State<Above80Screen> {
                 child: Container(
                   padding: EdgeInsets.all(8),
                   decoration: BoxDecoration(
-                    color: Colors.green.withOpacity(0.1),
+                    color: Colors.green.withValues(alpha: 0.1),
                     borderRadius: BorderRadius.circular(6),
                   ),
                   child: Row(
@@ -625,9 +599,11 @@ class _Above80ScreenState extends State<Above80Screen> {
     try {
       await launchUrl(launchUri);
     } catch (e) {
-      ScaffoldMessenger.of(context).showSnackBar(
-        SnackBar(content: Text('Could not launch phone dialer')),
-      );
+      if (mounted) {
+        ScaffoldMessenger.of(context).showSnackBar(
+          SnackBar(content: Text('Could not launch phone dialer')),
+        );
+      }
     }
   }
 
@@ -703,10 +679,10 @@ class _Above80ScreenState extends State<Above80Screen> {
                   Expanded(
                     child: ElevatedButton(
                       onPressed: () {
-                        Navigator.pop(context);
                         ScaffoldMessenger.of(context).showSnackBar(
                           SnackBar(content: Text('Search functionality implemented!')),
                         );
+                        Navigator.pop(context);
                       },
                       style: ElevatedButton.styleFrom(
                         backgroundColor: Color(0xFF1976D2),
@@ -1107,7 +1083,7 @@ class _Above80ScreenState extends State<Above80Screen> {
       child: Container(
         padding: EdgeInsets.symmetric(horizontal: 16, vertical: 8),
         decoration: BoxDecoration(
-          color: isSelected ? color.withOpacity(0.2) : Colors.grey[100],
+          color: isSelected ? color.withValues(alpha: 0.2) : Colors.grey[100],
           borderRadius: BorderRadius.circular(20),
           border: Border.all(
             color: isSelected ? color : Colors.grey[300]!,
@@ -1147,7 +1123,7 @@ class _Above80ScreenState extends State<Above80Screen> {
       child: Container(
         padding: EdgeInsets.all(12),
         decoration: BoxDecoration(
-          color: isSelected ? color.withOpacity(0.2) : Colors.grey[100],
+          color: isSelected ? color.withValues(alpha: 0.2) : Colors.grey[100],
           borderRadius: BorderRadius.circular(8),
           border: Border.all(
             color: isSelected ? color : Colors.grey[300]!,
@@ -1193,7 +1169,7 @@ class _Above80ScreenState extends State<Above80Screen> {
         width: 50,
         height: 50,
         decoration: BoxDecoration(
-          color: isSelected ? color.withOpacity(0.2) : Colors.grey[100],
+          color: isSelected ? color.withValues(alpha: 0.2) : Colors.grey[100],
           shape: BoxShape.circle,
           border: Border.all(
             color: isSelected ? color : Colors.grey[300]!,
@@ -1224,7 +1200,7 @@ class _Above80ScreenState extends State<Above80Screen> {
         width: 50,
         height: 50,
         decoration: BoxDecoration(
-          color: isSelected ? Colors.blue.withOpacity(0.2) : Colors.grey[100],
+          color: isSelected ? Colors.blue.withValues(alpha: 0.2) : Colors.grey[100],
           shape: BoxShape.circle,
           border: Border.all(
             color: isSelected ? Colors.blue : Colors.grey[300]!,
@@ -1256,7 +1232,7 @@ class _Above80ScreenState extends State<Above80Screen> {
         width: 50,
         height: 50,
         decoration: BoxDecoration(
-          color: isSelected ? Colors.orange.withOpacity(0.2) : Colors.grey[100],
+          color: isSelected ? Colors.orange.withValues(alpha: 0.2) : Colors.grey[100],
           shape: BoxShape.circle,
           border: Border.all(
             color: isSelected ? Colors.orange : Colors.grey[300]!,

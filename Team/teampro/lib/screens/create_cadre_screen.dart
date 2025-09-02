@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 
 class CreateCadreScreen extends StatefulWidget {
-  const CreateCadreScreen({Key? key}) : super(key: key);
+  const CreateCadreScreen({super.key});
 
   @override
   State<CreateCadreScreen> createState() => _CreateCadreScreenState();
@@ -369,7 +369,7 @@ class _CreateCadreScreenState extends State<CreateCadreScreen> {
         border: Border.all(color: Colors.grey[300]!),
       ),
       child: DropdownButtonFormField<String>(
-        value: value,
+        initialValue: value,
         hint: Text(
           hintText,
           style: TextStyle(color: Color(0xFF1976D2)),
