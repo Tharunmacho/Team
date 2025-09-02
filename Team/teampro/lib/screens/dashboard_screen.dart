@@ -19,6 +19,9 @@ import 'star_screen.dart';
 import 'mobile_screen.dart';
 import 'above80_screen.dart';
 import 'my_cadre_screen.dart';
+import 'part_map_screen.dart';
+import 'voter_list_screen.dart';
+import 'voter_part_numbers_screen.dart';
 
 class DashboardScreen extends StatefulWidget {
   const DashboardScreen({super.key});
@@ -32,6 +35,40 @@ class _DashboardScreenState extends State<DashboardScreen> {
   final PageController _pageController = PageController();
   int _currentPage = 0;
   final GlobalKey<ScaffoldState> _scaffoldKey = GlobalKey<ScaffoldState>();
+  
+  // Election dropdown state
+  String selectedElection = '119 - Thondamuthur';
+  List<String> electionOptions = [
+    '119 - Thondamuthur',
+    '120 - Annur',
+    '121 - Avinashi',
+    '122 - Tirupur North',
+    '123 - Tirupur South',
+    '124 - Kangeyam',
+    '125 - Perundurai',
+    '126 - Bhavani',
+    '127 - Anthiyur',
+    '128 - Gobichettipalayam',
+    '129 - Bhavanisagar',
+    '130 - Erode East',
+    '131 - Erode West',
+    '132 - Modakurichi',
+    '133 - Kavundampalayam',
+    '134 - Erode North',
+    '135 - Coimbatore North',
+    '136 - Coimbatore South',
+  ];
+  
+  // Advanced search controllers
+  final TextEditingController _mobileController = TextEditingController();
+  final TextEditingController _partNoController = TextEditingController();
+  final TextEditingController _serialNoController = TextEditingController();
+  final TextEditingController _epicIdController = TextEditingController();
+  final TextEditingController _voterFirstNameController = TextEditingController();
+  final TextEditingController _voterLastNameController = TextEditingController();
+  final TextEditingController _relationFirstNameController = TextEditingController();
+  final TextEditingController _relationLastNameController = TextEditingController();
+  final TextEditingController _ageController = TextEditingController();
 
   @override
   Widget build(BuildContext context) {
@@ -70,7 +107,7 @@ class _DashboardScreenState extends State<DashboardScreen> {
                         child: Row(
                           children: [
                             Text(
-                              '119 - Thondamuthur',
+                              selectedElection,
                               style: TextStyle(
                                 fontSize: 16,
                                 fontWeight: FontWeight.w500,
@@ -156,17 +193,20 @@ class _DashboardScreenState extends State<DashboardScreen> {
                             ),
                           ),
                           const SizedBox(width: 12),
-                          Container(
-                            padding: EdgeInsets.all(12),
-                            decoration: BoxDecoration(
-                              color: Colors.white,
-                              borderRadius: BorderRadius.circular(12),
-                              border: Border.all(color: Colors.grey[300]!),
-                            ),
-                            child: Icon(
-                              Icons.tune,
-                              color: Colors.grey[600],
-                              size: 24,
+                          GestureDetector(
+                            onTap: _showAdvancedSearch,
+                            child: Container(
+                              padding: EdgeInsets.all(12),
+                              decoration: BoxDecoration(
+                                color: Colors.white,
+                                borderRadius: BorderRadius.circular(12),
+                                border: Border.all(color: Colors.grey[300]!),
+                              ),
+                              child: Icon(
+                                Icons.tune,
+                                color: Colors.grey[600],
+                                size: 24,
+                              ),
                             ),
                           ),
                         ],
@@ -546,7 +586,7 @@ class _DashboardScreenState extends State<DashboardScreen> {
         } else if (title == 'Voter') {
           Navigator.push(
             context,
-            MaterialPageRoute(builder: (context) => PartNumbersScreen()),
+            MaterialPageRoute(builder: (context) => VoterPartNumbersScreen()),
           );
         } else if (title == 'New') {
           Navigator.push(
@@ -556,7 +596,7 @@ class _DashboardScreenState extends State<DashboardScreen> {
         } else if (title == 'Part') {
           Navigator.push(
             context,
-            MaterialPageRoute(builder: (context) => FamilyManagerScreen()),
+            MaterialPageRoute(builder: (context) => PartMapScreen()),
           );
         } else if (title == 'Transgender') {
           Navigator.push(
@@ -743,100 +783,132 @@ class _DashboardScreenState extends State<DashboardScreen> {
   }
 
   void _showElectionModal() {
+    String tempSelectedElection = selectedElection;
+    
     showModalBottomSheet(
       context: context,
       backgroundColor: Colors.transparent,
       isDismissible: false,
       enableDrag: false,
+      isScrollControlled: true,
       builder: (BuildContext context) {
-        return Container(
-          decoration: BoxDecoration(
-            color: Colors.white,
-            borderRadius: BorderRadius.only(
-              topLeft: Radius.circular(20),
-              topRight: Radius.circular(20),
-            ),
-          ),
-          padding: EdgeInsets.all(24),
-          child: Column(
-            mainAxisSize: MainAxisSize.min,
-            children: [
-              Text(
-                'Set Default Election',
-                style: TextStyle(
-                  fontSize: 24,
-                  fontWeight: FontWeight.bold,
-                  color: Colors.black87,
-                ),
+        return StatefulBuilder(
+          builder: (context, setModalState) => Container(
+            height: MediaQuery.of(context).size.height * 0.7,
+            decoration: BoxDecoration(
+              color: Colors.white,
+              borderRadius: BorderRadius.only(
+                topLeft: Radius.circular(20),
+                topRight: Radius.circular(20),
               ),
-              const SizedBox(height: 30),
-              Container(
-                width: double.infinity,
-                padding: EdgeInsets.all(20),
-                decoration: BoxDecoration(
-                  color: Colors.grey[100],
-                  borderRadius: BorderRadius.circular(12),
-                  border: Border.all(color: Colors.grey[300]!),
-                ),
-                child: Text(
-                  '119 - Thondamuthur',
+            ),
+            padding: EdgeInsets.all(24),
+            child: Column(
+              children: [
+                Text(
+                  'Set Default Election',
                   style: TextStyle(
-                    fontSize: 18,
+                    fontSize: 24,
+                    fontWeight: FontWeight.bold,
                     color: Colors.black87,
                   ),
                 ),
-              ),
-              const SizedBox(height: 30),
-              Container(
-                width: double.infinity,
-                height: 50,
-                child: ElevatedButton(
-                  onPressed: () {
-                    Navigator.pop(context);
-                    _showMessage('Election updated successfully');
-                  },
-                  style: ElevatedButton.styleFrom(
-                    backgroundColor: Color(0xFF1976D2),
-                    foregroundColor: Colors.white,
-                    shape: RoundedRectangleBorder(
-                      borderRadius: BorderRadius.circular(8),
-                    ),
-                    elevation: 0,
+                const SizedBox(height: 30),
+                Container(
+                  width: double.infinity,
+                  decoration: BoxDecoration(
+                    color: Colors.grey[100],
+                    borderRadius: BorderRadius.circular(12),
+                    border: Border.all(color: Colors.grey[300]!),
                   ),
-                  child: Text(
-                    'UPDATE',
+                  child: DropdownButtonFormField<String>(
+                    value: tempSelectedElection,
+                    decoration: InputDecoration(
+                      border: InputBorder.none,
+                      contentPadding: EdgeInsets.symmetric(horizontal: 20, vertical: 16),
+                    ),
                     style: TextStyle(
-                      fontSize: 16,
-                      fontWeight: FontWeight.w600,
+                      fontSize: 18,
+                      color: Colors.black87,
+                    ),
+                    icon: Icon(
+                      Icons.keyboard_arrow_down,
+                      color: Colors.black54,
+                    ),
+                    items: electionOptions.map((String election) {
+                      return DropdownMenuItem<String>(
+                        value: election,
+                        child: Text(
+                          election,
+                          style: TextStyle(
+                            fontSize: 16,
+                            color: Colors.black87,
+                          ),
+                        ),
+                      );
+                    }).toList(),
+                    onChanged: (String? newValue) {
+                      setModalState(() {
+                        tempSelectedElection = newValue!;
+                      });
+                    },
+                  ),
+                ),
+                const SizedBox(height: 30),
+                Container(
+                  width: double.infinity,
+                  height: 50,
+                  child: ElevatedButton(
+                    onPressed: () {
+                      setState(() {
+                        selectedElection = tempSelectedElection;
+                      });
+                      Navigator.pop(context);
+                      _showMessage('Election updated to $tempSelectedElection');
+                    },
+                    style: ElevatedButton.styleFrom(
+                      backgroundColor: Color(0xFF1976D2),
+                      foregroundColor: Colors.white,
+                      shape: RoundedRectangleBorder(
+                        borderRadius: BorderRadius.circular(8),
+                      ),
+                      elevation: 0,
+                    ),
+                    child: Text(
+                      'UPDATE',
+                      style: TextStyle(
+                        fontSize: 16,
+                        fontWeight: FontWeight.w600,
+                      ),
                     ),
                   ),
                 ),
-              ),
-              const SizedBox(height: 12),
-              Container(
-                width: double.infinity,
-                height: 50,
-                child: OutlinedButton(
-                  onPressed: () {
-                    Navigator.pop(context);
-                  },
-                  style: OutlinedButton.styleFrom(
-                    foregroundColor: Colors.black87,
-                    side: BorderSide(color: Colors.grey[300]!),
-                    shape: RoundedRectangleBorder(
-                      borderRadius: BorderRadius.circular(8),
+                const SizedBox(height: 12),
+                Container(
+                  width: double.infinity,
+                  height: 50,
+                  child: OutlinedButton(
+                    onPressed: () {
+                      Navigator.pop(context);
+                    },
+                    style: OutlinedButton.styleFrom(
+                      foregroundColor: Colors.black87,
+                      side: BorderSide(color: Colors.grey[300]!),
+                      shape: RoundedRectangleBorder(
+                        borderRadius: BorderRadius.circular(8),
+                      ),
                     ),
-                  ),
-                  child: Text(
-                    'CLOSE',
-                    style: TextStyle(
-                      fontSize: 16,
-                      fontWeight: FontWeight.w600,
+                    child: Text(
+                      'CLOSE',
+                      style: TextStyle(
+                        fontSize: 16,
+                        fontWeight: FontWeight.w600,
+                      ),
                     ),
                   ),
                 ),
-              ),
-            ],
+              ],
+            ),
           ),
         );
       },
@@ -1135,10 +1207,141 @@ class _DashboardScreenState extends State<DashboardScreen> {
     );
   }
 
+  void _showAdvancedSearch() {
+    showModalBottomSheet(
+      context: context,
+      isScrollControlled: true,
+      backgroundColor: Colors.transparent,
+      builder: (context) => Container(
+        height: MediaQuery.of(context).size.height * 0.8,
+        decoration: BoxDecoration(
+          color: Colors.white,
+          borderRadius: BorderRadius.only(
+            topLeft: Radius.circular(20),
+            topRight: Radius.circular(20),
+          ),
+        ),
+        child: Padding(
+          padding: EdgeInsets.all(20),
+          child: Column(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: [
+              Row(
+                children: [
+                  Text(
+                    'Advance Search',
+                    style: TextStyle(
+                      fontSize: 18,
+                      fontWeight: FontWeight.bold,
+                    ),
+                  ),
+                  Spacer(),
+                  GestureDetector(
+                    onTap: () => Navigator.pop(context),
+                    child: Icon(Icons.close, size: 24),
+                  ),
+                ],
+              ),
+              const SizedBox(height: 24),
+              _buildSearchField('Mobile No', _mobileController),
+              const SizedBox(height: 16),
+              _buildSearchField('PartNo', _partNoController),
+              const SizedBox(height: 16),
+              _buildSearchField('Serial No', _serialNoController),
+              const SizedBox(height: 16),
+              _buildSearchField('EPIC Id', _epicIdController),
+              const SizedBox(height: 16),
+              _buildSearchField('Voter First Name', _voterFirstNameController),
+              const SizedBox(height: 16),
+              _buildSearchField('Voter Last Name', _voterLastNameController),
+              const SizedBox(height: 16),
+              _buildSearchField('Relation First Name', _relationFirstNameController),
+              const SizedBox(height: 16),
+              _buildSearchField('Relation Last Name', _relationLastNameController),
+              const SizedBox(height: 16),
+              _buildSearchField('Age', _ageController),
+              const SizedBox(height: 24),
+              Row(
+                children: [
+                  Expanded(
+                    child: ElevatedButton(
+                      onPressed: () {
+                        Navigator.pop(context);
+                      },
+                      style: ElevatedButton.styleFrom(
+                        backgroundColor: Colors.white,
+                        foregroundColor: Colors.grey[700],
+                        side: BorderSide(color: Colors.grey[300]!),
+                        shape: RoundedRectangleBorder(
+                          borderRadius: BorderRadius.circular(8),
+                        ),
+                      ),
+                      child: Text('Cancel'),
+                    ),
+                  ),
+                  const SizedBox(width: 16),
+                  Expanded(
+                    child: ElevatedButton(
+                      onPressed: () {
+                        Navigator.pop(context);
+                        ScaffoldMessenger.of(context).showSnackBar(
+                          SnackBar(content: Text('Search functionality implemented!')),
+                        );
+                      },
+                      style: ElevatedButton.styleFrom(
+                        backgroundColor: Color(0xFF1976D2),
+                        foregroundColor: Colors.white,
+                        shape: RoundedRectangleBorder(
+                          borderRadius: BorderRadius.circular(8),
+                        ),
+                      ),
+                      child: Text('Search'),
+                    ),
+                  ),
+                ],
+              ),
+            ],
+          ),
+        ),
+      ),
+    );
+  }
+
+  Widget _buildSearchField(String label, TextEditingController controller) {
+    return TextField(
+      controller: controller,
+      decoration: InputDecoration(
+        hintText: label,
+        border: OutlineInputBorder(
+          borderRadius: BorderRadius.circular(12),
+          borderSide: BorderSide(color: Colors.grey[300]!),
+        ),
+        enabledBorder: OutlineInputBorder(
+          borderRadius: BorderRadius.circular(12),
+          borderSide: BorderSide(color: Colors.grey[300]!),
+        ),
+        focusedBorder: OutlineInputBorder(
+          borderRadius: BorderRadius.circular(12),
+          borderSide: BorderSide(color: Color(0xFF1976D2)),
+        ),
+        contentPadding: EdgeInsets.symmetric(horizontal: 16, vertical: 12),
+      ),
+    );
+  }
+
   @override
   void dispose() {
     _searchController.dispose();
     _pageController.dispose();
+    _mobileController.dispose();
+    _partNoController.dispose();
+    _serialNoController.dispose();
+    _epicIdController.dispose();
+    _voterFirstNameController.dispose();
+    _voterLastNameController.dispose();
+    _relationFirstNameController.dispose();
+    _relationLastNameController.dispose();
+    _ageController.dispose();
     super.dispose();
   }
 }

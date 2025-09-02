@@ -27,6 +27,8 @@ class _VoterInfoScreenState extends State<VoterInfoScreen> with TickerProviderSt
   final TextEditingController _voterFirstNameController = TextEditingController();
   final TextEditingController _voterLastNameController = TextEditingController();
   final TextEditingController _relationFirstNameController = TextEditingController();
+  final TextEditingController _relationLastNameController = TextEditingController();
+  final TextEditingController _ageController = TextEditingController();
   
   // Filter state variables
   double minAge = 18;
@@ -106,13 +108,17 @@ class _VoterInfoScreenState extends State<VoterInfoScreen> with TickerProviderSt
               _buildSearchField('Voter Last Name', _voterLastNameController),
               const SizedBox(height: 16),
               _buildSearchField('Relation First Name', _relationFirstNameController),
+              const SizedBox(height: 16),
+              _buildSearchField('Relation Last Name', _relationLastNameController),
+              const SizedBox(height: 16),
+              _buildSearchField('Age', _ageController),
               const SizedBox(height: 24),
               Row(
                 children: [
                   Expanded(
                     child: ElevatedButton(
                       onPressed: () {
-                        _clearSearchFields();
+                        Navigator.pop(context);
                       },
                       style: ElevatedButton.styleFrom(
                         backgroundColor: Colors.white,
@@ -122,7 +128,7 @@ class _VoterInfoScreenState extends State<VoterInfoScreen> with TickerProviderSt
                           borderRadius: BorderRadius.circular(8),
                         ),
                       ),
-                      child: Text('Clear'),
+                      child: Text('Cancel'),
                     ),
                   ),
                   const SizedBox(width: 16),
@@ -202,13 +208,17 @@ class _VoterInfoScreenState extends State<VoterInfoScreen> with TickerProviderSt
               _buildSearchField('Voter Last Name', _voterLastNameController),
               const SizedBox(height: 16),
               _buildSearchField('Relation First Name', _relationFirstNameController),
+              const SizedBox(height: 16),
+              _buildSearchField('Relation Last Name', _relationLastNameController),
+              const SizedBox(height: 16),
+              _buildSearchField('Age', _ageController),
               const SizedBox(height: 24),
               Row(
                 children: [
                   Expanded(
                     child: ElevatedButton(
                       onPressed: () {
-                        _clearSearchFields();
+                        Navigator.pop(context);
                       },
                       style: ElevatedButton.styleFrom(
                         backgroundColor: Colors.white,
@@ -218,7 +228,7 @@ class _VoterInfoScreenState extends State<VoterInfoScreen> with TickerProviderSt
                           borderRadius: BorderRadius.circular(8),
                         ),
                       ),
-                      child: Text('Clear'),
+                      child: Text('Cancel'),
                     ),
                   ),
                   const SizedBox(width: 16),
@@ -279,14 +289,16 @@ class _VoterInfoScreenState extends State<VoterInfoScreen> with TickerProviderSt
     _voterFirstNameController.clear();
     _voterLastNameController.clear();
     _relationFirstNameController.clear();
+    _relationLastNameController.clear();
+    _ageController.clear();
   }
 
   void _showFilterModalFamily() {
-    _showFilterModal('Family');
+    _showAdvancedSearchFamily();
   }
 
   void _showFilterModalFriends() {
-    _showFilterModal('Friends');
+    _showAdvancedSearchFriends();
   }
 
   void _showFilterModal(String source) {

@@ -625,28 +625,16 @@ class _OverseasScreenState extends State<OverseasScreen> {
     );
   }
 
-  Future<void> _makePhoneCall(String phoneNumber) async {
+  void _makePhoneCall(String phoneNumber) async {
+    final Uri launchUri = Uri(
+      scheme: 'tel',
+      path: phoneNumber,
+    );
     try {
-      final Uri launchUri = Uri(
-        scheme: 'tel',
-        path: phoneNumber,
-      );
-      if (await canLaunchUrl(launchUri)) {
-        await launchUrl(launchUri);
-      } else {
-        ScaffoldMessenger.of(context).showSnackBar(
-          SnackBar(
-            content: Text('Could not launch phone app'),
-            backgroundColor: Colors.red,
-          ),
-        );
-      }
+      await launchUrl(launchUri);
     } catch (e) {
       ScaffoldMessenger.of(context).showSnackBar(
-        SnackBar(
-          content: Text('Error making phone call: $e'),
-          backgroundColor: Colors.red,
-        ),
+        SnackBar(content: Text('Could not launch phone dialer')),
       );
     }
   }

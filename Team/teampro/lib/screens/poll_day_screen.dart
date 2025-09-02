@@ -77,9 +77,9 @@ class PollDayScreen extends StatelessWidget {
                     mainAxisSpacing: 16,
                     childAspectRatio: 1.2,
                   ),
-                  itemCount: 24, // Show numbers 1-24 as in your image
+                  itemCount: 380, // Show numbers 1-380 as requested
                   itemBuilder: (context, index) {
-                    int displayNumber = index + 1; // Numbers 1-24
+                    int displayNumber = index + 1; // Numbers 1-380
                     return _buildPollingStationCard(context, displayNumber);
                   },
                 ),

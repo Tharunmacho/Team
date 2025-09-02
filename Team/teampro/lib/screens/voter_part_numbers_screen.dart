@@ -1,16 +1,15 @@
 import 'package:flutter/material.dart';
 import 'part_details_screen.dart';
 import 'part_map_screen.dart';
-import 'voter_list_screen.dart';
 
-class PartNumbersScreen extends StatefulWidget {
-  const PartNumbersScreen({super.key});
+class VoterPartNumbersScreen extends StatefulWidget {
+  const VoterPartNumbersScreen({super.key});
 
   @override
-  State<PartNumbersScreen> createState() => _PartNumbersScreenState();
+  State<VoterPartNumbersScreen> createState() => _VoterPartNumbersScreenState();
 }
 
-class _PartNumbersScreenState extends State<PartNumbersScreen> {
+class _VoterPartNumbersScreenState extends State<VoterPartNumbersScreen> {
   bool isListView = false; // false = grid view, true = list view
   final TextEditingController _searchController = TextEditingController();
   Set<int> expandedCards = {}; // Track which cards are expanded
@@ -109,7 +108,6 @@ class _PartNumbersScreenState extends State<PartNumbersScreen> {
                           ),
                         ),
                       ),
-
                     ],
                   ),
                 ],
@@ -117,29 +115,6 @@ class _PartNumbersScreenState extends State<PartNumbersScreen> {
             ),
             
             const SizedBox(height: 20),
-            
-            // Search bar (only for list view)
-            if (isListView) ...[
-              Container(
-                margin: EdgeInsets.symmetric(horizontal: 16),
-                decoration: BoxDecoration(
-                  color: Colors.white,
-                  borderRadius: BorderRadius.circular(12),
-                  border: Border.all(color: Colors.grey[300]!),
-                ),
-                child: TextField(
-                  controller: _searchController,
-                  decoration: InputDecoration(
-                    hintText: 'Search by part number',
-                    hintStyle: TextStyle(color: Colors.grey[500]),
-                    prefixIcon: Icon(Icons.search, color: Colors.grey[600]),
-                    border: InputBorder.none,
-                    contentPadding: EdgeInsets.symmetric(horizontal: 16, vertical: 12),
-                  ),
-                ),
-              ),
-              const SizedBox(height: 16),
-            ],
             
             // Content section - either grid or list
             Expanded(
@@ -186,27 +161,25 @@ class _PartNumbersScreenState extends State<PartNumbersScreen> {
     return Column(
       children: [
         // Search bar for grid view
-        if (!isListView) ...[
-          Container(
-            margin: EdgeInsets.symmetric(horizontal: 16),
-            decoration: BoxDecoration(
-              color: Colors.white,
-              borderRadius: BorderRadius.circular(12),
-              border: Border.all(color: Colors.grey[300]!),
-            ),
-            child: TextField(
-              controller: _searchController,
-              decoration: InputDecoration(
-                hintText: 'Search by part number',
-                hintStyle: TextStyle(color: Colors.grey[500]),
-                prefixIcon: Icon(Icons.search, color: Colors.grey[600]),
-                border: InputBorder.none,
-                contentPadding: EdgeInsets.symmetric(horizontal: 16, vertical: 12),
-              ),
+        Container(
+          margin: EdgeInsets.symmetric(horizontal: 0),
+          decoration: BoxDecoration(
+            color: Colors.white,
+            borderRadius: BorderRadius.circular(12),
+            border: Border.all(color: Colors.grey[300]!),
+          ),
+          child: TextField(
+            controller: _searchController,
+            decoration: InputDecoration(
+              hintText: 'Search by part number',
+              hintStyle: TextStyle(color: Colors.grey[500]),
+              prefixIcon: Icon(Icons.search, color: Colors.grey[600]),
+              border: InputBorder.none,
+              contentPadding: EdgeInsets.symmetric(horizontal: 16, vertical: 12),
             ),
           ),
-          const SizedBox(height: 16),
-        ],
+        ),
+        const SizedBox(height: 16),
         Expanded(
           child: GridView.builder(
             gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
@@ -291,12 +264,38 @@ class _PartNumbersScreenState extends State<PartNumbersScreen> {
       },
     ];
 
-    return ListView.builder(
-      itemCount: partData.length,
-      itemBuilder: (context, index) {
-        final part = partData[index];
-        return _buildPartListCard(part);
-      },
+    return Column(
+      children: [
+        // Search bar for list view
+        Container(
+          margin: EdgeInsets.symmetric(horizontal: 0),
+          decoration: BoxDecoration(
+            color: Colors.white,
+            borderRadius: BorderRadius.circular(12),
+            border: Border.all(color: Colors.grey[300]!),
+          ),
+          child: TextField(
+            controller: _searchController,
+            decoration: InputDecoration(
+              hintText: 'Search by part number',
+              hintStyle: TextStyle(color: Colors.grey[500]),
+              prefixIcon: Icon(Icons.search, color: Colors.grey[600]),
+              border: InputBorder.none,
+              contentPadding: EdgeInsets.symmetric(horizontal: 16, vertical: 12),
+            ),
+          ),
+        ),
+        const SizedBox(height: 16),
+        Expanded(
+          child: ListView.builder(
+            itemCount: partData.length,
+            itemBuilder: (context, index) {
+              final part = partData[index];
+              return _buildPartListCard(part);
+            },
+          ),
+        ),
+      ],
     );
   }
 
@@ -319,13 +318,13 @@ class _PartNumbersScreenState extends State<PartNumbersScreen> {
       ),
       child: Column(
         children: [
-          // Main card content
+          // Main card content - Navigate to map when clicked
           GestureDetector(
             onTap: () {
               Navigator.push(
                 context,
                 MaterialPageRoute(
-                  builder: (context) => VoterListScreen(partNumber: partNumber),
+                  builder: (context) => PartMapScreen(),
                 ),
               );
             },
@@ -465,10 +464,11 @@ class _PartNumbersScreenState extends State<PartNumbersScreen> {
   Widget _buildNumberCard(BuildContext context, int number) {
     return GestureDetector(
       onTap: () {
+        // Navigate to map when part number is clicked
         Navigator.push(
           context,
           MaterialPageRoute(
-            builder: (context) => VoterListScreen(partNumber: number),
+            builder: (context) => PartMapScreen(),
           ),
         );
       },
