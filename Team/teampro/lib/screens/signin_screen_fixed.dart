@@ -286,7 +286,7 @@ class _SignInScreenState extends State<SignInScreen> {
                       const SizedBox(height: 15),
                       
                       // Login button
-                      SizedBox(
+                      Container(
                         width: double.infinity,
                         height: 55,
                         child: ElevatedButton(
@@ -325,7 +325,7 @@ class _SignInScreenState extends State<SignInScreen> {
                       const SizedBox(height: 15),
                       
                       // Login with OTP button
-                      SizedBox(
+                      Container(
                         width: double.infinity,
                         height: 55,
                         child: ElevatedButton(
@@ -349,7 +349,7 @@ class _SignInScreenState extends State<SignInScreen> {
                           ),
                         ),
                       ),
-                      const SizedBox(height: 20),
+                      const SizedBox(height: 20), // Extra padding at bottom
                     ],
                   ),
                 ),

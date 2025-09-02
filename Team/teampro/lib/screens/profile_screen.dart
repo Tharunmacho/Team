@@ -8,21 +8,6 @@ class ProfileScreen extends StatefulWidget {
 }
 
 class _ProfileScreenState extends State<ProfileScreen> {
-  final TextEditingController _firstNameController = TextEditingController(text: 'ramachandran');
-  final TextEditingController _lastNameController = TextEditingController(text: 'ADMK');
-  final TextEditingController _emailController = TextEditingController(text: 'mkjee@gmail.com');
-  final TextEditingController _mobileController = TextEditingController(text: '9994235009');
-  final TextEditingController _roleController = TextEditingController(text: 'SUPER_ADMIN');
-
-  @override
-  void dispose() {
-    _firstNameController.dispose();
-    _lastNameController.dispose();
-    _emailController.dispose();
-    _mobileController.dispose();
-    _roleController.dispose();
-    super.dispose();
-  }
 
   @override
   Widget build(BuildContext context) {
@@ -46,12 +31,20 @@ class _ProfileScreenState extends State<ProfileScreen> {
                       ),
                     ),
                   ),
+                  // Close button
                   GestureDetector(
                     onTap: () => Navigator.pop(context),
-                    child: Icon(
-                      Icons.close,
-                      size: 24,
-                      color: Colors.black87,
+                    child: Container(
+                      padding: EdgeInsets.all(8),
+                      decoration: BoxDecoration(
+                        color: Colors.white.withValues(alpha: 0.3),
+                        borderRadius: BorderRadius.circular(20),
+                      ),
+                      child: Icon(
+                        Icons.close,
+                        color: Colors.black54,
+                        size: 24,
+                      ),
                     ),
                   ),
                 ],
@@ -60,87 +53,30 @@ class _ProfileScreenState extends State<ProfileScreen> {
             
             // Form content
             Expanded(
-              child: SingleChildScrollView(
-                padding: const EdgeInsets.symmetric(horizontal: 20),
+              child: Container(
+                padding: EdgeInsets.symmetric(horizontal: 24, vertical: 16),
                 child: Column(
-                  crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
-                    // First Name
-                    _buildFormField(
-                      label: 'First Name',
-                      controller: _firstNameController,
-                      enabled: true,
+                    _buildMenuItem(Icons.person_outline, 'My Profile'),
+                    _buildMenuItem(Icons.how_to_vote_outlined, 'Your Elections'),
+                    _buildMenuItem(Icons.settings_outlined, 'Settings'),
+                    _buildMenuItem(Icons.language_outlined, 'App Language'),
+                    _buildMenuItem(Icons.lock_outline, 'Change Password'),
+                    _buildMenuItem(Icons.privacy_tip_outlined, 'Privacy Policy'),
+                    _buildMenuItem(Icons.description_outlined, 'Terms & Conditions'),
+                    _buildMenuItem(Icons.help_outline, 'Help'),
+                    _buildMenuItem(Icons.info_outline, 'About'),
+                    const Spacer(),
+                    // Version info
+                    Text(
+                      'V.3.1 |',
+                      style: TextStyle(
+                        fontSize: 14,
+                        color: Colors.black54,
+                      ),
+                      textAlign: TextAlign.center,
                     ),
-                    
-                    const SizedBox(height: 20),
-                    
-                    // Last Name
-                    _buildFormField(
-                      label: 'Last Name',
-                      controller: _lastNameController,
-                      enabled: true,
-                    ),
-                    
-                    const SizedBox(height: 20),
-                    
-                    // Email
-                    _buildFormField(
-                      label: 'Email',
-                      controller: _emailController,
-                      enabled: true,
-                    ),
-                    
-                    const SizedBox(height: 20),
-                    
-                    // Mobile Number
-                    _buildFormField(
-                      label: 'Mobile Number',
-                      controller: _mobileController,
-                      enabled: false,
-                      hintText: 'Mobile number cannot be changed',
-                    ),
-                    
-                    const SizedBox(height: 20),
-                    
-                    // Role
-                    _buildFormField(
-                      label: 'Role',
-                      controller: _roleController,
-                      enabled: false,
-                    ),
-                    
-                    const SizedBox(height: 40),
                   ],
-                ),
-              ),
-            ),
-            
-            // Save Changes Button
-            Container(
-              padding: const EdgeInsets.all(20),
-              child: SizedBox(
-                width: double.infinity,
-                height: 50,
-                child: ElevatedButton(
-                  onPressed: () {
-                    // Handle save changes
-                    _showSaveMessage();
-                  },
-                  style: ElevatedButton.styleFrom(
-                    backgroundColor: Color(0xFF424242),
-                    foregroundColor: Colors.white,
-                    shape: RoundedRectangleBorder(
-                      borderRadius: BorderRadius.circular(8),
-                    ),
-                    elevation: 0,
-                  ),
-                  child: Text(
-                    'Save Changes',
-                    style: TextStyle(
-                      fontSize: 16,
-                      fontWeight: FontWeight.bold,
-                    ),
-                  ),
                 ),
               ),
             ),
@@ -150,62 +86,82 @@ class _ProfileScreenState extends State<ProfileScreen> {
     );
   }
 
-  Widget _buildFormField({
-    required String label,
-    required TextEditingController controller,
-    required bool enabled,
-    String? hintText,
-  }) {
-    return Column(
-      crossAxisAlignment: CrossAxisAlignment.start,
-      children: [
-        Text(
-          label,
-          style: TextStyle(
-            fontSize: 16,
-            fontWeight: FontWeight.w500,
-            color: Colors.black87,
-          ),
-        ),
-        const SizedBox(height: 8),
-        Container(
-          decoration: BoxDecoration(
-            color: enabled ? Colors.white : Colors.grey[100],
-            borderRadius: BorderRadius.circular(8),
-            border: Border.all(
-              color: Colors.grey[300]!,
-              width: 1,
-            ),
-          ),
-          child: TextField(
-            controller: controller,
-            enabled: enabled,
-            style: TextStyle(
-              fontSize: 16,
-              color: Colors.black87,
-            ),
-            decoration: InputDecoration(
-              contentPadding: EdgeInsets.symmetric(horizontal: 16, vertical: 12),
-              border: InputBorder.none,
-              hintText: hintText,
-              hintStyle: TextStyle(
-                fontSize: 12,
-                color: Colors.grey[500],
+  Widget _buildMenuItem(IconData icon, String title, {bool isLogout = false}) {
+    return Container(
+      margin: EdgeInsets.symmetric(vertical: 8),
+      child: InkWell(
+        onTap: () {
+          if (isLogout) {
+            showLogoutDialog();
+          } else {
+            ScaffoldMessenger.of(context).showSnackBar(
+              SnackBar(
+                content: Text('$title - Feature coming soon!'),
+                backgroundColor: Color(0xFF1976D2),
               ),
-            ),
+            );
+          }
+        },
+        child: Container(
+          padding: EdgeInsets.symmetric(vertical: 16, horizontal: 4),
+          child: Row(
+            children: [
+              Icon(
+                icon,
+                color: isLogout ? Colors.red : Color(0xFF1976D2),
+                size: 24,
+              ),
+              const SizedBox(width: 20),
+              Text(
+                title,
+                style: TextStyle(
+                  fontSize: 18,
+                  color: Colors.black87,
+                  fontWeight: FontWeight.w500,
+                ),
+              ),
+            ],
           ),
         ),
-      ],
+      ),
     );
   }
 
-  void _showSaveMessage() {
-    ScaffoldMessenger.of(context).showSnackBar(
-      SnackBar(
-        content: Text('Profile updated successfully'),
-        duration: Duration(seconds: 2),
-        backgroundColor: Color(0xFF1976D2),
-      ),
+  void showLogoutDialog() {
+    showDialog(
+      context: context,
+      builder: (BuildContext context) {
+        return AlertDialog(
+          title: Text('Logout'),
+          content: Text('Are you sure you want to logout?'),
+          actions: [
+            TextButton(
+              onPressed: () {
+                Navigator.of(context).pop();
+              },
+              child: Text('Cancel'),
+            ),
+            TextButton(
+              onPressed: () {
+                Navigator.of(context).pop();
+                // Handle logout logic here
+                ScaffoldMessenger.of(context).showSnackBar(
+                  SnackBar(
+                    content: Text('Logged out successfully!'),
+                    backgroundColor: Colors.green,
+                  ),
+                );
+              },
+              child: Text('Logout'),
+            ),
+          ],
+        );
+      },
     );
+  }
+
+  @override
+  void dispose() {
+    super.dispose();
   }
 }
