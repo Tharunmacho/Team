@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:url_launcher/url_launcher.dart';
 import 'voter_info_screen.dart';
 import 'phone_call_screen.dart';
 
@@ -356,7 +357,6 @@ class _GuardianScreenState extends State<GuardianScreen> {
 
   Widget _buildVoterCard(GuardianVoter voter) {
     return Container(
-      margin: EdgeInsets.only(bottom: 16),
       padding: EdgeInsets.all(16),
       decoration: BoxDecoration(
         color: Colors.white,
@@ -364,231 +364,226 @@ class _GuardianScreenState extends State<GuardianScreen> {
         boxShadow: [
           BoxShadow(
             color: Colors.black.withValues(alpha: 0.05),
-            blurRadius: 10,
+            blurRadius: 8,
             offset: Offset(0, 2),
           ),
         ],
       ),
-      child: Row(
+      child: Column(
+        crossAxisAlignment: CrossAxisAlignment.start,
         children: [
-          // Profile image placeholder
-          Container(
-            width: 60,
-            height: 60,
-            decoration: BoxDecoration(
-              color: Color(0xFFE3F2FD),
-              borderRadius: BorderRadius.circular(8),
-            ),
-            child: Stack(
-              children: [
-                // Image placeholder
-                Center(
-                  child: Icon(
-                    Icons.person,
-                    size: 30,
-                    color: Color(0xFF2196F3),
-                  ),
-                ),
-                // Edit icon overlay
-                Positioned(
-                  bottom: 0,
-                  right: 0,
-                  child: Container(
-                    padding: EdgeInsets.all(2),
-                    decoration: BoxDecoration(
-                      color: Color(0xFF2196F3),
-                      shape: BoxShape.circle,
-                    ),
-                    child: Icon(
-                      Icons.edit,
-                      size: 12,
-                      color: Colors.white,
-                    ),
-                  ),
-                ),
-              ],
-            ),
-          ),
-          const SizedBox(width: 16),
-          
-          // Voter information
-          Expanded(
-            child: Column(
-              crossAxisAlignment: CrossAxisAlignment.start,
-              children: [
-                // Serial number with star
-                Row(
-                  children: [
-                    Icon(
-                      Icons.star_border,
-                      size: 16,
-                      color: Color(0xFF2196F3),
-                    ),
-                    const SizedBox(width: 4),
-                    Text(
-                      'Serial No: ${voter.serialNo}',
-                      style: TextStyle(
-                        fontSize: 14,
-                        color: Color(0xFF2196F3),
-                        fontWeight: FontWeight.w500,
-                      ),
-                    ),
-                  ],
-                ),
-                const SizedBox(height: 8),
-                
-                // Name in English and Tamil
-                Text(
-                  voter.name,
-                  style: TextStyle(
-                    fontSize: 16,
-                    fontWeight: FontWeight.bold,
-                    color: Colors.black87,
-                  ),
-                ),
-                Text(
-                  voter.tamilName,
-                  style: TextStyle(
-                    fontSize: 14,
-                    color: Colors.black54,
-                  ),
-                ),
-                const SizedBox(height: 4),
-                
-                // Relation in English and Tamil
-                Text(
-                  voter.relation,
-                  style: TextStyle(
-                    fontSize: 14,
-                    color: Colors.black87,
-                  ),
-                ),
-                Text(
-                  voter.tamilRelation,
-                  style: TextStyle(
-                    fontSize: 12,
-                    color: Colors.black54,
-                  ),
-                ),
-                const SizedBox(height: 8),
-                
-                // Door number
-                Text(
-                  voter.doorNo,
-                  style: TextStyle(
-                    fontSize: 14,
-                    color: Colors.black87,
-                    fontWeight: FontWeight.w500,
-                  ),
-                ),
-              ],
-            ),
-          ),
-          
-          // Right side - actions and info
-          Column(
+          // Serial number header with star
+          Row(
             children: [
-              // Voter ID
+              Icon(
+                Icons.star_border,
+                color: Colors.pink,
+                size: 16,
+              ),
+              const SizedBox(width: 6),
+              Text(
+                'Serial No: ${voter.serialNo}',
+                style: TextStyle(
+                  fontSize: 14,
+                  color: Color(0xFF1976D2),
+                  fontWeight: FontWeight.w600,
+                ),
+              ),
+              Spacer(),
+              // Voter ID badge positioned at top right
               Container(
-                padding: EdgeInsets.symmetric(horizontal: 8, vertical: 4),
+                padding: EdgeInsets.symmetric(horizontal: 8, vertical: 3),
                 decoration: BoxDecoration(
-                  color: Color(0xFF2196F3),
+                  color: Color(0xFF1976D2),
                   borderRadius: BorderRadius.circular(4),
                 ),
                 child: Text(
                   voter.voterId,
                   style: TextStyle(
-                    fontSize: 12,
+                    fontSize: 11,
                     color: Colors.white,
                     fontWeight: FontWeight.bold,
                   ),
                 ),
               ),
-              const SizedBox(height: 12),
-              
-              // Age and gender
-              Row(
-                children: [
-                  Icon(
-                    Icons.person,
-                    size: 16,
-                    color: Color(0xFFE91E63),
-                  ),
-                  const SizedBox(width: 4),
-                  Text(
-                    '${voter.age}',
-                    style: TextStyle(
-                      fontSize: 14,
-                      fontWeight: FontWeight.bold,
-                      color: Colors.black87,
+            ],
+          ),
+          
+          const SizedBox(height: 16),
+          
+          Row(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: [
+              // Profile image section
+              Container(
+                width: 60,
+                height: 70,
+                decoration: BoxDecoration(
+                  color: Colors.blue[50],
+                  borderRadius: BorderRadius.circular(8),
+                  border: Border.all(color: Colors.grey[300]!),
+                ),
+                child: Stack(
+                  children: [
+                    Center(
+                      child: Icon(
+                        Icons.person,
+                        size: 30,
+                        color: Colors.blue,
+                      ),
                     ),
-                  ),
-                  const SizedBox(width: 8),
-                  Text(
-                    voter.gender,
-                    style: TextStyle(
-                      fontSize: 12,
-                      color: Colors.black54,
+                    Positioned(
+                      bottom: 4,
+                      right: 4,
+                      child: Container(
+                        padding: EdgeInsets.all(3),
+                        decoration: BoxDecoration(
+                          color: Colors.blue,
+                          shape: BoxShape.circle,
+                        ),
+                        child: Icon(
+                          Icons.camera_alt,
+                          color: Colors.white,
+                          size: 10,
+                        ),
+                      ),
                     ),
-                  ),
-                ],
+                  ],
+                ),
               ),
-              const SizedBox(height: 12),
               
-              // Action buttons
+              const SizedBox(width: 16),
+              
+              // Voter details section
+              Expanded(
+                child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    Text(
+                      voter.name,
+                      style: TextStyle(
+                        fontSize: 16,
+                        fontWeight: FontWeight.bold,
+                        color: Colors.black87,
+                      ),
+                    ),
+                    Text(
+                      voter.tamilName,
+                      style: TextStyle(
+                        fontSize: 13,
+                        color: Colors.black54,
+                      ),
+                    ),
+                    const SizedBox(height: 6),
+                    Text(
+                      voter.relation,
+                      style: TextStyle(
+                        fontSize: 14,
+                        fontWeight: FontWeight.w500,
+                        color: Colors.black87,
+                      ),
+                    ),
+                    Text(
+                      voter.tamilRelation,
+                      style: TextStyle(
+                        fontSize: 12,
+                        color: Colors.black54,
+                      ),
+                    ),
+                    const SizedBox(height: 6),
+                    Text(
+                      'Door No ${voter.doorNo}',
+                      style: TextStyle(
+                        fontSize: 13,
+                        color: Colors.black87,
+                      ),
+                    ),
+                  ],
+                ),
+              ),
+            ],
+          ),
+          
+          const SizedBox(height: 16),
+          
+          // Bottom section with age and action buttons
+          Row(
+            children: [
+              Container(
+                padding: EdgeInsets.symmetric(horizontal: 6, vertical: 3),
+                decoration: BoxDecoration(
+                  color: Colors.pink[50],
+                  borderRadius: BorderRadius.circular(10),
+                ),
+                child: Row(
+                  mainAxisSize: MainAxisSize.min,
+                  children: [
+                    Icon(
+                      Icons.person,
+                      size: 14,
+                      color: Colors.pink[600],
+                    ),
+                    const SizedBox(width: 3),
+                    Text(
+                      '${voter.age}',
+                      style: TextStyle(
+                        fontSize: 12,
+                        color: Colors.pink[600],
+                        fontWeight: FontWeight.bold,
+                      ),
+                    ),
+                  ],
+                ),
+              ),
+              const SizedBox(width: 8),
+              Text(
+                voter.gender,
+                style: TextStyle(
+                  fontSize: 12,
+                  color: Colors.black54,
+                ),
+              ),
+              Spacer(),
+              // Action icons positioned at bottom right
               Row(
+                mainAxisSize: MainAxisSize.min,
                 children: [
                   GestureDetector(
-                    onTap: () {
-                      Navigator.push(
-                        context,
-                        MaterialPageRoute(
-                          builder: (context) => PhoneCallScreen(
-                            voterName: voter.name,
-                            voterTamilName: voter.tamilName,
-                            phoneNumber: voter.mobileNumber,
-                            voterId: voter.voterId,
-                            doorNo: voter.doorNo,
-                            age: voter.age,
-                            gender: voter.gender,
-                          ),
-                        ),
-                      );
-                    },
+                    onTap: () => _makePhoneCall(voter.mobileNumber),
                     child: Container(
                       padding: EdgeInsets.all(8),
                       decoration: BoxDecoration(
                         color: Colors.green,
-                        borderRadius: BorderRadius.circular(8),
+                        shape: BoxShape.circle,
                       ),
-                      child: Icon(
-                        Icons.phone,
-                        size: 16,
-                        color: Colors.white,
-                      ),
+                      child: Icon(Icons.phone, color: Colors.white, size: 16),
                     ),
                   ),
                   const SizedBox(width: 8),
                   GestureDetector(
                     onTap: () {
-                      // Handle voter details - convert GuardianVoter to VoterInfoScreen format
+                      // Navigate to voter info screen when family icon is clicked
                       Map<String, dynamic> voterData = {
                         'serialNo': voter.serialNo,
-                        'section': '1',
-                        'partNumber': '119',
+                        'serial': voter.serialNo.toString(),
                         'name': voter.name,
                         'tamilName': voter.tamilName,
                         'fatherName': voter.relation,
                         'fatherTamilName': voter.tamilRelation,
+                        'location': voter.relation,
+                        'tamilLocation': voter.tamilRelation,
                         'voterId': voter.voterId,
                         'doorNo': voter.doorNo,
+                        'partNumber': '1',
+                        'section': '1',
                         'age': voter.age,
-                        'relation': voter.gender,
-                        'epicId': voter.voterId,
-                        'part': '119',
-                        'serial': voter.serialNo,
+                        'gender': voter.gender,
+                        'relation': voter.relation,
+                        'mobileNumber': voter.mobileNumber,
+                        'politicalParty': 'Unknown',
+                        'religion': 'Unknown',
+                        'voterCategory': 'Active',
                       };
-                      
                       Navigator.push(
                         context,
                         MaterialPageRoute(
@@ -599,26 +594,8 @@ class _GuardianScreenState extends State<GuardianScreen> {
                     child: Container(
                       padding: EdgeInsets.all(8),
                       decoration: BoxDecoration(
-                        color: Color(0xFF2196F3),
-                        borderRadius: BorderRadius.circular(8),
-                      ),
-                      child: Icon(
-                        Icons.info,
-                        size: 16,
-                        color: Colors.white,
-                      ),
-                    ),
-                  ),
-                  const SizedBox(width: 8),
-                  GestureDetector(
-                    onTap: () {
-                      // Handle family details
-                    },
-                    child: Container(
-                      padding: EdgeInsets.all(8),
-                      decoration: BoxDecoration(
-                        color: Color(0xFF2196F3),
-                        borderRadius: BorderRadius.circular(8),
+                        color: Colors.red,
+                        shape: BoxShape.circle,
                       ),
                       child: Stack(
                         children: [
@@ -628,13 +605,13 @@ class _GuardianScreenState extends State<GuardianScreen> {
                             color: Colors.white,
                           ),
                           Positioned(
-                            top: -2,
-                            right: -2,
+                            top: -4,
+                            right: -4,
                             child: Container(
                               width: 12,
                               height: 12,
                               decoration: BoxDecoration(
-                                color: Colors.red,
+                                color: Colors.red[800],
                                 shape: BoxShape.circle,
                               ),
                               child: Center(
@@ -1494,6 +1471,36 @@ class _GuardianScreenState extends State<GuardianScreen> {
     _voterLastNameController.dispose();
     _relationFirstNameController.dispose();
     super.dispose();
+  }
+
+  void _makePhoneCall(String phoneNumber) async {
+    final Uri launchUri = Uri(
+      scheme: 'tel',
+      path: phoneNumber,
+    );
+    try {
+      if (await canLaunchUrl(launchUri)) {
+        await launchUrl(launchUri);
+      } else {
+        if (mounted) {
+          ScaffoldMessenger.of(context).showSnackBar(
+            SnackBar(
+              content: Text('Could not launch phone app'),
+              backgroundColor: Colors.red,
+            ),
+          );
+        }
+      }
+    } catch (e) {
+      if (mounted) {
+        ScaffoldMessenger.of(context).showSnackBar(
+          SnackBar(
+            content: Text('Error making phone call: $e'),
+            backgroundColor: Colors.red,
+          ),
+        );
+      }
+    }
   }
 }
 

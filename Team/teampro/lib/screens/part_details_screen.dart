@@ -12,6 +12,15 @@ class PartDetailsScreen extends StatefulWidget {
 
 class _PartDetailsScreenState extends State<PartDetailsScreen> {
   final TextEditingController _searchController = TextEditingController();
+  
+  // Filter state variables (comprehensive)
+  double minAge = 18;
+  double maxAge = 120;
+  Set<String> selectedGenders = {};
+  Set<String> selectedVoterHistory = {};
+  Set<String> selectedVoterCategory = {};
+  Set<String> selectedPoliticalParty = {};
+  Set<String> selectedReligion = {};
 
   @override
   void dispose() {
@@ -120,12 +129,15 @@ class _PartDetailsScreenState extends State<PartDetailsScreen> {
                       size: 24,
                     ),
                   ),
-                  Container(
-                    padding: EdgeInsets.all(12),
-                    child: Icon(
-                      Icons.tune,
-                      color: Colors.grey[600],
-                      size: 24,
+                  GestureDetector(
+                    onTap: _showFilterModal,
+                    child: Container(
+                      padding: EdgeInsets.all(12),
+                      child: Icon(
+                        Icons.tune,
+                        color: Colors.grey[600],
+                        size: 24,
+                      ),
                     ),
                   ),
                 ],
@@ -549,4 +561,612 @@ class _PartDetailsScreenState extends State<PartDetailsScreen> {
       ],
     );
   }
+
+  void _showFilterModal() {
+    showModalBottomSheet(
+      context: context,
+      isScrollControlled: true,
+      backgroundColor: Colors.transparent,
+      builder: (context) => StatefulBuilder(
+        builder: (context, setModalState) => Container(
+          height: MediaQuery.of(context).size.height * 0.9,
+          decoration: BoxDecoration(
+            color: Colors.white,
+            borderRadius: BorderRadius.only(
+              topLeft: Radius.circular(20),
+              topRight: Radius.circular(20),
+            ),
+          ),
+          child: Column(
+            children: [
+              Container(
+                padding: EdgeInsets.all(20),
+                child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    Text(
+                      'Filter Voters',
+                      style: TextStyle(
+                        fontSize: 24,
+                        fontWeight: FontWeight.bold,
+                      ),
+                    ),
+                    const SizedBox(height: 8),
+                    Text(
+                      'Select filters to narrow down the voter list',
+                      style: TextStyle(
+                        fontSize: 16,
+                        color: Colors.grey[600],
+                      ),
+                    ),
+                  ],
+                ),
+              ),
+              Expanded(
+                child: SingleChildScrollView(
+                  padding: EdgeInsets.symmetric(horizontal: 20),
+                  child: Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: [
+                      // Age filter
+                      _buildAgeFilter(setModalState),
+                      const SizedBox(height: 30),
+                      
+                      // Gender filter
+                      _buildGenderFilter(setModalState),
+                      const SizedBox(height: 30),
+                      
+                      // Voter History filter
+                      _buildVoterHistoryFilter(setModalState),
+                      const SizedBox(height: 30),
+                      
+                      // Voter Category filter
+                      _buildVoterCategoryFilter(setModalState),
+                      const SizedBox(height: 30),
+                      
+                      // Political Party filter
+                      _buildPoliticalPartyFilter(setModalState),
+                      const SizedBox(height: 30),
+                      
+                      // Religion filter
+                      _buildReligionFilter(setModalState),
+                      const SizedBox(height: 30),
+                    ],
+                  ),
+                ),
+              ),
+              Container(
+                padding: EdgeInsets.all(20),
+                child: Column(
+                  children: [
+                    Row(
+                      children: [
+                        Expanded(
+                          child: ElevatedButton(
+                            onPressed: () {
+                              setModalState(() {
+                                minAge = 18;
+                                maxAge = 120;
+                                selectedGenders.clear();
+                                selectedVoterHistory.clear();
+                                selectedVoterCategory.clear();
+                                selectedPoliticalParty.clear();
+                                selectedReligion.clear();
+                              });
+                            },
+                            style: ElevatedButton.styleFrom(
+                              backgroundColor: Colors.white,
+                              foregroundColor: Color(0xFF1976D2),
+                              side: BorderSide(color: Color(0xFF1976D2)),
+                              shape: RoundedRectangleBorder(
+                                borderRadius: BorderRadius.circular(8),
+                              ),
+                              padding: EdgeInsets.symmetric(vertical: 16),
+                            ),
+                            child: Text('Clear All'),
+                          ),
+                        ),
+                        const SizedBox(width: 16),
+                        Expanded(
+                          child: ElevatedButton(
+                            onPressed: () {
+                              Navigator.pop(context);
+                              ScaffoldMessenger.of(context).showSnackBar(
+                                SnackBar(
+                                  content: Text('Filters applied successfully!'),
+                                  backgroundColor: Colors.green,
+                                ),
+                              );
+                            },
+                            style: ElevatedButton.styleFrom(
+                              backgroundColor: Color(0xFF1976D2),
+                              foregroundColor: Colors.white,
+                              shape: RoundedRectangleBorder(
+                                borderRadius: BorderRadius.circular(8),
+                              ),
+                              padding: EdgeInsets.symmetric(vertical: 16),
+                            ),
+                            child: Text('Apply Filters'),
+                          ),
+                        ),
+                      ],
+                    ),
+                    const SizedBox(height: 16),
+                    SizedBox(
+                      width: double.infinity,
+                      child: ElevatedButton(
+                        onPressed: () => Navigator.pop(context),
+                        style: ElevatedButton.styleFrom(
+                          backgroundColor: Colors.black,
+                          foregroundColor: Colors.white,
+                          shape: RoundedRectangleBorder(
+                            borderRadius: BorderRadius.circular(8),
+                          ),
+                          padding: EdgeInsets.symmetric(vertical: 16),
+                        ),
+                        child: Text('Close'),
+                      ),
+                    ),
+                  ],
+                ),
+              ),
+            ],
+          ),
+        ),
+      ),
+    );
+  }
+
+  Widget _buildGenderFilter(StateSetter setModalState) {
+    return Column(
+      crossAxisAlignment: CrossAxisAlignment.start,
+      children: [
+        Text(
+          'Gender',
+          style: TextStyle(
+            fontSize: 18,
+            fontWeight: FontWeight.bold,
+          ),
+        ),
+        const SizedBox(height: 16),
+        Row(
+          children: [
+            _buildGenderChip('Male', Icons.person, Colors.blue, setModalState),
+            const SizedBox(width: 16),
+            _buildGenderChip('Female', Icons.person, Colors.pink, setModalState),
+            const SizedBox(width: 16),
+            _buildGenderChip('Other', Icons.transgender, Colors.orange, setModalState),
+          ],
+        ),
+      ],
+    );
+  }
+
+  Widget _buildGenderChip(String label, IconData icon, Color color, StateSetter setModalState) {
+    bool isSelected = selectedGenders.contains(label);
+    return GestureDetector(
+      onTap: () {
+        setModalState(() {
+          if (isSelected) {
+            selectedGenders.remove(label);
+          } else {
+            selectedGenders.add(label);
+          }
+        });
+      },
+      child: Container(
+        padding: EdgeInsets.symmetric(horizontal: 12, vertical: 8),
+        decoration: BoxDecoration(
+          color: isSelected ? color.withOpacity(0.2) : Colors.grey[100],
+          borderRadius: BorderRadius.circular(20),
+          border: Border.all(
+            color: isSelected ? color : Colors.grey[300]!,
+          ),
+        ),
+        child: Row(
+          mainAxisSize: MainAxisSize.min,
+          children: [
+            Icon(
+              icon,
+              color: isSelected ? color : Colors.grey[600],
+              size: 18,
+            ),
+            const SizedBox(width: 8),
+            Text(
+              label,
+              style: TextStyle(
+                color: isSelected ? color : Colors.grey[600],
+                fontWeight: isSelected ? FontWeight.bold : FontWeight.normal,
+              ),
+            ),
+          ],
+        ),
+      ),
+    );
+  }
+
+  Widget _buildVoterHistoryFilter(StateSetter setModalState) {
+    return Column(
+      crossAxisAlignment: CrossAxisAlignment.start,
+      children: [
+        Text(
+          'Voter History',
+          style: TextStyle(
+            fontSize: 18,
+            fontWeight: FontWeight.bold,
+          ),
+        ),
+        const SizedBox(height: 16),
+        Wrap(
+          spacing: 12,
+          runSpacing: 12,
+          children: [
+            _buildHistoryChip('2024', 'PC', Color(0xFF1565C0), setModalState),
+            _buildHistoryChip('2022', 'ULB', Color(0xFFD32F2F), setModalState),
+            _buildHistoryChip('2021', 'AC', Color(0xFF388E3C), setModalState),
+            _buildNotVotedChip(setModalState),
+          ],
+        ),
+      ],
+    );
+  }
+
+  Widget _buildHistoryChip(String year, String type, Color color, StateSetter setModalState) {
+    String key = '$year-$type';
+    bool isSelected = selectedVoterHistory.contains(key);
+    
+    return GestureDetector(
+      onTap: () {
+        setModalState(() {
+          if (isSelected) {
+            selectedVoterHistory.remove(key);
+          } else {
+            selectedVoterHistory.add(key);
+          }
+        });
+      },
+      child: Container(
+        padding: EdgeInsets.symmetric(horizontal: 8, vertical: 6),
+        decoration: BoxDecoration(
+          color: isSelected ? color.withOpacity(0.2) : color,
+          borderRadius: BorderRadius.circular(6),
+          border: isSelected ? Border.all(color: color, width: 2) : null,
+        ),
+        child: Column(
+          mainAxisSize: MainAxisSize.min,
+          children: [
+            Text(
+              year,
+              style: TextStyle(
+                color: isSelected ? color : Colors.white,
+                fontSize: 14,
+                fontWeight: FontWeight.bold,
+              ),
+            ),
+            Text(
+              type,
+              style: TextStyle(
+                color: isSelected ? color : Colors.white,
+                fontSize: 12,
+                fontWeight: FontWeight.bold,
+              ),
+            ),
+          ],
+        ),
+      ),
+    );
+  }
+
+  Widget _buildNotVotedChip(StateSetter setModalState) {
+    String key = 'not-voted';
+    bool isSelected = selectedVoterHistory.contains(key);
+    
+    return GestureDetector(
+      onTap: () {
+        setModalState(() {
+          if (isSelected) {
+            selectedVoterHistory.remove(key);
+          } else {
+            selectedVoterHistory.add(key);
+          }
+        });
+      },
+      child: Container(
+        width: 50,
+        height: 50,
+        decoration: BoxDecoration(
+          color: isSelected ? Colors.grey.withOpacity(0.2) : Colors.grey[100],
+          shape: BoxShape.circle,
+          border: Border.all(
+            color: isSelected ? Colors.grey : Colors.grey[300]!,
+            width: isSelected ? 2 : 1,
+          ),
+        ),
+        child: Stack(
+          children: [
+            Center(
+              child: Icon(
+                Icons.circle,
+                color: Colors.grey[400],
+                size: 30,
+              ),
+            ),
+            // Diagonal line to create crossed-out effect
+            Positioned.fill(
+              child: CustomPaint(
+                painter: CrossOutPainter(
+                  color: isSelected ? Colors.grey : Colors.grey[600]!,
+                ),
+              ),
+            ),
+          ],
+        ),
+      ),
+    );
+  }
+
+  Widget _buildVoterCategoryFilter(StateSetter setModalState) {
+    return Column(
+      crossAxisAlignment: CrossAxisAlignment.start,
+      children: [
+        Text(
+          'Voter Category',
+          style: TextStyle(
+            fontSize: 18,
+            fontWeight: FontWeight.bold,
+          ),
+        ),
+        const SizedBox(height: 16),
+        Wrap(
+          spacing: 12,
+          runSpacing: 12,
+          children: [
+            _buildCategoryIcon(Icons.check_circle, Colors.green, 'Active', setModalState),
+            _buildCategoryIcon(Icons.cancel, Colors.red, 'Inactive', setModalState),
+            _buildCategoryIcon(Icons.help, Colors.grey, 'Unknown', setModalState),
+            _buildCategoryIcon(Icons.trending_up, Colors.blue, 'New', setModalState),
+            _buildCategoryIcon(Icons.delete, Colors.black, 'Deleted', setModalState),
+            _buildCategoryIcon(Icons.arrow_forward, Colors.blue, 'Shifted', setModalState),
+            _buildCategoryIcon(Icons.accessibility, Colors.grey, 'Disabled', setModalState),
+            _buildCategoryIcon(Icons.family_restroom, Colors.brown, 'Family', setModalState),
+            _buildCategoryIcon(Icons.calendar_today, Colors.blue, 'Birthday', setModalState),
+            _buildCategoryIcon(Icons.schedule, Colors.grey, 'Pending', setModalState),
+            _buildCategoryIcon(Icons.store, Colors.red, 'Business', setModalState),
+            _buildCategoryIcon(Icons.people, Colors.pink, 'Community', setModalState),
+            _buildCategoryIcon(Icons.school, Colors.green, 'Student', setModalState),
+            _buildCategoryIcon(Icons.work, Colors.orange, 'Professional', setModalState),
+          ],
+        ),
+      ],
+    );
+  }
+
+  Widget _buildCategoryIcon(IconData icon, Color color, String label, StateSetter setModalState) {
+    bool isSelected = selectedVoterCategory.contains(label);
+    return GestureDetector(
+      onTap: () {
+        setModalState(() {
+          if (isSelected) {
+            selectedVoterCategory.remove(label);
+          } else {
+            selectedVoterCategory.add(label);
+          }
+        });
+      },
+      child: Container(
+        width: 50,
+        height: 50,
+        decoration: BoxDecoration(
+          color: isSelected ? color.withOpacity(0.2) : Colors.grey[100],
+          shape: BoxShape.circle,
+          border: Border.all(
+            color: isSelected ? color : Colors.grey[300]!,
+            width: isSelected ? 2 : 1,
+          ),
+        ),
+        child: Icon(
+          icon,
+          color: isSelected ? color : Colors.grey[600],
+          size: 24,
+        ),
+      ),
+    );
+  }
+
+  // Age Filter
+  Widget _buildAgeFilter(StateSetter setModalState) {
+    return Column(
+      crossAxisAlignment: CrossAxisAlignment.start,
+      children: [
+        Text(
+          'Age',
+          style: TextStyle(
+            fontSize: 18,
+            fontWeight: FontWeight.bold,
+          ),
+        ),
+        const SizedBox(height: 20),
+        Row(
+          children: [
+            Text('Age 18'),
+            Spacer(),
+            Text('Age 120'),
+          ],
+        ),
+        RangeSlider(
+          values: RangeValues(minAge, maxAge),
+          min: 0,
+          max: 120,
+          divisions: 120,
+          labels: RangeLabels(
+            minAge.round().toString(),
+            maxAge.round().toString(),
+          ),
+          onChanged: (RangeValues values) {
+            setModalState(() {
+              minAge = values.start;
+              maxAge = values.end;
+            });
+          },
+        ),
+      ],
+    );
+  }
+
+  // Political Party Filter
+  Widget _buildPoliticalPartyFilter(StateSetter setModalState) {
+    return Column(
+      crossAxisAlignment: CrossAxisAlignment.start,
+      children: [
+        Text(
+          'Political Party',
+          style: TextStyle(
+            fontSize: 18,
+            fontWeight: FontWeight.bold,
+          ),
+        ),
+        const SizedBox(height: 16),
+        Wrap(
+          spacing: 12,
+          runSpacing: 12,
+          children: [
+            _buildPartyIcon('admk', '🌿', Colors.green, setModalState),
+            _buildPartyIcon('bjp', '🪷', Colors.orange, setModalState),
+            _buildPartyIcon('dmk', '🔥', Colors.red, setModalState),
+            _buildPartyIcon('congress', '✋', Colors.blue, setModalState),
+            _buildPartyIcon('aam', '🧹', Colors.cyan, setModalState),
+            _buildPartyIcon('independent', '⊝', Colors.black, setModalState),
+            _buildPartyIcon('pmk', '☀️', Colors.amber, setModalState),
+            _buildPartyIcon('mdmk', '✋', Colors.green, setModalState),
+            _buildPartyIcon('cpi', '⚙️', Colors.blue, setModalState),
+            _buildPartyIcon('aidmk', '❤️', Colors.red, setModalState),
+            _buildPartyIcon('cpim', '⚒️', Colors.red, setModalState),
+            _buildPartyIcon('cpm', '⚒️', Colors.red, setModalState),
+            _buildPartyIcon('dmdk', '🎭', Colors.purple, setModalState),
+            _buildPartyIcon('mic', '🎤', Colors.grey, setModalState),
+          ],
+        ),
+      ],
+    );
+  }
+
+  Widget _buildPartyIcon(String party, String emoji, Color color, StateSetter setModalState) {
+    bool isSelected = selectedPoliticalParty.contains(party);
+    return GestureDetector(
+      onTap: () {
+        setModalState(() {
+          if (isSelected) {
+            selectedPoliticalParty.remove(party);
+          } else {
+            selectedPoliticalParty.add(party);
+          }
+        });
+      },
+      child: Container(
+        width: 50,
+        height: 50,
+        decoration: BoxDecoration(
+          color: isSelected ? color.withOpacity(0.2) : Colors.grey[100],
+          shape: BoxShape.circle,
+          border: Border.all(
+            color: isSelected ? color : Colors.grey[300]!,
+            width: isSelected ? 2 : 1,
+          ),
+        ),
+        child: Center(
+          child: Text(
+            emoji,
+            style: TextStyle(fontSize: 24),
+          ),
+        ),
+      ),
+    );
+  }
+
+  // Religion Filter
+  Widget _buildReligionFilter(StateSetter setModalState) {
+    return Column(
+      crossAxisAlignment: CrossAxisAlignment.start,
+      children: [
+        Text(
+          'Religion',
+          style: TextStyle(
+            fontSize: 18,
+            fontWeight: FontWeight.bold,
+          ),
+        ),
+        const SizedBox(height: 16),
+        Wrap(
+          spacing: 12,
+          runSpacing: 12,
+          children: [
+            _buildReligionIcon('hindu', '🕉️', Colors.orange, setModalState),
+            _buildReligionIcon('islam', '☪️', Colors.green, setModalState),
+            _buildReligionIcon('christian', '✝️', Colors.purple, setModalState),
+            _buildReligionIcon('buddhist', '☸️', Colors.yellow, setModalState),
+            _buildReligionIcon('sikh', '🪯', Colors.blue, setModalState),
+            _buildReligionIcon('jain', '⚡', Colors.amber, setModalState),
+          ],
+        ),
+      ],
+    );
+  }
+
+  Widget _buildReligionIcon(String religion, String symbol, Color color, StateSetter setModalState) {
+    bool isSelected = selectedReligion.contains(religion);
+    return GestureDetector(
+      onTap: () {
+        setModalState(() {
+          if (isSelected) {
+            selectedReligion.remove(religion);
+          } else {
+            selectedReligion.add(religion);
+          }
+        });
+      },
+      child: Container(
+        width: 50,
+        height: 50,
+        decoration: BoxDecoration(
+          color: isSelected ? color.withOpacity(0.2) : Colors.grey[100],
+          shape: BoxShape.circle,
+          border: Border.all(
+            color: isSelected ? color : Colors.grey[300]!,
+            width: isSelected ? 2 : 1,
+          ),
+        ),
+        child: Center(
+          child: Text(
+            symbol,
+            style: TextStyle(fontSize: 24),
+          ),
+        ),
+      ),
+    );
+  }
+}
+
+// Custom painter for creating crossed-out effect
+class CrossOutPainter extends CustomPainter {
+  final Color color;
+  
+  CrossOutPainter({required this.color});
+  
+  @override
+  void paint(Canvas canvas, Size size) {
+    final paint = Paint()
+      ..color = color
+      ..strokeWidth = 3
+      ..strokeCap = StrokeCap.round;
+    
+    // Draw diagonal line from top-left to bottom-right
+    canvas.drawLine(
+      Offset(size.width * 0.2, size.height * 0.2),
+      Offset(size.width * 0.8, size.height * 0.8),
+      paint,
+    );
+  }
+  
+  @override
+  bool shouldRepaint(CustomPainter oldDelegate) => false;
 }

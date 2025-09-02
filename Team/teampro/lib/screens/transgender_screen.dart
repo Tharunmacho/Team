@@ -1,5 +1,7 @@
 import 'package:flutter/material.dart';
+import 'package:url_launcher/url_launcher.dart';
 import 'transgender_voter_info_screen.dart';
+import 'voter_info_screen.dart';
 
 class TransgenderScreen extends StatefulWidget {
   const TransgenderScreen({super.key});
@@ -17,6 +19,8 @@ class _TransgenderScreenState extends State<TransgenderScreen> {
   final TextEditingController _voterFirstNameController = TextEditingController();
   final TextEditingController _voterLastNameController = TextEditingController();
   final TextEditingController _relationFirstNameController = TextEditingController();
+  final TextEditingController _relationLastNameController = TextEditingController();
+  final TextEditingController _ageController = TextEditingController();
   
   // Filter state variables
   double minAge = 18;
@@ -62,6 +66,8 @@ class _TransgenderScreenState extends State<TransgenderScreen> {
     _voterFirstNameController.dispose();
     _voterLastNameController.dispose();
     _relationFirstNameController.dispose();
+    _relationLastNameController.dispose();
+    _ageController.dispose();
     super.dispose();
   }
 
@@ -494,56 +500,55 @@ class _TransgenderScreenState extends State<TransgenderScreen> {
                 // Action icons
                 Row(
                   children: [
-                    Container(
-                      padding: EdgeInsets.all(8),
-                      decoration: BoxDecoration(
-                        color: Colors.blue[50],
-                        shape: BoxShape.circle,
-                      ),
-                      child: Icon(
-                        Icons.person,
-                        color: Colors.blue,
-                        size: 16,
+                    GestureDetector(
+                      onTap: () => _makePhoneCall('9965161134'), // Default phone number
+                      child: Container(
+                        padding: EdgeInsets.all(8),
+                        decoration: BoxDecoration(
+                          color: Colors.blue.withOpacity(0.1),
+                          borderRadius: BorderRadius.circular(6),
+                        ),
+                        child: Icon(Icons.phone, color: Colors.blue, size: 16),
                       ),
                     ),
                     const SizedBox(width: 8),
-                    Container(
-                      padding: EdgeInsets.all(8),
-                      decoration: BoxDecoration(
-                        color: Colors.blue[50],
-                        shape: BoxShape.circle,
-                      ),
-                      child: Stack(
-                        children: [
-                          Icon(
-                            Icons.group,
-                            color: Colors.blue,
-                            size: 16,
+                    GestureDetector(
+                      onTap: () {
+                        Map<String, dynamic> voterData = {
+                          'serialNo': voter.serialNo,
+                          'serial': voter.serialNo.toString(),
+                          'name': voter.name,
+                          'tamilName': voter.tamilName,
+                          'fatherName': voter.location,
+                          'fatherTamilName': voter.tamilLocation,
+                          'location': voter.location,
+                          'tamilLocation': voter.tamilLocation,
+                          'voterId': voter.voterId,
+                          'doorNo': voter.doorNo,
+                          'partNumber': '1',
+                          'section': '1',
+                          'age': voter.age,
+                          'gender': 'Other', // Transgender
+                          'relation': voter.relation,
+                          'mobileNumber': '9965161134', // Default mobile
+                          'politicalParty': 'Unknown',
+                          'religion': 'Unknown',
+                          'voterCategory': 'Active',
+                        };
+                        Navigator.push(
+                          context,
+                          MaterialPageRoute(
+                            builder: (context) => VoterInfoScreen(voterData: voterData),
                           ),
-                          if (voter.serialNo == 590)
-                            Positioned(
-                              top: -2,
-                              right: -2,
-                              child: Container(
-                                width: 8,
-                                height: 8,
-                                decoration: BoxDecoration(
-                                  color: Colors.red,
-                                  shape: BoxShape.circle,
-                                ),
-                                child: Center(
-                                  child: Text(
-                                    '1',
-                                    style: TextStyle(
-                                      color: Colors.white,
-                                      fontSize: 6,
-                                      fontWeight: FontWeight.bold,
-                                    ),
-                                  ),
-                                ),
-                              ),
-                            ),
-                        ],
+                        );
+                      },
+                      child: Container(
+                        padding: EdgeInsets.all(8),
+                        decoration: BoxDecoration(
+                          color: Colors.green.withOpacity(0.1),
+                          borderRadius: BorderRadius.circular(6),
+                        ),
+                        child: Icon(Icons.family_restroom, color: Colors.green, size: 16),
                       ),
                     ),
                   ],
@@ -579,98 +584,152 @@ class _TransgenderScreenState extends State<TransgenderScreen> {
   }
 
   void _showAdvancedSearch() {
-    showDialog(
+    showModalBottomSheet(
       context: context,
-      builder: (context) => Dialog(
-        shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(16)),
-        child: Container(
-          padding: EdgeInsets.all(24),
-          child: Column(
-            mainAxisSize: MainAxisSize.min,
-            children: [
-              Row(
+      isScrollControlled: true,
+      backgroundColor: Colors.transparent,
+      builder: (context) => Container(
+        height: MediaQuery.of(context).size.height * 0.85,
+        decoration: BoxDecoration(
+          color: Colors.white,
+          borderRadius: BorderRadius.only(
+            topLeft: Radius.circular(20),
+            topRight: Radius.circular(20),
+          ),
+        ),
+        child: Column(
+          children: [
+            // Header
+            Container(
+              padding: EdgeInsets.all(20),
+              child: Row(
+                mainAxisAlignment: MainAxisAlignment.spaceBetween,
                 children: [
                   Text(
                     'Advance Search',
                     style: TextStyle(
                       fontSize: 20,
                       fontWeight: FontWeight.bold,
+                      color: Colors.black87,
                     ),
                   ),
-                  Spacer(),
                   GestureDetector(
                     onTap: () => Navigator.pop(context),
-                    child: Icon(Icons.close, size: 24),
+                    child: Icon(
+                      Icons.close,
+                      size: 24,
+                      color: Colors.black54,
+                    ),
                   ),
                 ],
               ),
-              const SizedBox(height: 24),
-              _buildSearchField('Mobile No', _mobileController),
-              const SizedBox(height: 16),
-              _buildSearchField('PartNo', _partNoController),
-              const SizedBox(height: 16),
-              _buildSearchField('Serial No', _serialNoController),
-              const SizedBox(height: 16),
-              _buildSearchField('EPIC Id', _epicIdController),
-              const SizedBox(height: 16),
-              _buildSearchField('Voter First Name', _voterFirstNameController),
-              const SizedBox(height: 16),
-              _buildSearchField('Voter Last Name', _voterLastNameController),
-              const SizedBox(height: 16),
-              _buildSearchField('Relation First Name', _relationFirstNameController),
-              const SizedBox(height: 24),
-              Row(
+            ),
+            
+            // Scrollable form fields
+            Expanded(
+              child: SingleChildScrollView(
+                padding: EdgeInsets.symmetric(horizontal: 20),
+                child: Column(
+                  children: [
+                    _buildSearchField('Mobile No', _mobileController),
+                    const SizedBox(height: 16),
+                    _buildSearchField('PartNo', _partNoController),
+                    const SizedBox(height: 16),
+                    _buildSearchField('Serial No', _serialNoController),
+                    const SizedBox(height: 16),
+                    _buildSearchField('EPIC Id', _epicIdController),
+                    const SizedBox(height: 16),
+                    _buildSearchField('Voter First Name', _voterFirstNameController),
+                    const SizedBox(height: 16),
+                    _buildSearchField('Voter Last Name', _voterLastNameController),
+                    const SizedBox(height: 16),
+                    _buildSearchField('Relation First Name', _relationFirstNameController),
+                    const SizedBox(height: 16),
+                    _buildSearchField('Relation Last Name', _relationLastNameController),
+                    const SizedBox(height: 16),
+                    _buildSearchField('Age', _ageController),
+                    const SizedBox(height: 30),
+                  ],
+                ),
+              ),
+            ),
+            
+            // Bottom buttons
+            Container(
+              padding: EdgeInsets.all(20),
+              child: Row(
                 children: [
                   Expanded(
                     child: ElevatedButton(
                       onPressed: () {
-                        // Clear all fields
-                        _mobileController.clear();
-                        _partNoController.clear();
-                        _serialNoController.clear();
-                        _epicIdController.clear();
-                        _voterFirstNameController.clear();
-                        _voterLastNameController.clear();
-                        _relationFirstNameController.clear();
-                      },
-                      style: ElevatedButton.styleFrom(
-                        backgroundColor: Colors.white,
-                        foregroundColor: Colors.grey[700],
-                        side: BorderSide(color: Colors.grey[300]!),
-                        shape: RoundedRectangleBorder(
-                          borderRadius: BorderRadius.circular(8),
-                        ),
-                      ),
-                      child: Text('Clear'),
-                    ),
-                  ),
-                  const SizedBox(width: 16),
-                  Expanded(
-                    child: ElevatedButton(
-                      onPressed: () {
                         Navigator.pop(context);
-                        // Implement search logic here
                         ScaffoldMessenger.of(context).showSnackBar(
-                          SnackBar(content: Text('Search functionality implemented!')),
+                          SnackBar(
+                            content: Text('Search functionality implemented!'),
+                            backgroundColor: Color(0xFF1976D2),
+                          ),
                         );
                       },
                       style: ElevatedButton.styleFrom(
                         backgroundColor: Color(0xFF1976D2),
                         foregroundColor: Colors.white,
+                        padding: EdgeInsets.symmetric(vertical: 16),
                         shape: RoundedRectangleBorder(
                           borderRadius: BorderRadius.circular(8),
                         ),
                       ),
-                      child: Text('Search'),
+                      child: Text(
+                        'Search',
+                        style: TextStyle(
+                          fontSize: 16,
+                          fontWeight: FontWeight.w600,
+                        ),
+                      ),
+                    ),
+                  ),
+                  const SizedBox(width: 16),
+                  Expanded(
+                    child: OutlinedButton(
+                      onPressed: () {
+                        _clearSearchFields();
+                        Navigator.pop(context);
+                      },
+                      style: OutlinedButton.styleFrom(
+                        foregroundColor: Colors.black54,
+                        padding: EdgeInsets.symmetric(vertical: 16),
+                        side: BorderSide(color: Colors.grey[300]!),
+                        shape: RoundedRectangleBorder(
+                          borderRadius: BorderRadius.circular(8),
+                        ),
+                      ),
+                      child: Text(
+                        'Cancel',
+                        style: TextStyle(
+                          fontSize: 16,
+                          fontWeight: FontWeight.w600,
+                        ),
+                      ),
                     ),
                   ),
                 ],
               ),
-            ],
-          ),
+            ),
+          ],
         ),
       ),
     );
+  }
+
+  void _clearSearchFields() {
+    _mobileController.clear();
+    _partNoController.clear();
+    _serialNoController.clear();
+    _epicIdController.clear();
+    _voterFirstNameController.clear();
+    _voterLastNameController.clear();
+    _relationFirstNameController.clear();
+    _relationLastNameController.clear();
+    _ageController.clear();
   }
 
   Widget _buildSearchField(String label, TextEditingController controller) {
@@ -1217,6 +1276,20 @@ class _TransgenderScreenState extends State<TransgenderScreen> {
         ),
       ),
     );
+  }
+
+  void _makePhoneCall(String phoneNumber) async {
+    final Uri launchUri = Uri(
+      scheme: 'tel',
+      path: phoneNumber,
+    );
+    try {
+      await launchUrl(launchUri);
+    } catch (e) {
+      ScaffoldMessenger.of(context).showSnackBar(
+        SnackBar(content: Text('Could not launch phone dialer')),
+      );
+    }
   }
 }
 

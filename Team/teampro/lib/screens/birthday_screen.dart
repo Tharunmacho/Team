@@ -57,6 +57,11 @@ class _BirthdayScreenState extends State<BirthdayScreen> {
   
   DateTime selectedDate = DateTime.now();
   String selectedDateFilter = 'Today'; // 'Today', 'Tomorrow', 'Both'
+  DateTime? customSelectedDate;
+  String selectedMonth = 'All';
+  bool showUpcomingBirthdays = false;
+  int upcomingDays = 7; // Show birthdays in next 7 days
+  String selectedAgeGroup = 'All'; // 'All', '18-30', '31-50', '51+'
   
   // Filter state variables
   double minAge = 18;
@@ -389,101 +394,104 @@ class _BirthdayScreenState extends State<BirthdayScreen> {
 
   Widget _buildVoterCard(BirthdayVoter voter) {
     return Container(
-      margin: EdgeInsets.only(bottom: 12),
-      padding: EdgeInsets.all(12),
+      margin: EdgeInsets.only(bottom: 16),
+      padding: EdgeInsets.all(16),
       decoration: BoxDecoration(
         color: Colors.white,
-        borderRadius: BorderRadius.circular(8),
+        borderRadius: BorderRadius.circular(12),
         boxShadow: [
           BoxShadow(
             color: Colors.black.withValues(alpha: 0.05),
-            blurRadius: 2,
-            offset: Offset(0, 1),
+            blurRadius: 8,
+            offset: Offset(0, 2),
           ),
         ],
       ),
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
-          // Serial number with star
+          // Serial number header with star
           Row(
             children: [
               Icon(
-                Icons.star_outline,
-                color: Colors.pink[400],
+                Icons.star_border,
+                color: Colors.pink,
                 size: 16,
               ),
               const SizedBox(width: 6),
-              Text(
-                'Serial No: ${voter.serialNo}',
-                style: TextStyle(
-                  fontSize: 14,
-                  fontWeight: FontWeight.w600,
+              GestureDetector(
+                onTap: _showAdvancedSearch,
+                child: Text(
+                  'Serial No: ${voter.serialNo}',
+                  style: TextStyle(
+                    fontSize: 14,
+                    color: Color(0xFF1976D2),
+                    fontWeight: FontWeight.w600,
+                  ),
+                ),
+              ),
+              Spacer(),
+              // Voter ID badge
+              Container(
+                padding: EdgeInsets.symmetric(horizontal: 8, vertical: 3),
+                decoration: BoxDecoration(
                   color: Color(0xFF1976D2),
+                  borderRadius: BorderRadius.circular(4),
+                ),
+                child: Text(
+                  voter.voterId,
+                  style: TextStyle(
+                    fontSize: 11,
+                    color: Colors.white,
+                    fontWeight: FontWeight.bold,
+                  ),
                 ),
               ),
             ],
           ),
-          const SizedBox(height: 12),
+          const SizedBox(height: 16),
           
           Row(
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
-              // Profile image with voter ID
+              // Profile image section
               Container(
                 width: 60,
-                height: 80,
+                height: 70,
                 decoration: BoxDecoration(
-                  color: Colors.grey[100],
-                  borderRadius: BorderRadius.circular(6),
+                  color: Colors.blue[50],
+                  borderRadius: BorderRadius.circular(8),
+                  border: Border.all(color: Colors.grey[300]!),
                 ),
-                child: Column(
+                child: Stack(
                   children: [
-                    Expanded(
-                      child: Container(
-                        decoration: BoxDecoration(
-                          color: Colors.blue[100],
-                          borderRadius: BorderRadius.only(
-                            topLeft: Radius.circular(6),
-                            topRight: Radius.circular(6),
-                          ),
-                        ),
-                        child: Center(
-                          child: Icon(
-                            Icons.image,
-                            color: Colors.blue,
-                            size: 24,
-                          ),
-                        ),
+                    Center(
+                      child: Icon(
+                        Icons.person,
+                        size: 30,
+                        color: Colors.blue,
                       ),
                     ),
-                    GestureDetector(
-                      onTap: _showAdvancedSearch,
+                    Positioned(
+                      bottom: 4,
+                      right: 4,
                       child: Container(
-                        width: double.infinity,
-                        padding: EdgeInsets.symmetric(vertical: 4),
+                        padding: EdgeInsets.all(3),
                         decoration: BoxDecoration(
-                          color: Color(0xFF1976D2),
-                          borderRadius: BorderRadius.only(
-                            bottomLeft: Radius.circular(6),
-                            bottomRight: Radius.circular(6),
-                          ),
+                          color: Colors.blue,
+                          shape: BoxShape.circle,
                         ),
-                        child: Text(
-                          voter.voterId,
-                          style: TextStyle(
-                            color: Colors.white,
-                            fontSize: 8,
-                            fontWeight: FontWeight.bold,
-                          ),
-                          textAlign: TextAlign.center,
+                        child: Icon(
+                          Icons.camera_alt,
+                          color: Colors.white,
+                          size: 10,
                         ),
                       ),
                     ),
                   ],
                 ),
               ),
-              const SizedBox(width: 12),
+              const SizedBox(width: 16),
               
               // Voter details
               Expanded(
@@ -540,106 +548,114 @@ class _BirthdayScreenState extends State<BirthdayScreen> {
           
           const SizedBox(height: 12),
           
-          // Age and relation
+          // Bottom section with age and action buttons
           Row(
             children: [
-              Icon(
-                Icons.person,
-                color: Color(0xFF1976D2),
-                size: 16,
-              ),
-              const SizedBox(width: 6),
-              Text(
-                '${voter.age}',
-                style: TextStyle(
-                  fontSize: 14,
-                  fontWeight: FontWeight.w600,
-                  color: Color(0xFF1976D2),
+              Container(
+                padding: EdgeInsets.symmetric(horizontal: 6, vertical: 3),
+                decoration: BoxDecoration(
+                  color: Colors.pink[50],
+                  borderRadius: BorderRadius.circular(10),
+                ),
+                child: Row(
+                  mainAxisSize: MainAxisSize.min,
+                  children: [
+                    Icon(
+                      Icons.person,
+                      size: 14,
+                      color: Colors.pink[600],
+                    ),
+                    const SizedBox(width: 3),
+                    Text(
+                      '${voter.age}',
+                      style: TextStyle(
+                        fontSize: 12,
+                        color: Colors.pink[600],
+                        fontWeight: FontWeight.bold,
+                      ),
+                    ),
+                  ],
                 ),
               ),
-              const SizedBox(width: 12),
+              const SizedBox(width: 8),
               Text(
                 voter.relation,
                 style: TextStyle(
-                  fontSize: 14,
-                  color: Colors.black87,
+                  fontSize: 12,
+                  color: Colors.black54,
                 ),
               ),
-            ],
-          ),
-          
-          const SizedBox(height: 12),
-          
-          // Action buttons
-          Row(
-            mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-            children: [
-              _buildCompactActionButton(Icons.call, () {
-                _makePhoneCall(voter.mobileNumber);
-              }),
-              _buildCompactActionButton(Icons.cake, () {
-                // Handle birthday celebration
-              }),
-              GestureDetector(
-                onTap: () {
-                  Map<String, dynamic> voterData = {
-                    'serialNo': voter.serialNo,
-                    'section': 1,
-                    'partNumber': 1,
-                    'name': voter.name,
-                    'tamilName': voter.tamilName,
-                    'voterId': voter.voterId,
-                    'epicId': voter.voterId,
-                    'fatherName': voter.relation,
-                    'fatherTamilName': voter.relation,
-                    'doorNo': voter.doorNo,
-                    'age': voter.age,
-                    'relation': voter.relation,
-                    'part': 1,
-                    'serial': voter.serialNo,
-                  };
-                  Navigator.push(
-                    context,
-                    MaterialPageRoute(
-                      builder: (context) => VoterInfoScreen(voterData: voterData),
+              Spacer(),
+              // Action icons at bottom right
+              Row(
+                mainAxisSize: MainAxisSize.min,
+                children: [
+                  GestureDetector(
+                    onTap: () => _makePhoneCall(voter.mobileNumber),
+                    child: Container(
+                      padding: EdgeInsets.all(8),
+                      decoration: BoxDecoration(
+                        color: Colors.green,
+                        shape: BoxShape.circle,
+                      ),
+                      child: Icon(Icons.phone, color: Colors.white, size: 16),
                     ),
-                  );
-                },
-                child: Container(
-                  padding: EdgeInsets.all(8),
-                  decoration: BoxDecoration(
-                    color: Color(0xFF1976D2),
-                    shape: BoxShape.circle,
                   ),
-                  child: Stack(
-                    children: [
-                      Icon(
-                        Icons.group,
-                        color: Colors.white,
-                        size: 18,
+                  const SizedBox(width: 8),
+                  GestureDetector(
+                    onTap: () {
+                      // Handle birthday celebration
+                    },
+                    child: Container(
+                      padding: EdgeInsets.all(8),
+                      decoration: BoxDecoration(
+                        color: Colors.orange,
+                        shape: BoxShape.circle,
                       ),
-                      Positioned(
-                        top: -2,
-                        right: -2,
-                        child: Container(
-                          padding: EdgeInsets.all(1),
-                          decoration: BoxDecoration(
-                            color: Colors.red,
-                            shape: BoxShape.circle,
-                          ),
-                          child: Text(
-                            '1',
-                            style: TextStyle(
-                              color: Colors.white,
-                              fontSize: 8,
-                              fontWeight: FontWeight.bold,
-                            ),
-                          ),
+                      child: Icon(Icons.cake, color: Colors.white, size: 16),
+                    ),
+                  ),
+                  const SizedBox(width: 8),
+                  GestureDetector(
+                    onTap: () {
+                      Map<String, dynamic> voterData = {
+                        'serialNo': voter.serialNo,
+                        'serial': voter.serialNo.toString(),
+                        'name': voter.name,
+                        'tamilName': voter.tamilName,
+                        'fatherName': voter.location,
+                        'fatherTamilName': voter.tamilLocation,
+                        'location': voter.location,
+                        'tamilLocation': voter.tamilLocation,
+                        'voterId': voter.voterId,
+                        'doorNo': voter.doorNo,
+                        'partNumber': '1',
+                        'section': '1',
+                        'age': voter.age,
+                        'gender': voter.gender,
+                        'relation': voter.relation,
+                        'mobileNumber': voter.mobileNumber,
+                        'politicalParty': voter.politicalParty,
+                        'religion': voter.religion,
+                        'voterCategory': voter.voterCategory,
+                      };
+                      Navigator.push(
+                        context,
+                        MaterialPageRoute(
+                          builder: (context) => VoterInfoScreen(voterData: voterData),
                         ),
+                      );
+                    },
+                    child: Container(
+                      padding: EdgeInsets.all(8),
+                      decoration: BoxDecoration(
+                        color: Color(0xFF1976D2),
+                        shape: BoxShape.circle,
                       ),
-                    ],
+                      child: Icon(Icons.family_restroom, color: Colors.white, size: 16),
+                    ),
                   ),
-                ),
+                ],
               ),
             ],
           ),
@@ -692,9 +708,10 @@ class _BirthdayScreenState extends State<BirthdayScreen> {
   void _showDatePicker() {
     showModalBottomSheet(
       context: context,
+      isScrollControlled: true,
       backgroundColor: Colors.transparent,
       builder: (context) => Container(
-        height: MediaQuery.of(context).size.height * 0.6,
+        height: MediaQuery.of(context).size.height * 0.85,
         decoration: BoxDecoration(
           color: Colors.white,
           borderRadius: BorderRadius.only(
@@ -704,105 +721,59 @@ class _BirthdayScreenState extends State<BirthdayScreen> {
         ),
         child: Column(
           children: [
+            // Header with close button
             Container(
               padding: EdgeInsets.all(20),
-              child: Text(
-                'Select Date',
-                style: TextStyle(
-                  fontSize: 20,
-                  fontWeight: FontWeight.bold,
-                ),
-              ),
-            ),
-            
-            // Date selection grid
-            Expanded(
-              child: Container(
-                padding: EdgeInsets.all(20),
-                child: Column(
-                  children: [
-                    // DOB filter buttons
-                    Container(
-                      padding: EdgeInsets.symmetric(vertical: 20),
-                      child: Column(
-                        crossAxisAlignment: CrossAxisAlignment.start,
+              child: Row(
                         children: [
                           Text(
-                            'DOB',
+                    'Birthday Calendar',
                             style: TextStyle(
-                              fontSize: 18,
+                      fontSize: 20,
                               fontWeight: FontWeight.bold,
                             ),
                           ),
-                          const SizedBox(height: 16),
-                          Row(
-                            children: [
-                              _buildDateFilterButton('Today'),
-                              const SizedBox(width: 16),
-                              _buildDateFilterButton('Tomorrow'),
-                              const SizedBox(width: 16),
-                              _buildDateFilterButton('Both'),
-                            ],
+                  Spacer(),
+                  GestureDetector(
+                    onTap: () => Navigator.pop(context),
+                    child: Icon(Icons.close, size: 24),
                           ),
                         ],
                       ),
                     ),
                     
-                    // Calendar grid placeholder
                     Expanded(
-                      child: GridView.builder(
-                        gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
-                          crossAxisCount: 7,
-                          mainAxisSpacing: 8,
-                          crossAxisSpacing: 8,
-                        ),
-                        itemCount: 28, // 4 weeks
-                        itemBuilder: (context, index) {
-                          return Container(
-                            decoration: BoxDecoration(
-                              border: Border.all(color: Colors.grey[300]!),
-                              borderRadius: BorderRadius.circular(8),
-                            ),
-                            child: Center(
-                              child: Text(
-                                '${index + 1}',
-                                style: TextStyle(
-                                  fontSize: 16,
-                                  color: Colors.black54,
-                                ),
-                              ),
-                            ),
-                          );
-                        },
-                      ),
-                    ),
+              child: SingleChildScrollView(
+                padding: EdgeInsets.symmetric(horizontal: 20),
+                child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    // Quick date filters
+                    _buildQuickFilters(),
+                    const SizedBox(height: 24),
                     
-                    // Apply button
-                    Container(
-                      width: double.infinity,
-                      margin: EdgeInsets.only(top: 20),
-                      child: ElevatedButton(
-                        onPressed: () {
-                          Navigator.pop(context);
-                          _applyDateFilter();
-                        },
-                        style: ElevatedButton.styleFrom(
-                          backgroundColor: Color(0xFF1976D2),
-                          foregroundColor: Colors.white,
-                          padding: EdgeInsets.symmetric(vertical: 16),
-                          shape: RoundedRectangleBorder(
-                            borderRadius: BorderRadius.circular(8),
-                          ),
-                        ),
-                        child: Text(
-                          'Apply',
-                          style: TextStyle(
-                            fontSize: 18,
-                            fontWeight: FontWeight.w600,
-                          ),
-                        ),
-                      ),
-                    ),
+                    // Month selector
+                    _buildMonthSelector(),
+                    const SizedBox(height: 24),
+                    
+                    // Age group filter
+                    _buildAgeGroupFilter(),
+                    const SizedBox(height: 24),
+                    
+                    // Upcoming birthdays toggle
+                    _buildUpcomingBirthdaysToggle(),
+                    const SizedBox(height: 24),
+                    
+                    // Calendar grid
+                    _buildCalendarGrid(),
+                    const SizedBox(height: 24),
+                    
+                    // Birthday statistics
+                    _buildBirthdayStatistics(),
+                    const SizedBox(height: 24),
+                    
+                    // Action buttons
+                    _buildActionButtons(),
                   ],
                 ),
               ),
@@ -1338,14 +1309,14 @@ class _BirthdayScreenState extends State<BirthdayScreen> {
     _relationFirstNameController.clear();
   }
 
-  Future<void> _makePhoneCall(String phoneNumber) async {
+  void _makePhoneCall(String phoneNumber) async {
+    final Uri launchUri = Uri(
+      scheme: 'tel',
+      path: phoneNumber,
+    );
     try {
-      final Uri launchUri = Uri(
-        scheme: 'tel',
-        path: phoneNumber,
-      );
       if (await canLaunchUrl(launchUri)) {
-        await launchUrl(launchUri);
+      await launchUrl(launchUri);
       } else {
         if (mounted) {
           ScaffoldMessenger.of(context).showSnackBar(
@@ -1358,7 +1329,7 @@ class _BirthdayScreenState extends State<BirthdayScreen> {
       }
     } catch (e) {
       if (mounted) {
-        ScaffoldMessenger.of(context).showSnackBar(
+      ScaffoldMessenger.of(context).showSnackBar(
           SnackBar(
             content: Text('Error making phone call: $e'),
             backgroundColor: Colors.red,
@@ -1368,6 +1339,673 @@ class _BirthdayScreenState extends State<BirthdayScreen> {
     }
   }
 
+
+  // Enhanced calendar helper methods
+  Widget _buildQuickFilters() {
+    return Column(
+      crossAxisAlignment: CrossAxisAlignment.start,
+      children: [
+        Text(
+          'Quick Filters',
+          style: TextStyle(
+            fontSize: 18,
+            fontWeight: FontWeight.bold,
+            color: Colors.black87,
+          ),
+        ),
+        const SizedBox(height: 12),
+        Wrap(
+          spacing: 8,
+          runSpacing: 8,
+          children: [
+            _buildDateFilterChip('Today'),
+            _buildDateFilterChip('Tomorrow'),
+            _buildDateFilterChip('This Week'),
+            _buildDateFilterChip('This Month'),
+            _buildDateFilterChip('Custom'),
+          ],
+        ),
+      ],
+    );
+  }
+
+  Widget _buildDateFilterChip(String label) {
+    bool isSelected = selectedDateFilter == label;
+    return FilterChip(
+      label: Text(label),
+      selected: isSelected,
+      onSelected: (selected) {
+        setState(() {
+          selectedDateFilter = label;
+          if (label == 'Custom') {
+            _showCustomDatePicker();
+          }
+        });
+      },
+      selectedColor: Color(0xFF1976D2).withOpacity(0.2),
+      checkmarkColor: Color(0xFF1976D2),
+    );
+  }
+
+  Widget _buildMonthSelector() {
+    List<String> months = [
+      'All', 'January', 'February', 'March', 'April', 'May', 'June',
+      'July', 'August', 'September', 'October', 'November', 'December'
+    ];
+    
+    return Column(
+      crossAxisAlignment: CrossAxisAlignment.start,
+      children: [
+        Text(
+          'Filter by Month',
+          style: TextStyle(
+            fontSize: 18,
+            fontWeight: FontWeight.bold,
+            color: Colors.black87,
+          ),
+        ),
+        const SizedBox(height: 12),
+        Container(
+          height: 50,
+          child: ListView.builder(
+            scrollDirection: Axis.horizontal,
+            itemCount: months.length,
+            itemBuilder: (context, index) {
+              String month = months[index];
+              bool isSelected = selectedMonth == month;
+              return Container(
+                margin: EdgeInsets.only(right: 8),
+                child: FilterChip(
+                  label: Text(month),
+                  selected: isSelected,
+                  onSelected: (selected) {
+                    setState(() {
+                      selectedMonth = month;
+                    });
+                  },
+                  selectedColor: Color(0xFF1976D2).withOpacity(0.2),
+                  checkmarkColor: Color(0xFF1976D2),
+                ),
+              );
+            },
+          ),
+        ),
+      ],
+    );
+  }
+
+  Widget _buildAgeGroupFilter() {
+    List<String> ageGroups = ['All', '18-30', '31-50', '51-70', '70+'];
+    
+    return Column(
+      crossAxisAlignment: CrossAxisAlignment.start,
+      children: [
+        Text(
+          'Age Groups',
+          style: TextStyle(
+            fontSize: 18,
+            fontWeight: FontWeight.bold,
+            color: Colors.black87,
+          ),
+        ),
+        const SizedBox(height: 12),
+        Wrap(
+          spacing: 8,
+          runSpacing: 8,
+          children: ageGroups.map((group) {
+            bool isSelected = selectedAgeGroup == group;
+            return FilterChip(
+              label: Text(group),
+              selected: isSelected,
+              onSelected: (selected) {
+                setState(() {
+                  selectedAgeGroup = group;
+                });
+              },
+              selectedColor: Color(0xFF1976D2).withOpacity(0.2),
+              checkmarkColor: Color(0xFF1976D2),
+            );
+          }).toList(),
+        ),
+      ],
+    );
+  }
+
+  Widget _buildUpcomingBirthdaysToggle() {
+    return Column(
+      crossAxisAlignment: CrossAxisAlignment.start,
+      children: [
+        Text(
+          'Upcoming Birthdays',
+          style: TextStyle(
+            fontSize: 18,
+            fontWeight: FontWeight.bold,
+            color: Colors.black87,
+          ),
+        ),
+        const SizedBox(height: 12),
+        Row(
+          children: [
+            Switch(
+              value: showUpcomingBirthdays,
+              onChanged: (value) {
+                setState(() {
+                  showUpcomingBirthdays = value;
+                });
+              },
+              activeColor: Color(0xFF1976D2),
+            ),
+            const SizedBox(width: 8),
+            Expanded(
+              child: Text(
+                'Show birthdays in next $upcomingDays days',
+                style: TextStyle(fontSize: 14, color: Colors.grey[700]),
+              ),
+            ),
+          ],
+        ),
+        if (showUpcomingBirthdays) ...[
+          const SizedBox(height: 8),
+          Row(
+            children: [
+              Text('Days: ', style: TextStyle(fontSize: 14)),
+              Expanded(
+                child: Slider(
+                  value: upcomingDays.toDouble(),
+                  min: 1,
+                  max: 30,
+                  divisions: 29,
+                  label: upcomingDays.toString(),
+                  onChanged: (value) {
+                    setState(() {
+                      upcomingDays = value.round();
+                    });
+                  },
+                  activeColor: Color(0xFF1976D2),
+                ),
+              ),
+            ],
+          ),
+        ],
+      ],
+    );
+  }
+
+  Widget _buildCalendarGrid() {
+    DateTime now = DateTime.now();
+    DateTime firstDayOfMonth = DateTime(now.year, now.month, 1);
+    DateTime lastDayOfMonth = DateTime(now.year, now.month + 1, 0);
+    int daysInMonth = lastDayOfMonth.day;
+    int startWeekday = firstDayOfMonth.weekday % 7;
+
+    return Column(
+      crossAxisAlignment: CrossAxisAlignment.start,
+      children: [
+        Text(
+          'Calendar - ${_getMonthName(now.month)} ${now.year}',
+          style: TextStyle(
+            fontSize: 18,
+            fontWeight: FontWeight.bold,
+            color: Colors.black87,
+          ),
+        ),
+        const SizedBox(height: 12),
+        
+        // Weekday headers
+        GridView.builder(
+          shrinkWrap: true,
+          physics: NeverScrollableScrollPhysics(),
+          gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
+            crossAxisCount: 7,
+            childAspectRatio: 1.0,
+          ),
+          itemCount: 7,
+          itemBuilder: (context, index) {
+            List<String> weekdays = ['S', 'M', 'T', 'W', 'T', 'F', 'S'];
+            return Container(
+              alignment: Alignment.center,
+              child: Text(
+                weekdays[index],
+                style: TextStyle(
+                  fontWeight: FontWeight.bold,
+                  color: Colors.grey[600],
+                ),
+              ),
+            );
+          },
+        ),
+        
+        // Calendar days
+        GridView.builder(
+          shrinkWrap: true,
+          physics: NeverScrollableScrollPhysics(),
+          gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
+            crossAxisCount: 7,
+            childAspectRatio: 1.0,
+            mainAxisSpacing: 4,
+            crossAxisSpacing: 4,
+          ),
+          itemCount: 42, // 6 weeks
+          itemBuilder: (context, index) {
+            int dayNumber = index - startWeekday + 1;
+            bool isCurrentMonth = dayNumber > 0 && dayNumber <= daysInMonth;
+            bool isToday = isCurrentMonth && dayNumber == now.day;
+            bool hasBirthday = isCurrentMonth && _hasBirthdayOnDay(dayNumber);
+            
+            return GestureDetector(
+              onTap: isCurrentMonth ? () {
+                setState(() {
+                  customSelectedDate = DateTime(now.year, now.month, dayNumber);
+                  selectedDateFilter = 'Custom';
+                });
+              } : null,
+              child: Container(
+                decoration: BoxDecoration(
+                  color: isToday 
+                      ? Color(0xFF1976D2)
+                      : hasBirthday 
+                          ? Colors.pink[100]
+                          : Colors.transparent,
+                  borderRadius: BorderRadius.circular(8),
+                  border: customSelectedDate != null && 
+                          customSelectedDate!.day == dayNumber &&
+                          customSelectedDate!.month == now.month
+                      ? Border.all(color: Color(0xFF1976D2), width: 2)
+                      : null,
+                ),
+                child: Stack(
+                  children: [
+                    Center(
+                      child: Text(
+                        isCurrentMonth ? dayNumber.toString() : '',
+                        style: TextStyle(
+                          fontSize: 16,
+                          fontWeight: FontWeight.w500,
+                          color: isToday 
+                              ? Colors.white
+                              : isCurrentMonth 
+                                  ? Colors.black87
+                                  : Colors.grey[400],
+                        ),
+                      ),
+                    ),
+                    if (hasBirthday)
+                      Positioned(
+                        top: 2,
+                        right: 2,
+                        child: Container(
+                          width: 8,
+                          height: 8,
+                          decoration: BoxDecoration(
+                            color: Colors.pink,
+                            shape: BoxShape.circle,
+                          ),
+                        ),
+                      ),
+                  ],
+                ),
+              ),
+            );
+          },
+        ),
+      ],
+    );
+  }
+
+  Widget _buildBirthdayStatistics() {
+    int todayBirthdays = _getBirthdaysForDay(DateTime.now()).length;
+    int tomorrowBirthdays = _getBirthdaysForDay(DateTime.now().add(Duration(days: 1))).length;
+    int thisWeekBirthdays = _getBirthdaysForWeek().length;
+    int thisMonthBirthdays = _getBirthdaysForMonth().length;
+
+    return Column(
+      crossAxisAlignment: CrossAxisAlignment.start,
+      children: [
+        Text(
+          'Birthday Statistics',
+          style: TextStyle(
+            fontSize: 18,
+            fontWeight: FontWeight.bold,
+            color: Colors.black87,
+          ),
+        ),
+        const SizedBox(height: 12),
+        Container(
+          padding: EdgeInsets.all(16),
+          decoration: BoxDecoration(
+            color: Colors.grey[50],
+            borderRadius: BorderRadius.circular(12),
+            border: Border.all(color: Colors.grey[200]!),
+          ),
+          child: Column(
+            children: [
+              Row(
+                children: [
+                  Expanded(child: _buildStatItem('Today', todayBirthdays, Colors.blue)),
+                  Expanded(child: _buildStatItem('Tomorrow', tomorrowBirthdays, Colors.green)),
+                ],
+              ),
+              const SizedBox(height: 12),
+              Row(
+                children: [
+                  Expanded(child: _buildStatItem('This Week', thisWeekBirthdays, Colors.orange)),
+                  Expanded(child: _buildStatItem('This Month', thisMonthBirthdays, Colors.purple)),
+                ],
+              ),
+            ],
+          ),
+        ),
+      ],
+    );
+  }
+
+  Widget _buildStatItem(String label, int count, Color color) {
+    return Column(
+      children: [
+        Text(
+          count.toString(),
+          style: TextStyle(
+            fontSize: 24,
+            fontWeight: FontWeight.bold,
+            color: color,
+          ),
+        ),
+        Text(
+          label,
+          style: TextStyle(
+            fontSize: 12,
+            color: Colors.grey[600],
+          ),
+        ),
+      ],
+    );
+  }
+
+  Widget _buildActionButtons() {
+    return Column(
+      children: [
+        Row(
+          children: [
+            Expanded(
+              child: OutlinedButton.icon(
+                onPressed: () {
+                  _exportBirthdays();
+                },
+                icon: Icon(Icons.file_download),
+                label: Text('Export'),
+                style: OutlinedButton.styleFrom(
+                  padding: EdgeInsets.symmetric(vertical: 12),
+                  side: BorderSide(color: Color(0xFF1976D2)),
+                  foregroundColor: Color(0xFF1976D2),
+                ),
+              ),
+            ),
+            const SizedBox(width: 12),
+            Expanded(
+              child: OutlinedButton.icon(
+                onPressed: () {
+                  _setReminders();
+                },
+                icon: Icon(Icons.notifications),
+                label: Text('Reminders'),
+                style: OutlinedButton.styleFrom(
+                  padding: EdgeInsets.symmetric(vertical: 12),
+                  side: BorderSide(color: Colors.orange),
+                  foregroundColor: Colors.orange,
+                ),
+              ),
+            ),
+          ],
+        ),
+        const SizedBox(height: 12),
+        Container(
+          width: double.infinity,
+          child: ElevatedButton(
+            onPressed: () {
+              Navigator.pop(context);
+              _applyAdvancedFilters();
+            },
+            style: ElevatedButton.styleFrom(
+              backgroundColor: Color(0xFF1976D2),
+              foregroundColor: Colors.white,
+              padding: EdgeInsets.symmetric(vertical: 16),
+              shape: RoundedRectangleBorder(
+                borderRadius: BorderRadius.circular(12),
+              ),
+            ),
+            child: Text(
+              'Apply Filters',
+              style: TextStyle(
+                fontSize: 18,
+                fontWeight: FontWeight.bold,
+              ),
+            ),
+          ),
+        ),
+      ],
+    );
+  }
+
+  // Helper methods for calendar functionality
+  String _getMonthName(int month) {
+    List<String> monthNames = [
+      '', 'January', 'February', 'March', 'April', 'May', 'June',
+      'July', 'August', 'September', 'October', 'November', 'December'
+    ];
+    return monthNames[month];
+  }
+
+  bool _hasBirthdayOnDay(int day) {
+    DateTime checkDate = DateTime(DateTime.now().year, DateTime.now().month, day);
+    return allVoters.any((voter) => 
+      voter.birthDate.day == day && voter.birthDate.month == checkDate.month);
+  }
+
+  List<BirthdayVoter> _getBirthdaysForDay(DateTime date) {
+    return allVoters.where((voter) => 
+      voter.birthDate.day == date.day && voter.birthDate.month == date.month).toList();
+  }
+
+  List<BirthdayVoter> _getBirthdaysForWeek() {
+    DateTime now = DateTime.now();
+    DateTime weekStart = now.subtract(Duration(days: now.weekday - 1));
+    DateTime weekEnd = weekStart.add(Duration(days: 6));
+    
+    return allVoters.where((voter) {
+      DateTime thisYearBirthday = DateTime(now.year, voter.birthDate.month, voter.birthDate.day);
+      return thisYearBirthday.isAfter(weekStart.subtract(Duration(days: 1))) &&
+             thisYearBirthday.isBefore(weekEnd.add(Duration(days: 1)));
+    }).toList();
+  }
+
+  List<BirthdayVoter> _getBirthdaysForMonth() {
+    DateTime now = DateTime.now();
+    return allVoters.where((voter) => voter.birthDate.month == now.month).toList();
+  }
+
+  void _showCustomDatePicker() {
+    showDatePicker(
+      context: context,
+      initialDate: customSelectedDate ?? DateTime.now(),
+      firstDate: DateTime(1900),
+      lastDate: DateTime.now(),
+    ).then((pickedDate) {
+      if (pickedDate != null) {
+        setState(() {
+          customSelectedDate = pickedDate;
+        });
+      }
+    });
+  }
+
+  void _applyAdvancedFilters() {
+    setState(() {
+      DateTime now = DateTime.now();
+      
+      filteredVoters = allVoters.where((voter) {
+        // Date filter
+        bool matchesDate = true;
+        if (selectedDateFilter == 'Today') {
+          matchesDate = _isSameDay(voter.birthDate, now);
+        } else if (selectedDateFilter == 'Tomorrow') {
+          matchesDate = _isSameDay(voter.birthDate, now.add(Duration(days: 1)));
+        } else if (selectedDateFilter == 'This Week') {
+          DateTime weekStart = now.subtract(Duration(days: now.weekday - 1));
+          DateTime weekEnd = weekStart.add(Duration(days: 6));
+          DateTime thisYearBirthday = DateTime(now.year, voter.birthDate.month, voter.birthDate.day);
+          matchesDate = thisYearBirthday.isAfter(weekStart.subtract(Duration(days: 1))) &&
+                       thisYearBirthday.isBefore(weekEnd.add(Duration(days: 1)));
+        } else if (selectedDateFilter == 'This Month') {
+          matchesDate = voter.birthDate.month == now.month;
+        } else if (selectedDateFilter == 'Custom' && customSelectedDate != null) {
+          matchesDate = _isSameDay(voter.birthDate, customSelectedDate!);
+        }
+        
+        // Month filter
+        bool matchesMonth = selectedMonth == 'All' || 
+                           _getMonthName(voter.birthDate.month) == selectedMonth;
+        
+        // Age group filter
+        bool matchesAgeGroup = true;
+        if (selectedAgeGroup != 'All') {
+          switch (selectedAgeGroup) {
+            case '18-30':
+              matchesAgeGroup = voter.age >= 18 && voter.age <= 30;
+              break;
+            case '31-50':
+              matchesAgeGroup = voter.age >= 31 && voter.age <= 50;
+              break;
+            case '51-70':
+              matchesAgeGroup = voter.age >= 51 && voter.age <= 70;
+              break;
+            case '70+':
+              matchesAgeGroup = voter.age > 70;
+              break;
+          }
+        }
+        
+        // Upcoming birthdays
+        bool matchesUpcoming = true;
+        if (showUpcomingBirthdays) {
+          DateTime thisYearBirthday = DateTime(now.year, voter.birthDate.month, voter.birthDate.day);
+          if (thisYearBirthday.isBefore(now)) {
+            thisYearBirthday = DateTime(now.year + 1, voter.birthDate.month, voter.birthDate.day);
+          }
+          int daysDifference = thisYearBirthday.difference(now).inDays;
+          matchesUpcoming = daysDifference <= upcomingDays;
+        }
+        
+        return matchesDate && matchesMonth && matchesAgeGroup && matchesUpcoming && _applyAllFilters(voter);
+      }).toList();
+    });
+    
+    ScaffoldMessenger.of(context).showSnackBar(
+      SnackBar(content: Text('Advanced filters applied! Found ${filteredVoters.length} results.')),
+    );
+  }
+
+  void _exportBirthdays() {
+    // Export functionality
+    showModalBottomSheet(
+      context: context,
+      builder: (context) => Container(
+        padding: EdgeInsets.all(20),
+        child: Column(
+          mainAxisSize: MainAxisSize.min,
+          children: [
+            Text(
+              'Export Birthday List',
+              style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold),
+            ),
+            const SizedBox(height: 20),
+            ListTile(
+              leading: Icon(Icons.picture_as_pdf, color: Colors.red),
+              title: Text('Export as PDF'),
+              subtitle: Text('${filteredVoters.length} birthdays'),
+              onTap: () {
+                Navigator.pop(context);
+                ScaffoldMessenger.of(context).showSnackBar(
+                  SnackBar(content: Text('PDF export started...')),
+                );
+              },
+            ),
+            ListTile(
+              leading: Icon(Icons.table_chart, color: Colors.green),
+              title: Text('Export as Excel'),
+              subtitle: Text('${filteredVoters.length} birthdays'),
+              onTap: () {
+                Navigator.pop(context);
+                ScaffoldMessenger.of(context).showSnackBar(
+                  SnackBar(content: Text('Excel export started...')),
+                );
+              },
+            ),
+            ListTile(
+              leading: Icon(Icons.share, color: Colors.blue),
+              title: Text('Share List'),
+              subtitle: Text('Share birthday information'),
+              onTap: () {
+                Navigator.pop(context);
+                ScaffoldMessenger.of(context).showSnackBar(
+                  SnackBar(content: Text('Sharing options opened...')),
+                );
+              },
+            ),
+          ],
+        ),
+      ),
+    );
+  }
+
+  void _setReminders() {
+    // Reminder functionality
+    showDialog(
+      context: context,
+      builder: (context) => AlertDialog(
+        title: Text('Birthday Reminders'),
+        content: Column(
+          mainAxisSize: MainAxisSize.min,
+          children: [
+            Text('Set reminders for upcoming birthdays?'),
+            const SizedBox(height: 16),
+            Row(
+              children: [
+                Expanded(
+                  child: ElevatedButton(
+                    onPressed: () {
+                      Navigator.pop(context);
+                      ScaffoldMessenger.of(context).showSnackBar(
+                        SnackBar(content: Text('Daily reminders enabled!')),
+                      );
+                    },
+                    child: Text('Daily'),
+                  ),
+                ),
+                const SizedBox(width: 8),
+                Expanded(
+                  child: ElevatedButton(
+                    onPressed: () {
+                      Navigator.pop(context);
+                      ScaffoldMessenger.of(context).showSnackBar(
+                        SnackBar(content: Text('Weekly reminders enabled!')),
+                      );
+                    },
+                    child: Text('Weekly'),
+                  ),
+                ),
+              ],
+            ),
+          ],
+        ),
+        actions: [
+          TextButton(
+            onPressed: () => Navigator.pop(context),
+            child: Text('Cancel'),
+          ),
+        ],
+      ),
+    );
+  }
 
   @override
   void dispose() {
@@ -1382,5 +2020,6 @@ class _BirthdayScreenState extends State<BirthdayScreen> {
     super.dispose();
   }
 }
+
 
 

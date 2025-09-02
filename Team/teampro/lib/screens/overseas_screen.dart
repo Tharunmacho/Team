@@ -625,12 +625,12 @@ class _OverseasScreenState extends State<OverseasScreen> {
     );
   }
 
-  Future<void> _makePhoneCall(String phoneNumber) async {
+  void _makePhoneCall(String phoneNumber) async {
+    final Uri launchUri = Uri(
+      scheme: 'tel',
+      path: phoneNumber,
+    );
     try {
-      final Uri launchUri = Uri(
-        scheme: 'tel',
-        path: phoneNumber,
-      );
       if (await canLaunchUrl(launchUri)) {
         await launchUrl(launchUri);
       } else {

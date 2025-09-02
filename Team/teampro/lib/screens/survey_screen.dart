@@ -124,10 +124,15 @@ class _SurveyScreenState extends State<SurveyScreen> {
                             ),
                           );
                         },
-                        activeThumbColor: Colors.white,
-                        activeTrackColor: Colors.green,
-                        inactiveThumbColor: Colors.white,
-                        inactiveTrackColor: Colors.grey[300],
+                        thumbColor: WidgetStateProperty.resolveWith<Color?>((Set<WidgetState> states) {
+                          return Colors.white;
+                        }),
+                        trackColor: WidgetStateProperty.resolveWith<Color?>((Set<WidgetState> states) {
+                          if (states.contains(WidgetState.selected)) {
+                            return Colors.green;
+                          }
+                          return Colors.grey[300];
+                        }),
                       ),
                     ],
                   ),
