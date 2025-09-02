@@ -18,7 +18,7 @@ class DrawerScreen extends StatelessWidget {
       body: SafeArea(
         child: Column(
           children: [
-            // Profile Header Section with Wavy Background
+            // Profile Header Section with Light Blue Background
             Container(
               height: 280,
               decoration: BoxDecoration(
@@ -33,16 +33,6 @@ class DrawerScreen extends StatelessWidget {
               ),
               child: Stack(
                 children: [
-                  // Wavy background element
-                  Positioned(
-                    top: 0,
-                    left: 0,
-                    right: 0,
-                    bottom: 0,
-                    child: CustomPaint(
-                      painter: WavyBackgroundPainter(),
-                    ),
-                  ),
                   // Close button
                   Positioned(
                     top: 20,
@@ -71,79 +61,48 @@ class DrawerScreen extends StatelessWidget {
                       ),
                     ),
                   ),
-                  // Profile content
+                  // Centered Profile content
                   Positioned(
-                    top: 60,
-                    left: 20,
-                    right: 20,
-                    child: Row(
+                    top: 80,
+                    left: 0,
+                    right: 0,
+                    child: Column(
                       children: [
-                        // Profile picture with camera overlay
-                        Stack(
-                          children: [
-                            // Main profile picture
-                            Container(
-                              width: 80,
-                              height: 80,
-                              decoration: BoxDecoration(
-                                shape: BoxShape.circle,
-                                color: Color(0xFF1976D2),
-                              ),
-                              child: Icon(
-                                Icons.person,
-                                color: Colors.white,
-                                size: 50,
-                              ),
-                            ),
-                            // Camera icon overlay at bottom-right
-                            Positioned(
-                              bottom: 0,
-                              right: 0,
-                              child: Container(
-                                width: 28,
-                                height: 28,
-                                decoration: BoxDecoration(
-                                  color: Color(0xFF1976D2),
-                                  shape: BoxShape.circle,
-                                  border: Border.all(
-                                    color: Colors.white,
-                                    width: 2,
-                                  ),
-                                ),
-                                child: Icon(
-                                  Icons.camera_alt,
-                                  color: Colors.white,
-                                  size: 16,
-                                ),
-                              ),
-                            ),
-                          ],
-                        ),
-                        const SizedBox(width: 20),
-                        // Name and role
-                        Expanded(
-                          child: Column(
-                            crossAxisAlignment: CrossAxisAlignment.start,
-                            children: [
-                              Text(
-                                'ramachandran A...',
-                                style: TextStyle(
-                                  fontSize: 20,
-                                  fontWeight: FontWeight.bold,
-                                  color: Colors.black87,
-                                ),
-                              ),
-                              const SizedBox(height: 4),
-                              Text(
-                                'Super Admin',
-                                style: TextStyle(
-                                  fontSize: 14,
-                                  color: Colors.grey[700],
-                                  fontWeight: FontWeight.w500,
-                                ),
-                              ),
-                            ],
+                        // Profile picture - centered
+                        Container(
+                          width: 100,
+                          height: 100,
+                          decoration: BoxDecoration(
+                            shape: BoxShape.circle,
+                            color: Color(0xFF1976D2),
                           ),
+                          child: Icon(
+                            Icons.person,
+                            color: Colors.white,
+                            size: 60,
+                          ),
+                        ),
+                        const SizedBox(height: 20),
+                        // Name - centered
+                        Text(
+                          'ramachandran A...',
+                          style: TextStyle(
+                            fontSize: 22,
+                            fontWeight: FontWeight.bold,
+                            color: Colors.black87,
+                          ),
+                          textAlign: TextAlign.center,
+                        ),
+                        const SizedBox(height: 8),
+                        // Role - centered
+                        Text(
+                          'Super Admin',
+                          style: TextStyle(
+                            fontSize: 16,
+                            color: Colors.grey[700],
+                            fontWeight: FontWeight.w500,
+                          ),
+                          textAlign: TextAlign.center,
                         ),
                       ],
                     ),
@@ -155,20 +114,7 @@ class DrawerScreen extends StatelessWidget {
             // Menu Items Section
             Expanded(
               child: Container(
-                decoration: BoxDecoration(
-                  color: Colors.white,
-                  borderRadius: BorderRadius.only(
-                    topLeft: Radius.circular(20),
-                    topRight: Radius.circular(20),
-                  ),
-                  boxShadow: [
-                    BoxShadow(
-                      color: Colors.black.withValues(alpha: 0.05),
-                      blurRadius: 10,
-                      offset: Offset(0, -2),
-                    ),
-                  ],
-                ),
+                color: Colors.white,
                 child: ListView(
                   padding: const EdgeInsets.only(top: 20),
                   children: [
@@ -340,38 +286,7 @@ class DrawerScreen extends StatelessWidget {
   }
 }
 
-// Wavy Background Painter
-class WavyBackgroundPainter extends CustomPainter {
-  @override
-  void paint(Canvas canvas, Size size) {
-    final paint = Paint()
-      ..color = Color(0xFF90CAF9).withValues(alpha: 0.3)
-      ..style = PaintingStyle.fill;
 
-    final path = Path();
-    path.moveTo(0, size.height * 0.8);
-    path.quadraticBezierTo(
-      size.width * 0.25,
-      size.height * 0.7,
-      size.width * 0.5,
-      size.height * 0.8,
-    );
-    path.quadraticBezierTo(
-      size.width * 0.75,
-      size.height * 0.9,
-      size.width,
-      size.height * 0.8,
-    );
-    path.lineTo(size.width, size.height);
-    path.lineTo(0, size.height);
-    path.close();
-
-    canvas.drawPath(path, paint);
-  }
-
-  @override
-  bool shouldRepaint(covariant CustomPainter oldDelegate) => false;
-}
 
 // Change Password Bottom Sheet
 void _showChangePasswordDialog(BuildContext context) {
