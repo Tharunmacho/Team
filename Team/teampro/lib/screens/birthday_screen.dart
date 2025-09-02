@@ -725,24 +725,24 @@ class _BirthdayScreenState extends State<BirthdayScreen> {
             Container(
               padding: EdgeInsets.all(20),
               child: Row(
-                children: [
-                  Text(
+                        children: [
+                          Text(
                     'Birthday Calendar',
-                    style: TextStyle(
+                            style: TextStyle(
                       fontSize: 20,
-                      fontWeight: FontWeight.bold,
-                    ),
-                  ),
+                              fontWeight: FontWeight.bold,
+                            ),
+                          ),
                   Spacer(),
                   GestureDetector(
                     onTap: () => Navigator.pop(context),
                     child: Icon(Icons.close, size: 24),
-                  ),
-                ],
-              ),
-            ),
-            
-            Expanded(
+                          ),
+                        ],
+                      ),
+                    ),
+                    
+                    Expanded(
               child: SingleChildScrollView(
                 padding: EdgeInsets.symmetric(horizontal: 20),
                 child: Column(
@@ -1316,7 +1316,7 @@ class _BirthdayScreenState extends State<BirthdayScreen> {
     );
     try {
       if (await canLaunchUrl(launchUri)) {
-        await launchUrl(launchUri);
+      await launchUrl(launchUri);
       } else {
         if (mounted) {
           ScaffoldMessenger.of(context).showSnackBar(
@@ -1329,7 +1329,7 @@ class _BirthdayScreenState extends State<BirthdayScreen> {
       }
     } catch (e) {
       if (mounted) {
-        ScaffoldMessenger.of(context).showSnackBar(
+      ScaffoldMessenger.of(context).showSnackBar(
           SnackBar(
             content: Text('Error making phone call: $e'),
             backgroundColor: Colors.red,
