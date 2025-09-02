@@ -3,10 +3,7 @@ import 'profile_screen.dart';
 import 'catalogue_screen.dart';
 import 'settings_screen.dart';
 import 'language_screen.dart';
-import 'help_screen.dart';
-import 'about_screen.dart';
 import 'privacy_policy_screen.dart';
-import 'terms_conditions_screen.dart';
 
 class DrawerScreen extends StatelessWidget {
   const DrawerScreen({super.key});
@@ -18,16 +15,16 @@ class DrawerScreen extends StatelessWidget {
       body: SafeArea(
         child: Column(
           children: [
-            // Profile Header Section with Light Blue Background
+            // Header Section with Light Yellow/Cream Background
             Container(
-              height: 280,
+              height: 200,
               decoration: BoxDecoration(
                 gradient: LinearGradient(
                   begin: Alignment.topCenter,
                   end: Alignment.bottomCenter,
                   colors: [
-                    Color(0xFFDBEAFE), // Light blue top
-                    Color(0xFFEFF6FF), // Lighter blue bottom
+                    Color(0xFFFFF8E1), // Light yellow/cream
+                    Color(0xFFFFF3C4), // Slightly darker cream
                   ],
                 ),
               ),
@@ -43,7 +40,7 @@ class DrawerScreen extends StatelessWidget {
                         width: 36,
                         height: 36,
                         decoration: BoxDecoration(
-                          color: Colors.grey[300],
+                          color: Colors.white,
                           shape: BoxShape.circle,
                           boxShadow: [
                             BoxShadow(
@@ -55,54 +52,112 @@ class DrawerScreen extends StatelessWidget {
                         ),
                         child: Icon(
                           Icons.close,
-                          color: Colors.grey[700],
+                          color: Colors.black87,
                           size: 20,
                         ),
                       ),
                     ),
                   ),
-                  // Centered Profile content
+                  // Profile content - centered
                   Positioned(
-                    top: 80,
+                    top: 60,
                     left: 0,
                     right: 0,
                     child: Column(
                       children: [
-                        // Profile picture - centered
+                        // Green rectangular button with megaphone
                         Container(
-                          width: 100,
-                          height: 100,
+                          width: 80,
+                          height: 50,
                           decoration: BoxDecoration(
-                            shape: BoxShape.circle,
-                            color: Color(0xFF1976D2),
+                            color: Color(0xFF4CAF50),
+                            borderRadius: BorderRadius.circular(12),
+                            boxShadow: [
+                              BoxShadow(
+                                color: Colors.black.withValues(alpha: 0.1),
+                                blurRadius: 8,
+                                offset: Offset(0, 4),
+                              ),
+                            ],
                           ),
-                          child: Icon(
-                            Icons.person,
-                            color: Colors.white,
-                            size: 60,
+                          child: Stack(
+                            children: [
+                              // Megaphone icon
+                              Center(
+                                child: Icon(
+                                  Icons.campaign,
+                                  color: Colors.white,
+                                  size: 24,
+                                ),
+                              ),
+                              // Sound waves
+                              Positioned(
+                                right: 8,
+                                top: 8,
+                                child: Row(
+                                  mainAxisSize: MainAxisSize.min,
+                                  children: [
+                                    Container(
+                                      width: 2,
+                                      height: 8,
+                                      color: Colors.white.withValues(alpha: 0.7),
+                                    ),
+                                    SizedBox(width: 1),
+                                    Container(
+                                      width: 2,
+                                      height: 12,
+                                      color: Colors.white.withValues(alpha: 0.7),
+                                    ),
+                                    SizedBox(width: 1),
+                                    Container(
+                                      width: 2,
+                                      height: 6,
+                                      color: Colors.white.withValues(alpha: 0.7),
+                                    ),
+                                  ],
+                                ),
+                              ),
+                            ],
                           ),
                         ),
-                        const SizedBox(height: 20),
-                        // Name - centered
+                        const SizedBox(height: 16),
+                        // Name - split into two lines
                         Text(
-                          'ramachandran A...',
+                          'ramach',
                           style: TextStyle(
-                            fontSize: 22,
+                            fontSize: 20,
                             fontWeight: FontWeight.bold,
                             color: Colors.black87,
                           ),
-                          textAlign: TextAlign.center,
                         ),
-                        const SizedBox(height: 8),
-                        // Role - centered
+                        Text(
+                          'andran A...',
+                          style: TextStyle(
+                            fontSize: 20,
+                            fontWeight: FontWeight.bold,
+                            color: Colors.black87,
+                          ),
+                        ),
+                        const SizedBox(height: 6),
                         Text(
                           'Super Admin',
                           style: TextStyle(
-                            fontSize: 16,
+                            fontSize: 14,
                             color: Colors.grey[700],
                             fontWeight: FontWeight.w500,
                           ),
-                          textAlign: TextAlign.center,
+                        ),
+                        const SizedBox(height: 16),
+                        // Quick action icons - subtle
+                        Row(
+                          mainAxisAlignment: MainAxisAlignment.center,
+                          children: [
+                            _buildSubtleIcon(Icons.list_alt),
+                            const SizedBox(width: 20),
+                            _buildSubtleIcon(Icons.home),
+                            const SizedBox(width: 20),
+                            _buildSubtleIcon(Icons.camera_alt),
+                          ],
                         ),
                       ],
                     ),
@@ -190,69 +245,24 @@ class DrawerScreen extends StatelessWidget {
                         );
                       },
                     ),
-                    _buildMenuItem(
-                      Icons.description_outlined,
-                      'Terms & Conditions',
-                      () {
-                        Navigator.pop(context);
-                        Navigator.push(
-                          context,
-                          MaterialPageRoute(
-                            builder: (context) => const TermsConditionsScreen(),
-                          ),
-                        );
-                      },
-                    ),
-                    _buildMenuItem(
-                      Icons.help_outline,
-                      'Help',
-                      () {
-                        Navigator.pop(context);
-                        Navigator.push(
-                          context,
-                          MaterialPageRoute(
-                            builder: (context) => const HelpScreen(),
-                          ),
-                        );
-                      },
-                    ),
-                    _buildMenuItem(
-                      Icons.info_outline,
-                      'About',
-                      () {
-                        Navigator.pop(context);
-                        Navigator.push(
-                          context,
-                          MaterialPageRoute(
-                            builder: (context) => const AboutScreen(),
-                          ),
-                        );
-                      },
-                    ),
                   ],
                 ),
               ),
             ),
-
-            // App Version
-            Padding(
-              padding: const EdgeInsets.all(12),
-              child: Text(
-                "V.3.1",
-                style: TextStyle(
-                  fontSize: 14,
-                  color: Colors.grey[600],
-                  fontWeight: FontWeight.w500,
-                ),
-              ),
-            )
           ],
         ),
       ),
     );
   }
 
-
+  // Subtle Quick Action Icons
+  Widget _buildSubtleIcon(IconData icon) {
+    return Icon(
+      icon,
+      color: Colors.grey[600],
+      size: 20,
+    );
+  }
 
   // Menu Items
   Widget _buildMenuItem(IconData icon, String title, VoidCallback onTap) {

@@ -37,8 +37,18 @@ class _DashboardScreenState extends State<DashboardScreen> {
       body: SafeArea(
         child: Column(
           children: [
-            // Header section
+            // Header section with light blue background
             Container(
+              decoration: BoxDecoration(
+                color: Color(0xFFE3F2FD), // Light blue background
+                boxShadow: [
+                  BoxShadow(
+                    color: Colors.black.withValues(alpha: 0.1),
+                    blurRadius: 4,
+                    offset: Offset(0, 2),
+                  ),
+                ],
+              ),
               padding: const EdgeInsets.all(16),
               child: Row(
                 children: [
@@ -125,6 +135,24 @@ class _DashboardScreenState extends State<DashboardScreen> {
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
                     
+                    // Manager cards section (like Image 2)
+                    Container(
+                      padding: const EdgeInsets.symmetric(horizontal: 16),
+                      child: Row(
+                        children: [
+                          _buildManagerCard('Cadre\nManager', 'assets/icons/cadre.png'),
+                          const SizedBox(width: 12),
+                          _buildManagerCard('Voter\nManager', 'assets/icons/voter.png'),
+                          const SizedBox(width: 12),
+                          _buildManagerCard('Family\nManager', 'assets/icons/part.png'),
+                          const SizedBox(width: 12),
+                          _buildManagerCard('Survey\nManager', 'assets/icons/New.png'),
+                        ],
+                      ),
+                    ),
+                    
+                    const SizedBox(height: 20),
+                    
                     // Search section
                     Container(
                       padding: const EdgeInsets.symmetric(horizontal: 16),
@@ -172,24 +200,6 @@ class _DashboardScreenState extends State<DashboardScreen> {
                               size: 24,
                             ),
                           ),
-                        ],
-                      ),
-                    ),
-                    
-                    const SizedBox(height: 20),
-                    
-                    // Manager cards section (like Image 2)
-                    Container(
-                      padding: const EdgeInsets.symmetric(horizontal: 16),
-                      child: Row(
-                        children: [
-                          _buildManagerCard('Cadre\nManager', 'assets/icons/cadre.png'),
-                          const SizedBox(width: 12),
-                          _buildManagerCard('Voter\nManager', 'assets/icons/voter.png'),
-                          const SizedBox(width: 12),
-                          _buildManagerCard('Family\nManager', 'assets/icons/part.png'),
-                          const SizedBox(width: 12),
-                          _buildManagerCard('Survey\nManager', 'assets/icons/New.png'),
                         ],
                       ),
                     ),
