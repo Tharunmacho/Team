@@ -149,7 +149,7 @@ class _OverseasScreenState extends State<OverseasScreen> {
                 color: Colors.white,
                 boxShadow: [
                   BoxShadow(
-                    color: Colors.black.withOpacity(0.1),
+                    color: Colors.black.withValues(alpha: 0.1),
                     blurRadius: 4,
                     offset: Offset(0, 2),
                   ),
@@ -261,7 +261,7 @@ class _OverseasScreenState extends State<OverseasScreen> {
           color: Colors.white,
           boxShadow: [
             BoxShadow(
-              color: Colors.black.withOpacity(0.1),
+              color: Colors.black.withValues(alpha: 0.1),
               blurRadius: 10,
               offset: Offset(0, -2),
             ),
@@ -334,7 +334,7 @@ class _OverseasScreenState extends State<OverseasScreen> {
         borderRadius: BorderRadius.circular(8),
         boxShadow: [
           BoxShadow(
-            color: Colors.black.withOpacity(0.05),
+            color: Colors.black.withValues(alpha: 0.05),
             blurRadius: 2,
             offset: Offset(0, 1),
           ),
@@ -631,11 +631,27 @@ class _OverseasScreenState extends State<OverseasScreen> {
       path: phoneNumber,
     );
     try {
-      await launchUrl(launchUri);
+      if (await canLaunchUrl(launchUri)) {
+        await launchUrl(launchUri);
+      } else {
+        if (mounted) {
+          ScaffoldMessenger.of(context).showSnackBar(
+            SnackBar(
+              content: Text('Could not launch phone app'),
+              backgroundColor: Colors.red,
+            ),
+          );
+        }
+      }
     } catch (e) {
-      ScaffoldMessenger.of(context).showSnackBar(
-        SnackBar(content: Text('Could not launch phone dialer')),
-      );
+      if (mounted) {
+        ScaffoldMessenger.of(context).showSnackBar(
+          SnackBar(
+            content: Text('Error making phone call: $e'),
+            backgroundColor: Colors.red,
+          ),
+        );
+      }
     }
   }
 
@@ -1080,7 +1096,7 @@ class _OverseasScreenState extends State<OverseasScreen> {
       child: Container(
         padding: EdgeInsets.symmetric(horizontal: 16, vertical: 8),
         decoration: BoxDecoration(
-          color: isSelected ? color.withOpacity(0.2) : Colors.grey[100],
+          color: isSelected ? color.withValues(alpha: 0.2) : Colors.grey[100],
           borderRadius: BorderRadius.circular(20),
           border: Border.all(
             color: isSelected ? color : Colors.grey[300]!,

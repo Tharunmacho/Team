@@ -102,7 +102,7 @@ class _FatherlessScreenState extends State<FatherlessScreen> {
                     child: Container(
                       padding: EdgeInsets.all(8),
                       decoration: BoxDecoration(
-                        color: Colors.white.withOpacity(0.3),
+                        color: Colors.white.withValues(alpha: 0.3),
                         borderRadius: BorderRadius.circular(8),
                       ),
                       child: Icon(
@@ -265,7 +265,7 @@ class _FatherlessScreenState extends State<FatherlessScreen> {
         color: backgroundColor,
         borderRadius: BorderRadius.circular(12),
         border: Border.all(
-          color: textColor?.withOpacity(0.3) ?? Colors.grey[300]!,
+          color: textColor?.withValues(alpha: 0.3) ?? Colors.grey[300]!,
           width: 1,
         ),
       ),
@@ -310,7 +310,7 @@ class _FatherlessScreenState extends State<FatherlessScreen> {
           borderRadius: BorderRadius.circular(12),
           boxShadow: [
             BoxShadow(
-              color: Colors.black.withOpacity(0.05),
+              color: Colors.black.withValues(alpha: 0.05),
               blurRadius: 8,
               offset: Offset(0, 2),
             ),
@@ -1113,7 +1113,7 @@ class _FatherlessScreenState extends State<FatherlessScreen> {
       child: Container(
         padding: EdgeInsets.symmetric(horizontal: 16, vertical: 8),
         decoration: BoxDecoration(
-          color: isSelected ? color.withOpacity(0.2) : Colors.grey[100],
+          color: isSelected ? color.withValues(alpha: 0.2) : Colors.grey[100],
           borderRadius: BorderRadius.circular(20),
           border: Border.all(
             color: isSelected ? color : Colors.grey[300]!,
@@ -1153,7 +1153,7 @@ class _FatherlessScreenState extends State<FatherlessScreen> {
       child: Container(
         padding: EdgeInsets.all(12),
         decoration: BoxDecoration(
-          color: isSelected ? color.withOpacity(0.2) : Colors.grey[100],
+          color: isSelected ? color.withValues(alpha: 0.2) : Colors.grey[100],
           borderRadius: BorderRadius.circular(8),
           border: Border.all(
             color: isSelected ? color : Colors.grey[300]!,
@@ -1199,7 +1199,7 @@ class _FatherlessScreenState extends State<FatherlessScreen> {
         width: 50,
         height: 50,
         decoration: BoxDecoration(
-          color: isSelected ? color.withOpacity(0.2) : Colors.grey[100],
+          color: isSelected ? color.withValues(alpha: 0.2) : Colors.grey[100],
           shape: BoxShape.circle,
           border: Border.all(
             color: isSelected ? color : Colors.grey[300]!,
@@ -1230,7 +1230,7 @@ class _FatherlessScreenState extends State<FatherlessScreen> {
         width: 50,
         height: 50,
         decoration: BoxDecoration(
-          color: isSelected ? Colors.blue.withOpacity(0.2) : Colors.grey[100],
+          color: isSelected ? Colors.blue.withValues(alpha: 0.2) : Colors.grey[100],
           shape: BoxShape.circle,
           border: Border.all(
             color: isSelected ? Colors.blue : Colors.grey[300]!,
@@ -1262,7 +1262,7 @@ class _FatherlessScreenState extends State<FatherlessScreen> {
         width: 50,
         height: 50,
         decoration: BoxDecoration(
-          color: isSelected ? Colors.orange.withOpacity(0.2) : Colors.grey[100],
+          color: isSelected ? Colors.orange.withValues(alpha: 0.2) : Colors.grey[100],
           shape: BoxShape.circle,
           border: Border.all(
             color: isSelected ? Colors.orange : Colors.grey[300]!,

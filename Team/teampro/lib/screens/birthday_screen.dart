@@ -199,7 +199,7 @@ class _BirthdayScreenState extends State<BirthdayScreen> {
                 color: Colors.white,
                 boxShadow: [
                   BoxShadow(
-                    color: Colors.black.withOpacity(0.1),
+                    color: Colors.black.withValues(alpha: 0.1),
                     blurRadius: 4,
                     offset: Offset(0, 2),
                   ),
@@ -328,7 +328,7 @@ class _BirthdayScreenState extends State<BirthdayScreen> {
           color: Colors.white,
           boxShadow: [
             BoxShadow(
-              color: Colors.black.withOpacity(0.1),
+              color: Colors.black.withValues(alpha: 0.1),
               blurRadius: 10,
               offset: Offset(0, -2),
             ),
@@ -401,7 +401,7 @@ class _BirthdayScreenState extends State<BirthdayScreen> {
         borderRadius: BorderRadius.circular(12),
         boxShadow: [
           BoxShadow(
-            color: Colors.black.withOpacity(0.05),
+            color: Colors.black.withValues(alpha: 0.05),
             blurRadius: 8,
             offset: Offset(0, 2),
           ),
@@ -664,23 +664,7 @@ class _BirthdayScreenState extends State<BirthdayScreen> {
     );
   }
 
-  Widget _buildActionButton(IconData icon, VoidCallback onTap) {
-    return GestureDetector(
-      onTap: onTap,
-      child: Container(
-        padding: EdgeInsets.all(12),
-        decoration: BoxDecoration(
-          color: Colors.grey[100],
-          shape: BoxShape.circle,
-        ),
-        child: Icon(
-          icon,
-          color: Colors.black54,
-          size: 24,
-        ),
-      ),
-    );
-  }
+
 
   Widget _buildCompactActionButton(IconData icon, VoidCallback onTap) {
     return GestureDetector(
@@ -1150,7 +1134,7 @@ class _BirthdayScreenState extends State<BirthdayScreen> {
       child: Container(
         padding: EdgeInsets.symmetric(horizontal: 16, vertical: 8),
         decoration: BoxDecoration(
-          color: isSelected ? color.withOpacity(0.2) : Colors.grey[100],
+          color: isSelected ? color.withValues(alpha: 0.2) : Colors.grey[100],
           borderRadius: BorderRadius.circular(20),
           border: Border.all(
             color: isSelected ? color : Colors.grey[300]!,
@@ -1331,11 +1315,27 @@ class _BirthdayScreenState extends State<BirthdayScreen> {
       path: phoneNumber,
     );
     try {
-      await launchUrl(launchUri);
+      if (await canLaunchUrl(launchUri)) {
+        await launchUrl(launchUri);
+      } else {
+        if (mounted) {
+          ScaffoldMessenger.of(context).showSnackBar(
+            SnackBar(
+              content: Text('Could not launch phone app'),
+              backgroundColor: Colors.red,
+            ),
+          );
+        }
+      }
     } catch (e) {
-      ScaffoldMessenger.of(context).showSnackBar(
-        SnackBar(content: Text('Could not launch phone dialer')),
-      );
+      if (mounted) {
+        ScaffoldMessenger.of(context).showSnackBar(
+          SnackBar(
+            content: Text('Error making phone call: $e'),
+            backgroundColor: Colors.red,
+          ),
+        );
+      }
     }
   }
 

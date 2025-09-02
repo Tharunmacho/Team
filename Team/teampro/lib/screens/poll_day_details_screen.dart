@@ -12,10 +12,10 @@ class PollDayDetailsScreen extends StatefulWidget {
 
 class _PollDayDetailsScreenState extends State<PollDayDetailsScreen> {
   final TextEditingController _searchController = TextEditingController();
-  Map<int, bool> _votingStatus = {}; // Track voting status for each booth
+  final Map<int, bool> _votingStatus = {}; // Track voting status for each booth
   int _votedCount = 3;
   int _notVotedCount = 1452;
-  int _totalCount = 1455;
+  final int _totalCount = 1455;
   bool _showListView = false; // Toggle between grid and list view
 
   // Sample voter data for the poll day - matching your image
@@ -153,7 +153,7 @@ class _PollDayDetailsScreenState extends State<PollDayDetailsScreen> {
                     child: Container(
                       padding: EdgeInsets.all(8),
                       decoration: BoxDecoration(
-                        color: Colors.white.withOpacity(0.3),
+                        color: Colors.white.withValues(alpha: 0.3),
                         borderRadius: BorderRadius.circular(8),
                       ),
                       child: Icon(
@@ -184,7 +184,7 @@ class _PollDayDetailsScreenState extends State<PollDayDetailsScreen> {
                     child: Container(
                       padding: EdgeInsets.all(8),
                       decoration: BoxDecoration(
-                        color: Colors.white.withOpacity(0.3),
+                        color: Colors.white.withValues(alpha: 0.3),
                         borderRadius: BorderRadius.circular(8),
                       ),
                       child: Icon(
@@ -304,9 +304,9 @@ class _PollDayDetailsScreenState extends State<PollDayDetailsScreen> {
     return Container(
       padding: EdgeInsets.symmetric(vertical: 12, horizontal: 8),
       decoration: BoxDecoration(
-        color: color.withOpacity(0.1),
+        color: color.withValues(alpha: 0.1),
         borderRadius: BorderRadius.circular(20),
-        border: Border.all(color: color.withOpacity(0.3)),
+        border: Border.all(color: color.withValues(alpha: 0.3)),
       ),
       child: Text(
         text,
@@ -325,7 +325,7 @@ class _PollDayDetailsScreenState extends State<PollDayDetailsScreen> {
       onTap: () => _toggleVotingStatus(boothNumber),
       child: Container(
         decoration: BoxDecoration(
-          color: isVoted ? Colors.green.withOpacity(0.1) : Colors.pink.withOpacity(0.1),
+          color: isVoted ? Colors.green.withValues(alpha: 0.1) : Colors.pink.withValues(alpha: 0.1),
           borderRadius: BorderRadius.circular(20),
           border: Border.all(
             color: isVoted ? Colors.green : Colors.pink,
@@ -460,7 +460,7 @@ class _PollDayDetailsScreenState extends State<PollDayDetailsScreen> {
               borderRadius: BorderRadius.circular(12),
               boxShadow: [
                 BoxShadow(
-                  color: Colors.black.withOpacity(0.1),
+                  color: Colors.black.withValues(alpha: 0.1),
                   blurRadius: 4,
                   offset: Offset(0, 2),
                 ),
@@ -555,7 +555,7 @@ class _PollDayDetailsScreenState extends State<PollDayDetailsScreen> {
           borderRadius: BorderRadius.circular(12),
           boxShadow: [
             BoxShadow(
-              color: Colors.black.withOpacity(0.05),
+              color: Colors.black.withValues(alpha: 0.05),
               blurRadius: 8,
               offset: Offset(0, 2),
             ),
@@ -741,7 +741,7 @@ class _PollDayDetailsScreenState extends State<PollDayDetailsScreen> {
                     Container(
                       padding: EdgeInsets.all(8),
                       decoration: BoxDecoration(
-                        color: Color(0xFF1976D2).withOpacity(0.1),
+                        color: Color(0xFF1976D2).withValues(alpha: 0.1),
                         shape: BoxShape.circle,
                       ),
                       child: Row(

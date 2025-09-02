@@ -1,7 +1,4 @@
 import 'package:flutter/material.dart';
-import 'login_screen.dart';
-import 'profile_screen.dart';
-import 'cadre_manager_screen.dart';
 import 'part_numbers_screen.dart';
 import 'family_manager_screen.dart';
 import 'survey_screen.dart';
@@ -22,6 +19,7 @@ import 'my_cadre_screen.dart';
 import 'part_map_screen.dart';
 import 'voter_list_screen.dart';
 import 'voter_part_numbers_screen.dart';
+import 'drawer_screen.dart';
 
 class DashboardScreen extends StatefulWidget {
   const DashboardScreen({super.key});
@@ -34,6 +32,7 @@ class _DashboardScreenState extends State<DashboardScreen> {
   final TextEditingController _searchController = TextEditingController();
   final PageController _pageController = PageController();
   int _currentPage = 0;
+<<<<<<< HEAD
   final GlobalKey<ScaffoldState> _scaffoldKey = GlobalKey<ScaffoldState>();
   
   // Election dropdown state
@@ -73,7 +72,6 @@ class _DashboardScreenState extends State<DashboardScreen> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      key: _scaffoldKey,
       backgroundColor: Color(0xFFF5F7FA),
       body: SafeArea(
         child: Column(
@@ -85,7 +83,14 @@ class _DashboardScreenState extends State<DashboardScreen> {
                 children: [
                   // Menu icon
                   GestureDetector(
-                    onTap: () => _showCustomDrawer(),
+                    onTap: () {
+                      Navigator.push(
+                        context,
+                        MaterialPageRoute(
+                          builder: (context) => DrawerScreen(),
+                        ),
+                      );
+                    },
                     child: Icon(
                       Icons.menu,
                       size: 28,
@@ -220,13 +225,13 @@ class _DashboardScreenState extends State<DashboardScreen> {
                       padding: const EdgeInsets.symmetric(horizontal: 16),
                       child: Row(
                         children: [
-                          _buildManagerCard('Cadre\nManager', Icons.person_outline),
+                          _buildManagerCard('Cadre\nManager', 'assets/icons/cadre.png'),
                           const SizedBox(width: 12),
-                          _buildManagerCard('Voter\nManager', Icons.how_to_vote_outlined),
+                          _buildManagerCard('Voter\nManager', 'assets/icons/voter.png'),
                           const SizedBox(width: 12),
-                          _buildManagerCard('Family\nManager', Icons.family_restroom_outlined),
+                          _buildManagerCard('Family\nManager', 'assets/icons/part.png'),
                           const SizedBox(width: 12),
-                          _buildManagerCard('Survey\nManager', Icons.assignment_outlined),
+                          _buildManagerCard('Survey\nManager', 'assets/icons/New.png'),
                         ],
                       ),
                     ),
@@ -244,18 +249,18 @@ class _DashboardScreenState extends State<DashboardScreen> {
                         mainAxisSpacing: 16,
                         childAspectRatio: 0.85,
                         children: [
-                          _buildCategoryItem('Cadre', Icons.person_pin_circle_outlined, Color(0xFF2196F3)),
-                          _buildCategoryItem('Part', Icons.location_on_outlined, Color(0xFFF44336)),
-                          _buildCategoryItem('Voter', Icons.home_outlined, Color(0xFFFF9800)),
-                          _buildCategoryItem('New', Icons.people_outline, Color(0xFF4CAF50)),
-                          _buildCategoryItem('Transgender', Icons.person_outline, Color(0xFFFFEB3B)),
-                          _buildCategoryItem('Fatherless', Icons.person_off_outlined, Color(0xFF9C27B0)),
-                          _buildCategoryItem('Guardian', Icons.security_outlined, Color(0xFF00BCD4)),
-                          _buildCategoryItem('Overseas', Icons.public_outlined, Color(0xFF607D8B)),
-                          _buildCategoryItem('Birthday', Icons.cake_outlined, Color(0xFFE91E63)),
-                          _buildCategoryItem('Star', Icons.star_outline, Color(0xFFFF5722)),
-                          _buildCategoryItem('Mobile', Icons.phone_android_outlined, Color(0xFF3F51B5)),
-                          _buildCategoryItem('80 Above', Icons.elderly_outlined, Color(0xFF795548)),
+                          _buildCategoryItem('Cadre', 'assets/icons/cadre.png', Color(0xFF2196F3)),
+                          _buildCategoryItem('Part', 'assets/icons/part.png', Color(0xFFF44336)),
+                          _buildCategoryItem('Voter', 'assets/icons/voter.png', Color(0xFFFF9800)),
+                          _buildCategoryItem('New', 'assets/icons/New.png', Color(0xFF4CAF50)),
+                          _buildCategoryItem('Transgender', 'assets/icons/transegender.png', Color(0xFFFFEB3B)),
+                          _buildCategoryItem('Fatherless', 'assets/icons/fatherless.png', Color(0xFF9C27B0)),
+                          _buildCategoryItem('Guardian', 'assets/icons/guardian.png', Color(0xFF00BCD4)),
+                          _buildCategoryItem('Overseas', 'assets/icons/overseas.png', Color(0xFF607D8B)),
+                          _buildCategoryItem('Birthday', 'assets/icons/birthday.png', Color(0xFFE91E63)),
+                          _buildCategoryItem('Star', 'assets/icons/star.png', Color(0xFFFF5722)),
+                          _buildCategoryItem('Mobile', 'assets/icons/Mobile.png', Color(0xFF3F51B5)),
+                          _buildCategoryItem('80 Above', 'assets/icons/80 Above.png', Color(0xFF795548)),
                         ],
                       ),
                     ),
@@ -263,7 +268,7 @@ class _DashboardScreenState extends State<DashboardScreen> {
                     const SizedBox(height: 20),
                     
                     // Image carousel section
-                    Container(
+                    SizedBox(
                       height: 200,
                       child: PageView(
                         controller: _pageController,
@@ -509,7 +514,7 @@ class _DashboardScreenState extends State<DashboardScreen> {
     );
   }
 
-  Widget _buildManagerCard(String title, IconData icon) {
+  Widget _buildManagerCard(String title, String iconPath) {
     return Expanded(
       child: GestureDetector(
         onTap: () {
@@ -552,9 +557,10 @@ class _DashboardScreenState extends State<DashboardScreen> {
           ),
           child: Column(
             children: [
-              Icon(
-                icon,
-                size: 32,
+              Image.asset(
+                iconPath,
+                width: 32,
+                height: 32,
                 color: Color(0xFF1976D2),
               ),
               const SizedBox(height: 8),
@@ -574,7 +580,7 @@ class _DashboardScreenState extends State<DashboardScreen> {
     );
   }
 
-  Widget _buildCategoryItem(String title, IconData icon, Color color) {
+  Widget _buildCategoryItem(String title, String iconPath, Color color) {
     return GestureDetector(
       onTap: () {
         // Handle navigation for different categories
@@ -654,13 +660,14 @@ class _DashboardScreenState extends State<DashboardScreen> {
             width: 60,
             height: 60,
             decoration: BoxDecoration(
-              color: color.withOpacity(0.1),
+              color: color.withValues(alpha: 0.1),
               borderRadius: BorderRadius.circular(12),
             ),
-            child: Icon(
-              icon,
+            child: Image.asset(
+              iconPath,
+              width: 28,
+              height: 28,
               color: color,
-              size: 28,
             ),
           ),
           const SizedBox(height: 8),
@@ -686,7 +693,7 @@ class _DashboardScreenState extends State<DashboardScreen> {
         borderRadius: BorderRadius.circular(12),
         boxShadow: [
           BoxShadow(
-            color: Colors.black.withOpacity(0.05),
+            color: Colors.black.withValues(alpha: 0.05),
             blurRadius: 10,
             offset: Offset(0, 2),
           ),
@@ -925,287 +932,7 @@ class _DashboardScreenState extends State<DashboardScreen> {
     );
   }
 
-  void _showCustomDrawer() {
-    showGeneralDialog(
-      context: context,
-      barrierDismissible: true,
-      barrierLabel: '',
-      barrierColor: Colors.black.withOpacity(0.5),
-      transitionDuration: Duration(milliseconds: 300),
-      pageBuilder: (context, animation, secondaryAnimation) {
-        return SlideTransition(
-          position: animation.drive(
-            Tween(begin: Offset(-1.0, 0.0), end: Offset.zero).chain(
-              CurveTween(curve: Curves.easeInOut),
-            ),
-          ),
-          child: Align(
-            alignment: Alignment.centerLeft,
-            child: Material(
-              color: Colors.transparent,
-              child: Container(
-                width: MediaQuery.of(context).size.width,
-                height: MediaQuery.of(context).size.height,
-                color: Colors.white,
-                child: SafeArea(
-                  child: Column(
-                    children: [
-                      // Header section with curved background design
-                      Container(
-                        height: 340,
-                        child: Stack(
-                          children: [
-                            // Main curved background container
-                            Container(
-                              height: 300,
-                              decoration: BoxDecoration(
-                                gradient: LinearGradient(
-                                  begin: Alignment.topCenter,
-                                  end: Alignment.bottomCenter,
-                                  colors: [
-                                    Color(0xFFF5E9A3), // Yellow gradient top
-                                    Color(0xFFE8F4FD), // Light blue gradient bottom
-                                  ],
-                                ),
-                              ),
-                            ),
-                            // Curved white overlay for design effect
-                            Positioned(
-                              bottom: 0,
-                              left: 0,
-                              right: 0,
-                              child: Container(
-                                height: 100,
-                                decoration: BoxDecoration(
-                                  color: Colors.white,
-                                  borderRadius: BorderRadius.only(
-                                    topLeft: Radius.circular(50),
-                                    topRight: Radius.circular(50),
-                                  ),
-                                ),
-                              ),
-                            ),
-                            // Close button
-                            Positioned(
-                              top: 20,
-                              right: 20,
-                              child: GestureDetector(
-                                onTap: () => Navigator.pop(context),
-                                child: Icon(
-                                  Icons.close,
-                                  color: Colors.black87,
-                                  size: 28,
-                                ),
-                              ),
-                            ),
-                            // Profile content
-                            Positioned(
-                              top: 70,
-                              left: 0,
-                              right: 0,
-                              child: Column(
-                                children: [
-                                  // Profile image with political meeting photo
-                                  Container(
-                                    width: 120,
-                                    height: 80,
-                                    decoration: BoxDecoration(
-                                      borderRadius: BorderRadius.circular(12),
-                                      boxShadow: [
-                                        BoxShadow(
-                                          color: Colors.black.withOpacity(0.2),
-                                          blurRadius: 8,
-                                          offset: Offset(0, 4),
-                                        ),
-                                      ],
-                                    ),
-                                    child: ClipRRect(
-                                      borderRadius: BorderRadius.circular(12),
-                                      child: Image.asset(
-                                        'assets/images/political_meeting.jpg',
-                                        width: 120,
-                                        height: 80,
-                                        fit: BoxFit.cover,
-                                        errorBuilder: (context, error, stackTrace) {
-                                          return Container(
-                                            decoration: BoxDecoration(
-                                              borderRadius: BorderRadius.circular(12),
-                                              gradient: LinearGradient(
-                                                begin: Alignment.topLeft,
-                                                end: Alignment.bottomRight,
-                                                colors: [
-                                                  Color(0xFF4CAF50),
-                                                  Color(0xFF66BB6A),
-                                                ],
-                                              ),
-                                            ),
-                                            child: Center(
-                                              child: Icon(
-                                                Icons.campaign,
-                                                size: 40,
-                                                color: Colors.white,
-                                              ),
-                                            ),
-                                          );
-                                        },
-                                      ),
-                                    ),
-                                  ),
-                                  const SizedBox(height: 16),
-                                  // User name
-                                  Text(
-                                    'ramach',
-                                    style: TextStyle(
-                                      fontSize: 24,
-                                      fontWeight: FontWeight.bold,
-                                      color: Colors.black87,
-                                    ),
-                                  ),
-                                  Text(
-                                    'andran A...',
-                                    style: TextStyle(
-                                      fontSize: 24,
-                                      fontWeight: FontWeight.bold,
-                                      color: Colors.black87,
-                                    ),
-                                  ),
-                                  const SizedBox(height: 8),
-                                  // Role
-                                  Text(
-                                    'Super Admin',
-                                    style: TextStyle(
-                                      fontSize: 16,
-                                      color: Colors.black54,
-                                    ),
-                                  ),
-                                  const SizedBox(height: 16),
-                                  // Action buttons row
-                                  Row(
-                                    mainAxisAlignment: MainAxisAlignment.center,
-                                    children: [
-                                      _buildActionButton(Icons.list_alt, 'Overview'),
-                                      const SizedBox(width: 16),
-                                      _buildActionButton(Icons.home, 'Home'),
-                                      const SizedBox(width: 16),
-                                      _buildActionButton(Icons.camera_alt, 'Camera'),
-                                    ],
-                                  ),
-                                ],
-                              ),
-                            ),
-                          ],
-                        ),
-                      ),
-                      
-                      // Menu items
-                      Expanded(
-                        child: Container(
-                          padding: EdgeInsets.symmetric(horizontal: 24, vertical: 16),
-                          child: Column(
-                            children: [
-                              _buildFullPageMenuItem(Icons.person_outline, 'My Profile'),
-                              _buildFullPageMenuItem(Icons.how_to_vote_outlined, 'Your Elections'),
-                              _buildFullPageMenuItem(Icons.settings_outlined, 'Settings'),
-                              _buildFullPageMenuItem(Icons.language_outlined, 'App Language'),
-                              _buildFullPageMenuItem(Icons.lock_outline, 'Change Password'),
-                              _buildFullPageMenuItem(Icons.privacy_tip_outlined, 'Privacy Policy'),
-                              _buildFullPageMenuItem(Icons.description_outlined, 'Terms & Conditions'),
-                              _buildFullPageMenuItem(Icons.help_outline, 'Help'),
-                              _buildFullPageMenuItem(Icons.info_outline, 'About'),
-                              const Spacer(),
-                              // Version info
-                              Text(
-                                'V.3.1 |',
-                                style: TextStyle(
-                                  fontSize: 14,
-                                  color: Colors.black54,
-                                ),
-                                textAlign: TextAlign.center,
-                              ),
-                            ],
-                          ),
-                        ),
-                      ),
-                    ],
-                  ),
-                ),
-              ),
-            ),
-          ),
-        );
-      },
-    );
-  }
 
-  Widget _buildActionButton(IconData icon, String label) {
-    return Container(
-      padding: EdgeInsets.all(12),
-      decoration: BoxDecoration(
-        color: Colors.white.withOpacity(0.3),
-        borderRadius: BorderRadius.circular(12),
-      ),
-      child: Column(
-        mainAxisSize: MainAxisSize.min,
-        children: [
-          Icon(
-            icon,
-            size: 20,
-            color: Colors.black87,
-          ),
-          const SizedBox(height: 4),
-          Text(
-            label,
-            style: TextStyle(
-              fontSize: 10,
-              color: Colors.black87,
-            ),
-          ),
-        ],
-      ),
-    );
-  }
-
-  Widget _buildFullPageMenuItem(IconData icon, String title) {
-    return Container(
-      margin: EdgeInsets.symmetric(vertical: 8),
-      child: InkWell(
-        onTap: () {
-          Navigator.pop(context); // Close overlay first
-          if (title == 'My Profile') {
-            // Navigate to profile screen for all menu items
-            Navigator.push(
-              context,
-              MaterialPageRoute(builder: (context) => ProfileScreen()),
-            );
-          } else {
-            // Handle other menu items
-            _showMessage('$title feature coming soon!');
-          }
-        },
-        child: Container(
-          padding: EdgeInsets.symmetric(vertical: 16, horizontal: 4),
-          child: Row(
-            children: [
-              Icon(
-                icon,
-                color: Color(0xFF1976D2),
-                size: 24,
-              ),
-              const SizedBox(width: 20),
-              Text(
-                title,
-                style: TextStyle(
-                  fontSize: 18,
-                  color: Colors.black87,
-                  fontWeight: FontWeight.w500,
-                ),
-              ),
-            ],
-          ),
-        ),
-      ),
-    );
-  }
 
   void _showAdvancedSearch() {
     showModalBottomSheet(

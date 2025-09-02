@@ -76,7 +76,7 @@ class _NewVotersScreenState extends State<NewVotersScreen> {
                     child: Container(
                       padding: EdgeInsets.all(8),
                       decoration: BoxDecoration(
-                        color: Colors.white.withOpacity(0.3),
+                        color: Colors.white.withValues(alpha: 0.3),
                         borderRadius: BorderRadius.circular(8),
                       ),
                       child: Icon(
@@ -601,6 +601,40 @@ class _NewVotersScreenState extends State<NewVotersScreen> {
     _relationFirstNameController.clear();
     _relationLastNameController.clear();
     _ageController.clear();
+  }
+
+  Widget _buildStatCard(String label, String count, Color backgroundColor, Color? textColor) {
+    return Container(
+      padding: EdgeInsets.all(16),
+      decoration: BoxDecoration(
+        color: backgroundColor,
+        borderRadius: BorderRadius.circular(12),
+        border: Border.all(
+          color: textColor?.withValues(alpha: 0.3) ?? Colors.grey[300]!,
+          width: 1,
+        ),
+      ),
+      child: Column(
+        children: [
+          Text(
+            count,
+            style: TextStyle(
+              fontSize: 24,
+              fontWeight: FontWeight.bold,
+              color: textColor ?? Colors.black87,
+            ),
+          ),
+          const SizedBox(height: 4),
+          Text(
+            label,
+            style: TextStyle(
+              fontSize: 14,
+              color: textColor ?? Colors.black54,
+            ),
+          ),
+        ],
+      ),
+    );
   }
 
   Widget _buildAgeFilter(StateSetter setModalState) {

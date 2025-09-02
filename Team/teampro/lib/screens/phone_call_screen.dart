@@ -30,7 +30,7 @@ class _PhoneCallScreenState extends State<PhoneCallScreen>
   late AnimationController _pulseController;
   late Animation<double> _pulseAnimation;
   bool _isCallActive = false;
-  int _callDuration = 0;
+
   String _callStatus = 'Connecting...';
 
   @override
@@ -73,12 +73,14 @@ class _PhoneCallScreenState extends State<PhoneCallScreen>
         setState(() {
           _callStatus = 'Unable to make call';
         });
-        ScaffoldMessenger.of(context).showSnackBar(
-          SnackBar(
-            content: Text('Could not launch phone dialer'),
-            backgroundColor: Colors.red,
-          ),
-        );
+        if (mounted) {
+          ScaffoldMessenger.of(context).showSnackBar(
+            SnackBar(
+              content: Text('Could not launch phone dialer'),
+              backgroundColor: Colors.red,
+            ),
+          );
+        }
       }
     } catch (e) {
       setState(() {
@@ -106,7 +108,7 @@ class _PhoneCallScreenState extends State<PhoneCallScreen>
           shape: BoxShape.circle,
           boxShadow: [
             BoxShadow(
-              color: color.withOpacity(0.3),
+              color: color.withValues(alpha: 0.3),
               blurRadius: 15,
               offset: Offset(0, 5),
             ),
@@ -138,7 +140,7 @@ class _PhoneCallScreenState extends State<PhoneCallScreen>
                     child: Container(
                       padding: EdgeInsets.all(10),
                       decoration: BoxDecoration(
-                        color: Colors.white.withOpacity(0.1),
+                        color: Colors.white.withValues(alpha: 0.1),
                         borderRadius: BorderRadius.circular(10),
                       ),
                       child: Icon(
@@ -205,7 +207,7 @@ class _PhoneCallScreenState extends State<PhoneCallScreen>
                             ),
                             boxShadow: [
                               BoxShadow(
-                                color: Color(0xFF2196F3).withOpacity(0.3),
+                                color: Color(0xFF2196F3).withValues(alpha: 0.3),
                                 blurRadius: 30,
                                 offset: Offset(0, 10),
                               ),
@@ -254,7 +256,7 @@ class _PhoneCallScreenState extends State<PhoneCallScreen>
                   Container(
                     padding: EdgeInsets.symmetric(horizontal: 20, vertical: 10),
                     decoration: BoxDecoration(
-                      color: Colors.white.withOpacity(0.1),
+                      color: Colors.white.withValues(alpha: 0.1),
                       borderRadius: BorderRadius.circular(25),
                     ),
                     child: Text(
@@ -275,10 +277,10 @@ class _PhoneCallScreenState extends State<PhoneCallScreen>
                     padding: EdgeInsets.all(20),
                     margin: EdgeInsets.symmetric(horizontal: 40),
                     decoration: BoxDecoration(
-                      color: Colors.white.withOpacity(0.05),
+                      color: Colors.white.withValues(alpha: 0.05),
                       borderRadius: BorderRadius.circular(15),
                       border: Border.all(
-                        color: Colors.white.withOpacity(0.1),
+                        color: Colors.white.withValues(alpha: 0.1),
                       ),
                     ),
                     child: Column(
@@ -390,7 +392,7 @@ class _PhoneCallScreenState extends State<PhoneCallScreen>
                               boxShadow: [
                                 BoxShadow(
                                   color: (_isCallActive ? Colors.red : Colors.green)
-                                      .withOpacity(0.4),
+                                      .withValues(alpha: 0.4),
                                   blurRadius: 20,
                                   offset: Offset(0, 8),
                                 ),
@@ -479,7 +481,7 @@ class _PhoneCallScreenState extends State<PhoneCallScreen>
             width: 50,
             height: 50,
             decoration: BoxDecoration(
-              color: color.withOpacity(0.2),
+              color: color.withValues(alpha: 0.2),
               shape: BoxShape.circle,
               border: Border.all(color: color, width: 2),
             ),
@@ -514,12 +516,14 @@ class _PhoneCallScreenState extends State<PhoneCallScreen>
     if (await canLaunchUrl(whatsappUri)) {
       await launchUrl(whatsappUri);
     } else {
-      ScaffoldMessenger.of(context).showSnackBar(
-        SnackBar(
-          content: Text('WhatsApp not installed'),
-          backgroundColor: Colors.orange,
-        ),
-      );
+      if (mounted) {
+        ScaffoldMessenger.of(context).showSnackBar(
+          SnackBar(
+            content: Text('WhatsApp not installed'),
+            backgroundColor: Colors.orange,
+          ),
+        );
+      }
     }
   }
 

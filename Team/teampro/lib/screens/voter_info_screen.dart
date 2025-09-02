@@ -644,7 +644,7 @@ class _VoterInfoScreenState extends State<VoterInfoScreen> with TickerProviderSt
       child: Container(
         padding: EdgeInsets.symmetric(horizontal: 16, vertical: 8),
         decoration: BoxDecoration(
-          color: isSelected ? color.withOpacity(0.2) : Colors.grey[100],
+          color: isSelected ? color.withValues(alpha: 0.2) : Colors.grey[100],
           borderRadius: BorderRadius.circular(20),
           border: Border.all(
             color: isSelected ? color : Colors.grey[300]!,
@@ -684,7 +684,7 @@ class _VoterInfoScreenState extends State<VoterInfoScreen> with TickerProviderSt
       child: Container(
         padding: EdgeInsets.all(12),
         decoration: BoxDecoration(
-          color: isSelected ? color.withOpacity(0.2) : color,
+          color: isSelected ? color.withOpacity(0.2) : Colors.grey[100],
           borderRadius: BorderRadius.circular(8),
           border: isSelected ? Border.all(color: color, width: 2) : null,
         ),
@@ -728,7 +728,7 @@ class _VoterInfoScreenState extends State<VoterInfoScreen> with TickerProviderSt
         width: 50,
         height: 50,
         decoration: BoxDecoration(
-          color: isSelected ? color.withOpacity(0.2) : Colors.grey[100],
+          color: isSelected ? color.withValues(alpha: 0.2) : Colors.grey[100],
           shape: BoxShape.circle,
           border: Border.all(
             color: isSelected ? color : Colors.grey[300]!,
@@ -759,7 +759,7 @@ class _VoterInfoScreenState extends State<VoterInfoScreen> with TickerProviderSt
         width: 50,
         height: 50,
         decoration: BoxDecoration(
-          color: isSelected ? Colors.blue.withOpacity(0.2) : Colors.grey[100],
+          color: isSelected ? Colors.blue.withValues(alpha: 0.2) : Colors.grey[100],
           shape: BoxShape.circle,
           border: Border.all(
             color: isSelected ? Colors.blue : Colors.grey[300]!,
@@ -791,7 +791,7 @@ class _VoterInfoScreenState extends State<VoterInfoScreen> with TickerProviderSt
         width: 50,
         height: 50,
         decoration: BoxDecoration(
-          color: isSelected ? Colors.orange.withOpacity(0.2) : Colors.grey[100],
+          color: isSelected ? Colors.orange.withValues(alpha: 0.2) : Colors.grey[100],
           shape: BoxShape.circle,
           border: Border.all(
             color: isSelected ? Colors.orange : Colors.grey[300]!,
@@ -857,7 +857,7 @@ class _VoterInfoScreenState extends State<VoterInfoScreen> with TickerProviderSt
                     child: Container(
                       padding: EdgeInsets.all(8),
                       decoration: BoxDecoration(
-                        color: Colors.white.withOpacity(0.3),
+                        color: Colors.white.withValues(alpha: 0.3),
                         borderRadius: BorderRadius.circular(8),
                       ),
                       child: Icon(
@@ -897,7 +897,7 @@ class _VoterInfoScreenState extends State<VoterInfoScreen> with TickerProviderSt
                 borderRadius: BorderRadius.circular(12),
                 boxShadow: [
                   BoxShadow(
-                    color: Colors.black.withOpacity(0.05),
+                    color: Colors.black.withValues(alpha: 0.05),
                     blurRadius: 8,
                     offset: Offset(0, 2),
                   ),
@@ -1507,7 +1507,7 @@ class _VoterInfoScreenState extends State<VoterInfoScreen> with TickerProviderSt
                 borderRadius: BorderRadius.circular(12),
                 boxShadow: [
                   BoxShadow(
-                    color: Colors.black.withOpacity(0.1),
+                    color: Colors.black.withValues(alpha: 0.1),
                     blurRadius: 8,
                     offset: Offset(0, 2),
                   ),
@@ -1723,7 +1723,7 @@ class _VoterInfoScreenState extends State<VoterInfoScreen> with TickerProviderSt
         border: Border.all(color: Colors.grey[300]!),
       ),
       child: DropdownButtonFormField<String>(
-        value: value,
+        initialValue: value,
         decoration: InputDecoration(
           prefixIcon: Icon(icon, color: Color(0xFF1976D2)),
           border: InputBorder.none,
@@ -1820,10 +1820,10 @@ class _VoterInfoScreenState extends State<VoterInfoScreen> with TickerProviderSt
         decoration: BoxDecoration(
           color: Colors.white,
           borderRadius: BorderRadius.circular(12),
-          border: Border.all(color: color.withOpacity(0.3)),
+          border: Border.all(color: color.withValues(alpha: 0.3)),
           boxShadow: [
             BoxShadow(
-              color: Colors.black.withOpacity(0.05),
+              color: Colors.black.withValues(alpha: 0.05),
               blurRadius: 4,
               offset: Offset(0, 2),
             ),
@@ -1835,7 +1835,7 @@ class _VoterInfoScreenState extends State<VoterInfoScreen> with TickerProviderSt
             Container(
               padding: EdgeInsets.all(12),
               decoration: BoxDecoration(
-                color: color.withOpacity(0.1),
+                color: color.withValues(alpha: 0.1),
                 shape: BoxShape.circle,
               ),
               child: Icon(
@@ -1864,7 +1864,7 @@ class _VoterInfoScreenState extends State<VoterInfoScreen> with TickerProviderSt
   }
 
   void _shareViaSMS() {
-    String message = _generateShareMessage();
+    _generateShareMessage();
     ScaffoldMessenger.of(context).showSnackBar(
       SnackBar(
         content: Text('Opening SMS to share voter information...'),
@@ -1874,7 +1874,7 @@ class _VoterInfoScreenState extends State<VoterInfoScreen> with TickerProviderSt
   }
 
   void _shareGeneral() {
-    String message = _generateShareMessage();
+    _generateShareMessage();
     ScaffoldMessenger.of(context).showSnackBar(
       SnackBar(
         content: Text('Opening share dialog...'),
@@ -1924,7 +1924,7 @@ Door No: ${widget.voterData['doorNo']}
             const SizedBox(height: 20),
             
             // Share Options Grid
-            Container(
+            SizedBox(
               height: 180,
               child: GridView.count(
                 crossAxisCount: 2,
@@ -2000,7 +2000,7 @@ Door No: ${widget.voterData['doorNo']}
                       border: Border.all(color: Colors.grey[300]!),
                       boxShadow: [
                         BoxShadow(
-                          color: Colors.black.withOpacity(0.05),
+                          color: Colors.black.withValues(alpha: 0.05),
                           blurRadius: 4,
                           offset: Offset(0, 2),
                         ),
@@ -2041,7 +2041,7 @@ Door No: ${widget.voterData['doorNo']}
                       border: Border.all(color: Colors.grey[300]!),
                       boxShadow: [
                         BoxShadow(
-                          color: Colors.black.withOpacity(0.05),
+                          color: Colors.black.withValues(alpha: 0.05),
                           blurRadius: 4,
                           offset: Offset(0, 2),
                         ),
@@ -2081,7 +2081,7 @@ Door No: ${widget.voterData['doorNo']}
   }
 
   void _shareViaWhatsAppActual() {
-    String message = _generateShareMessage();
+    _generateShareMessage();
     ScaffoldMessenger.of(context).showSnackBar(
       SnackBar(
         content: Text('Opening WhatsApp to share voter information...'),
@@ -2452,7 +2452,7 @@ Door No: ${widget.voterData['doorNo']}
                 borderRadius: BorderRadius.circular(12),
                 boxShadow: [
                   BoxShadow(
-                    color: Colors.black.withOpacity(0.05),
+                    color: Colors.black.withValues(alpha: 0.05),
                     blurRadius: 8,
                     offset: Offset(0, 2),
                   ),
