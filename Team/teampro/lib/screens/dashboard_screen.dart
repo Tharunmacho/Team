@@ -118,7 +118,6 @@ class _DashboardScreenState extends State<DashboardScreen> {
       body: SafeArea(
         child: Column(
           children: [
-<<<<<<< HEAD
             // Combined Header and Manager cards section with blue background
             Container(
               width: double.infinity,
@@ -130,22 +129,6 @@ class _DashboardScreenState extends State<DashboardScreen> {
                 ),
               ),
               child: Column(
-=======
-            // Header section with light blue background
-            Container(
-              decoration: BoxDecoration(
-                color: Color(0xFFE3F2FD), // Light blue background
-                boxShadow: [
-                  BoxShadow(
-                    color: Colors.black.withValues(alpha: 0.1),
-                    blurRadius: 4,
-                    offset: Offset(0, 2),
-                  ),
-                ],
-              ),
-              padding: const EdgeInsets.all(16),
-              child: Row(
->>>>>>> c00c080087205e881cf4f33e66cf7727d79f01a9
                 children: [
                   // Header section
                   Container(
@@ -254,31 +237,9 @@ class _DashboardScreenState extends State<DashboardScreen> {
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
                     
-<<<<<<< HEAD
-                    const SizedBox(height: 20),
-                    
-                    // Search section (moved below manager cards)
-=======
-                    // Manager cards section (like Image 2)
-                    Container(
-                      padding: const EdgeInsets.symmetric(horizontal: 16),
-                      child: Row(
-                        children: [
-                          _buildManagerCard('Cadre\nManager', 'assets/icons/cadre.png'),
-                          const SizedBox(width: 12),
-                          _buildManagerCard('Voter\nManager', 'assets/icons/voter.png'),
-                          const SizedBox(width: 12),
-                          _buildManagerCard('Family\nManager', 'assets/icons/part.png'),
-                          const SizedBox(width: 12),
-                          _buildManagerCard('Survey\nManager', 'assets/icons/New.png'),
-                        ],
-                      ),
-                    ),
-                    
                     const SizedBox(height: 20),
                     
                     // Search section
->>>>>>> c00c080087205e881cf4f33e66cf7727d79f01a9
                     Container(
                       padding: const EdgeInsets.symmetric(horizontal: 16),
                       child: Row(

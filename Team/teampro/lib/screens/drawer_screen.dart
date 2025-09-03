@@ -16,25 +16,9 @@ class DrawerScreen extends StatelessWidget {
       body: SafeArea(
         child: Column(
           children: [
-<<<<<<< HEAD
             // Modern Header with Wavy Background
             Container(
               height: 200,
-=======
-            // Header Section with Light Yellow/Cream Background
-            Container(
-              height: 200,
-              decoration: BoxDecoration(
-                gradient: LinearGradient(
-                  begin: Alignment.topCenter,
-                  end: Alignment.bottomCenter,
-                  colors: [
-                    Color(0xFFFFF8E1), // Light yellow/cream
-                    Color(0xFFFFF3C4), // Slightly darker cream
-                  ],
-                ),
-              ),
->>>>>>> c00c080087205e881cf4f33e66cf7727d79f01a9
               child: Stack(
                 children: [
                   // Wavy gradient background
@@ -66,11 +50,7 @@ class DrawerScreen extends StatelessWidget {
                         width: 36,
                         height: 36,
                         decoration: BoxDecoration(
-<<<<<<< HEAD
                           color: Colors.white.withOpacity(0.9),
-=======
-                          color: Colors.white,
->>>>>>> c00c080087205e881cf4f33e66cf7727d79f01a9
                           shape: BoxShape.circle,
                           boxShadow: [
                             BoxShadow(
@@ -88,7 +68,6 @@ class DrawerScreen extends StatelessWidget {
                       ),
                     ),
                   ),
-<<<<<<< HEAD
                   // Profile section with left-aligned layout
                   Positioned(
                     top: 70,
@@ -187,108 +166,6 @@ class DrawerScreen extends StatelessWidget {
                               ),
                             ],
                           ),
-=======
-                  // Profile content - centered
-                  Positioned(
-                    top: 60,
-                    left: 0,
-                    right: 0,
-                    child: Column(
-                      children: [
-                        // Green rectangular button with megaphone
-                        Container(
-                          width: 80,
-                          height: 50,
-                          decoration: BoxDecoration(
-                            color: Color(0xFF4CAF50),
-                            borderRadius: BorderRadius.circular(12),
-                            boxShadow: [
-                              BoxShadow(
-                                color: Colors.black.withValues(alpha: 0.1),
-                                blurRadius: 8,
-                                offset: Offset(0, 4),
-                              ),
-                            ],
-                          ),
-                          child: Stack(
-                            children: [
-                              // Megaphone icon
-                              Center(
-                                child: Icon(
-                                  Icons.campaign,
-                                  color: Colors.white,
-                                  size: 24,
-                                ),
-                              ),
-                              // Sound waves
-                              Positioned(
-                                right: 8,
-                                top: 8,
-                                child: Row(
-                                  mainAxisSize: MainAxisSize.min,
-                                  children: [
-                                    Container(
-                                      width: 2,
-                                      height: 8,
-                                      color: Colors.white.withValues(alpha: 0.7),
-                                    ),
-                                    SizedBox(width: 1),
-                                    Container(
-                                      width: 2,
-                                      height: 12,
-                                      color: Colors.white.withValues(alpha: 0.7),
-                                    ),
-                                    SizedBox(width: 1),
-                                    Container(
-                                      width: 2,
-                                      height: 6,
-                                      color: Colors.white.withValues(alpha: 0.7),
-                                    ),
-                                  ],
-                                ),
-                              ),
-                            ],
-                          ),
-                        ),
-                        const SizedBox(height: 16),
-                        // Name - split into two lines
-                        Text(
-                          'ramach',
-                          style: TextStyle(
-                            fontSize: 20,
-                            fontWeight: FontWeight.bold,
-                            color: Colors.black87,
-                          ),
-                        ),
-                        Text(
-                          'andran A...',
-                          style: TextStyle(
-                            fontSize: 20,
-                            fontWeight: FontWeight.bold,
-                            color: Colors.black87,
-                          ),
-                        ),
-                        const SizedBox(height: 6),
-                        Text(
-                          'Super Admin',
-                          style: TextStyle(
-                            fontSize: 14,
-                            color: Colors.grey[700],
-                            fontWeight: FontWeight.w500,
-                          ),
-                        ),
-                        const SizedBox(height: 16),
-                        // Quick action icons - subtle
-                        Row(
-                          mainAxisAlignment: MainAxisAlignment.center,
-                          children: [
-                            _buildSubtleIcon(Icons.list_alt),
-                            const SizedBox(width: 20),
-                            _buildSubtleIcon(Icons.home),
-                            const SizedBox(width: 20),
-                            _buildSubtleIcon(Icons.camera_alt),
-                          ],
->>>>>>> c00c080087205e881cf4f33e66cf7727d79f01a9
                         ),
                       ],
                     ),
