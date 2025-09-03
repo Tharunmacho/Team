@@ -5,6 +5,9 @@ import 'elections_screen.dart';
 import 'settings_screen.dart';
 import 'language_screen.dart';
 import 'privacy_policy_screen.dart';
+import 'terms_conditions_screen.dart';
+import 'help_screen.dart';
+import 'about_screen.dart';
 
 class DrawerScreen extends StatelessWidget {
   const DrawerScreen({super.key});
@@ -98,7 +101,7 @@ class DrawerScreen extends StatelessWidget {
                               ),
                               child: ClipOval(
                                 child: Container(
-                                  color: Color(0xFF1976D2),
+                                  color: Colors.black,
                                   child: Icon(
                                     Icons.person,
                                     color: Colors.white,
@@ -115,7 +118,7 @@ class DrawerScreen extends StatelessWidget {
                                 width: 24,
                                 height: 24,
                                 decoration: BoxDecoration(
-                                  color: Color(0xFF1976D2),
+                                  color: Colors.black,
                                   shape: BoxShape.circle,
                                   border: Border.all(
                                     color: Colors.white,
@@ -253,6 +256,52 @@ class DrawerScreen extends StatelessWidget {
                         );
                       },
                     ),
+                    _buildMenuItem(
+                      Icons.description_outlined,
+                      'Terms & Conditions',
+                      () {
+                        Navigator.pop(context);
+                        Navigator.push(
+                          context,
+                          MaterialPageRoute(
+                            builder: (context) => const TermsConditionsScreen(),
+                          ),
+                        );
+                      },
+                    ),
+                    _buildMenuItem(
+                      Icons.help_outline,
+                      'Help',
+                      () {
+                        Navigator.pop(context);
+                        Navigator.push(
+                          context,
+                          MaterialPageRoute(
+                            builder: (context) => const HelpScreen(),
+                          ),
+                        );
+                      },
+                    ),
+                    _buildMenuItem(
+                      Icons.info_outline,
+                      'About',
+                      () {
+                        Navigator.pop(context);
+                        Navigator.push(
+                          context,
+                          MaterialPageRoute(
+                            builder: (context) => const AboutScreen(),
+                          ),
+                        );
+                      },
+                    ),
+                    _buildMenuItem(
+                      Icons.logout_outlined,
+                      'Logout',
+                      () {
+                        _showLogoutDialog(context);
+                      },
+                    ),
                   ],
                 ),
               ),
@@ -279,7 +328,7 @@ class DrawerScreen extends StatelessWidget {
         ListTile(
           leading: Icon(
             icon,
-            color: Colors.black87,
+            color: Color(0xFF1976D2),
             size: 24,
           ),
           title: Text(
@@ -330,14 +379,14 @@ void _showChangePasswordDialog(BuildContext context) {
             Row(
               children: [
                 const Expanded(
-                  child: Text(
-                    'Change Password',
-                    style: TextStyle(
-                      fontSize: 20,
-                      fontWeight: FontWeight.bold,
-                      color: Color(0xFF1976D2),
-                    ),
-                  ),
+                  child:                               Text(
+                                'Change Password',
+                                style: TextStyle(
+                                  fontSize: 20,
+                                  fontWeight: FontWeight.bold,
+                                  color: Colors.black,
+                                ),
+                              ),
                 ),
                 GestureDetector(
                   onTap: () => Navigator.pop(context),
@@ -379,7 +428,7 @@ void _showChangePasswordDialog(BuildContext context) {
                   ScaffoldMessenger.of(context).showSnackBar(
                     const SnackBar(
                       content: Text('OTP sent to 9994235009'),
-                      backgroundColor: Color(0xFF1976D2),
+                      backgroundColor: Colors.black,
                     ),
                   );
                 },
@@ -403,6 +452,85 @@ void _showChangePasswordDialog(BuildContext context) {
             const SizedBox(height: 20),
           ],
         ),
+      );
+    },
+  );
+}
+
+// Logout Dialog
+void _showLogoutDialog(BuildContext context) {
+  showDialog(
+    context: context,
+    builder: (BuildContext context) {
+      return AlertDialog(
+        shape: RoundedRectangleBorder(
+          borderRadius: BorderRadius.circular(16),
+        ),
+        title: Row(
+          children: [
+            Icon(
+              Icons.logout,
+              color: Colors.red,
+              size: 28,
+            ),
+            const SizedBox(width: 12),
+            Text(
+              'Logout',
+              style: TextStyle(
+                fontSize: 20,
+                fontWeight: FontWeight.bold,
+                color: Colors.black,
+              ),
+            ),
+          ],
+        ),
+        content: Text(
+          'Are you sure you want to logout?',
+          style: TextStyle(
+            fontSize: 16,
+            color: Colors.black87,
+          ),
+        ),
+        actions: [
+          TextButton(
+            onPressed: () => Navigator.pop(context),
+            child: Text(
+              'Cancel',
+              style: TextStyle(
+                color: Colors.grey[600],
+                fontSize: 16,
+                fontWeight: FontWeight.w500,
+              ),
+            ),
+          ),
+          ElevatedButton(
+            onPressed: () {
+              Navigator.pop(context); // Close dialog
+              Navigator.pop(context); // Close drawer
+              // Add your logout logic here
+              ScaffoldMessenger.of(context).showSnackBar(
+                SnackBar(
+                  content: Text('Logged out successfully'),
+                  backgroundColor: Colors.black,
+                ),
+              );
+            },
+            style: ElevatedButton.styleFrom(
+              backgroundColor: Colors.red,
+              foregroundColor: Colors.white,
+              shape: RoundedRectangleBorder(
+                borderRadius: BorderRadius.circular(8),
+              ),
+            ),
+            child: Text(
+              'Logout',
+              style: TextStyle(
+                fontSize: 16,
+                fontWeight: FontWeight.bold,
+              ),
+            ),
+          ),
+        ],
       );
     },
   );

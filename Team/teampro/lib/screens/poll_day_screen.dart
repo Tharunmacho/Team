@@ -1,5 +1,7 @@
 import 'package:flutter/material.dart';
 import 'poll_day_details_screen.dart';
+import 'catalogue_screen.dart';
+import 'slip_box_screen.dart';
 
 class PollDayScreen extends StatelessWidget {
   const PollDayScreen({super.key});
@@ -94,22 +96,27 @@ class PollDayScreen extends StatelessWidget {
               child: Row(
                 mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                 children: [
-                  _buildBottomNavItem('Report', Icons.trending_up_outlined, false),
-                  _buildBottomNavItem('Catalogue', Icons.list_alt_outlined, false),
-                  Container(
-                    padding: EdgeInsets.all(16),
-                    decoration: BoxDecoration(
-                      color: Color(0xFF1976D2),
-                      shape: BoxShape.circle,
-                    ),
-                    child: Icon(
-                      Icons.home,
-                      color: Colors.white,
-                      size: 28,
+                  _buildBottomNavItem(context, 'Report', Icons.trending_up_outlined, false),
+                  _buildBottomNavItem(context, 'Catalogue', Icons.list_alt_outlined, false),
+                  GestureDetector(
+                    onTap: () {
+                      Navigator.pop(context); // Go back to dashboard
+                    },
+                    child: Container(
+                      padding: EdgeInsets.all(16),
+                      decoration: BoxDecoration(
+                        color: Color(0xFF1976D2),
+                        shape: BoxShape.circle,
+                      ),
+                      child: Icon(
+                        Icons.home,
+                        color: Colors.white,
+                        size: 28,
+                      ),
                     ),
                   ),
-                  _buildBottomNavItem('Slip Box', Icons.inventory_outlined, false),
-                  _buildBottomNavItem('Poll Day', Icons.how_to_vote_outlined, true),
+                  _buildBottomNavItem(context, 'Slip', Icons.inventory_outlined, false),
+                  _buildBottomNavItem(context, 'Poll', Icons.how_to_vote_outlined, true),
                 ],
               ),
             ),
@@ -159,25 +166,47 @@ class PollDayScreen extends StatelessWidget {
     );
   }
 
-  Widget _buildBottomNavItem(String title, IconData icon, bool isSelected) {
-    return Column(
-      mainAxisSize: MainAxisSize.min,
-      children: [
-        Icon(
-          icon,
-          size: 24,
-          color: isSelected ? Color(0xFF1976D2) : Colors.black54,
-        ),
-        const SizedBox(height: 4),
-        Text(
-          title,
-          style: TextStyle(
-            fontSize: 10,
+  Widget _buildBottomNavItem(BuildContext context, String title, IconData icon, bool isSelected) {
+    return GestureDetector(
+      onTap: () {
+        if (title == 'Catalogue') {
+          Navigator.pushReplacement(
+            context,
+            MaterialPageRoute(builder: (context) => CatalogueScreen()),
+          );
+        } else if (title == 'Slip') {
+          Navigator.pushReplacement(
+            context,
+            MaterialPageRoute(builder: (context) => SlipBoxScreen()),
+          );
+        } else if (!isSelected) {
+          ScaffoldMessenger.of(context).showSnackBar(
+            SnackBar(
+              content: Text('$title - Coming Soon!'),
+              duration: Duration(seconds: 1),
+            ),
+          );
+        }
+      },
+      child: Column(
+        mainAxisSize: MainAxisSize.min,
+        children: [
+          Icon(
+            icon,
+            size: 24,
             color: isSelected ? Color(0xFF1976D2) : Colors.black54,
-            fontWeight: isSelected ? FontWeight.bold : FontWeight.normal,
           ),
-        ),
-      ],
+          const SizedBox(height: 4),
+          Text(
+            title,
+            style: TextStyle(
+              fontSize: 10,
+              color: isSelected ? Color(0xFF1976D2) : Colors.black54,
+              fontWeight: isSelected ? FontWeight.bold : FontWeight.normal,
+            ),
+          ),
+        ],
+      ),
     );
   }
 }

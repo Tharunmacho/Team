@@ -964,10 +964,10 @@ class _StarScreenState extends State<StarScreen> {
           spacing: 12,
           runSpacing: 12,
           children: [
-            _buildHistoryChip('2024', 'PC', Colors.blue, setModalState),
-            _buildHistoryChip('2022', 'ULB', Colors.red, setModalState),
-            _buildHistoryChip('2021', 'AC', Colors.green, setModalState),
-            _buildHistoryChip('Not Voted', '', Colors.grey, setModalState),
+            _buildHistoryChip('2024', 'PC', Color(0xFF1976D2), setModalState),
+            _buildHistoryChip('2022', 'ULB', Color(0xFFD32F2F), setModalState),
+            _buildHistoryChip('2021', 'AC', Color(0xFF388E3C), setModalState),
+            _buildNotVotedChip(setModalState),
           ],
         ),
       ],
@@ -1126,32 +1126,97 @@ class _StarScreenState extends State<StarScreen> {
         });
       },
       child: Container(
-        padding: EdgeInsets.all(12),
+        width: 70,
+        height: 70,
         decoration: BoxDecoration(
           color: isSelected ? color.withValues(alpha: 0.2) : Colors.grey[100],
-          borderRadius: BorderRadius.circular(8),
+          borderRadius: BorderRadius.circular(12),
           border: Border.all(
             color: isSelected ? color : Colors.grey[300]!,
+            width: 2,
           ),
         ),
         child: Column(
+          mainAxisAlignment: MainAxisAlignment.center,
           children: [
-            Text(
-              year,
-              style: TextStyle(
-                color: Colors.white,
-                fontWeight: FontWeight.bold,
-                fontSize: 12,
+            Container(
+              padding: EdgeInsets.symmetric(horizontal: 8, vertical: 4),
+              decoration: BoxDecoration(
+                color: color,
+                borderRadius: BorderRadius.circular(6),
               ),
-            ),
-            if (type.isNotEmpty)
-              Text(
-                type,
+              child: Text(
+                year,
                 style: TextStyle(
                   color: Colors.white,
-                  fontSize: 10,
+                  fontWeight: FontWeight.bold,
+                  fontSize: 12,
                 ),
               ),
+            ),
+            const SizedBox(height: 4),
+            if (type.isNotEmpty)
+              Container(
+                padding: EdgeInsets.symmetric(horizontal: 6, vertical: 2),
+                decoration: BoxDecoration(
+                  color: color,
+                  borderRadius: BorderRadius.circular(4),
+                ),
+                child: Text(
+                  type,
+                  style: TextStyle(
+                    color: Colors.white,
+                    fontSize: 10,
+                    fontWeight: FontWeight.w500,
+                  ),
+                ),
+              ),
+          ],
+        ),
+      ),
+    );
+  }
+
+  Widget _buildNotVotedChip(StateSetter setModalState) {
+    String key = 'Not Voted';
+    bool isSelected = selectedVoterHistory.contains(key);
+    return GestureDetector(
+      onTap: () {
+        setModalState(() {
+          if (isSelected) {
+            selectedVoterHistory.remove(key);
+          } else {
+            selectedVoterHistory.add(key);
+          }
+        });
+      },
+      child: Container(
+        width: 70,
+        height: 70,
+        decoration: BoxDecoration(
+          color: isSelected ? Colors.grey.withValues(alpha: 0.3) : Colors.grey[100],
+          borderRadius: BorderRadius.circular(12),
+          border: Border.all(
+            color: isSelected ? Colors.grey[600]! : Colors.grey[300]!,
+            width: 2,
+          ),
+        ),
+        child: Column(
+          mainAxisAlignment: MainAxisAlignment.center,
+          children: [
+            Container(
+              width: 32,
+              height: 32,
+              decoration: BoxDecoration(
+                color: Colors.red,
+                shape: BoxShape.circle,
+              ),
+              child: Icon(
+                Icons.close,
+                color: Colors.white,
+                size: 20,
+              ),
+            ),
           ],
         ),
       ),

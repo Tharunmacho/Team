@@ -1,6 +1,8 @@
 import 'package:flutter/material.dart';
+import 'package:url_launcher/url_launcher.dart';
 import 'voter_info_screen.dart';
 import 'phone_call_screen.dart';
+import '../widgets/unified_voter_filter.dart';
 
 class GuardianScreen extends StatefulWidget {
   const GuardianScreen({super.key});
@@ -548,22 +550,7 @@ class _GuardianScreenState extends State<GuardianScreen> {
                 mainAxisSize: MainAxisSize.min,
                 children: [
                   GestureDetector(
-                    onTap: () {
-                      Navigator.push(
-                        context,
-                        MaterialPageRoute(
-                          builder: (context) => PhoneCallScreen(
-                            voterName: voter.name,
-                            voterTamilName: voter.tamilName,
-                            phoneNumber: voter.mobileNumber,
-                            voterId: voter.voterId,
-                            doorNo: voter.doorNo,
-                            age: voter.age,
-                            gender: voter.gender,
-                          ),
-                        ),
-                      );
-                    },
+                    onTap: () => _makePhoneCall(voter.mobileNumber),
                     child: Container(
                       padding: EdgeInsets.all(8),
                       decoration: BoxDecoration(
@@ -905,29 +892,19 @@ class _GuardianScreenState extends State<GuardianScreen> {
               Expanded(
                 child: SingleChildScrollView(
                   padding: EdgeInsets.symmetric(horizontal: 20),
-                  child: Column(
-                    crossAxisAlignment: CrossAxisAlignment.start,
-                    children: [
-                      // Age filter
-                      _buildAgeFilter(setModalState),
-                      const SizedBox(height: 30),
-                      
-                      // Gender filter
-                      _buildGenderFilter(setModalState),
-                      const SizedBox(height: 30),
-                      
-                      // Political Party filter
-                      _buildPoliticalPartyFilter(setModalState),
-                      const SizedBox(height: 30),
-                      
-                      // Religion filter
-                      _buildReligionFilter(setModalState),
-                      const SizedBox(height: 30),
-                      
-                      // Voter Category filter
-                      _buildVoterCategoryFilter(setModalState),
-                      const SizedBox(height: 30),
-                    ],
+                  child: UnifiedVoterFilter(
+                    minAge: minAge,
+                    maxAge: maxAge,
+                    selectedGenders: selectedGenders,
+                    selectedVoterHistory: selectedVoterHistory,
+                    selectedVoterCategory: selectedVoterCategory,
+                    selectedPoliticalParty: selectedPoliticalParty,
+                    selectedReligion: selectedReligion,
+                    setModalState: setModalState,
+                    onAgeChanged: (min, max) {
+                      minAge = min;
+                      maxAge = max;
+                    },
                   ),
                 ),
               ),
@@ -1487,7 +1464,19 @@ class _GuardianScreenState extends State<GuardianScreen> {
     super.dispose();
   }
 
-
+  void _makePhoneCall(String phoneNumber) async {
+    final Uri launchUri = Uri(
+      scheme: 'tel',
+      path: phoneNumber,
+    );
+    try {
+      await launchUrl(launchUri);
+    } catch (e) {
+      ScaffoldMessenger.of(context).showSnackBar(
+        SnackBar(content: Text('Could not launch phone dialer')),
+      );
+    }
+  }
 }
 
 class GuardianVoter {

@@ -118,14 +118,14 @@ class _DashboardScreenState extends State<DashboardScreen> {
       body: SafeArea(
         child: Column(
           children: [
-            // Combined Header and Manager cards section with blue background
+            // Header and Manager cards section with blue background
             Container(
               width: double.infinity,
               decoration: BoxDecoration(
                 color: Color(0xFFE3F2FD), // Light blue background
                 borderRadius: BorderRadius.only(
-                  bottomLeft: Radius.circular(20),
-                  bottomRight: Radius.circular(20),
+                  bottomLeft: Radius.circular(25),
+                  bottomRight: Radius.circular(25),
                 ),
               ),
               child: Column(
@@ -216,13 +216,13 @@ class _DashboardScreenState extends State<DashboardScreen> {
                     padding: const EdgeInsets.fromLTRB(16, 0, 16, 25),
                     child: Row(
                       children: [
-                        _buildManagerCard('Cadre\nManager', 'assets/icons/cadre.png'),
+                        _buildManagerCard('Cadre\nManager', 'assets/icons/cadre_manager.png'),
                         const SizedBox(width: 12),
-                        _buildManagerCard('Voter\nManager', 'assets/icons/voter.png'),
+                        _buildManagerCard('Voter\nManager', 'assets/icons/voter_manager.png'),
                         const SizedBox(width: 12),
-                        _buildManagerCard('Family\nManager', 'assets/icons/part.png'),
+                        _buildManagerCard('Family\nManager', 'assets/icons/family_manager.png'),
                         const SizedBox(width: 12),
-                        _buildManagerCard('Survey\nManager', 'assets/icons/New.png'),
+                        _buildManagerCard('Survey\nManager', 'assets/icons/survey_manager.png'),
                       ],
                     ),
                   ),
@@ -239,7 +239,7 @@ class _DashboardScreenState extends State<DashboardScreen> {
                     
                     const SizedBox(height: 20),
                     
-                    // Search section
+                    // Search section - outside blue background
                     Container(
                       padding: const EdgeInsets.symmetric(horizontal: 16),
                       child: Row(
@@ -249,7 +249,13 @@ class _DashboardScreenState extends State<DashboardScreen> {
                               decoration: BoxDecoration(
                                 color: Colors.white,
                                 borderRadius: BorderRadius.circular(25),
-                                border: Border.all(color: Colors.grey[300]!),
+                                boxShadow: [
+                                  BoxShadow(
+                                    color: Colors.black.withOpacity(0.1),
+                                    blurRadius: 8,
+                                    offset: Offset(0, 2),
+                                  ),
+                                ],
                               ),
                               child: TextField(
                                 controller: _searchController,
@@ -262,13 +268,13 @@ class _DashboardScreenState extends State<DashboardScreen> {
                                   prefixIcon: Icon(
                                     Icons.search,
                                     color: Colors.grey[600],
+                                    size: 24,
                                   ),
                                   border: InputBorder.none,
-                                  contentPadding: EdgeInsets.symmetric(
-                                    horizontal: 20,
-                                    vertical: 15,
-                                  ),
+                                  contentPadding: EdgeInsets.symmetric(horizontal: 20, vertical: 15),
                                 ),
+                                onTap: () => _showAdvancedSearch(),
+                                readOnly: true,
                               ),
                             ),
                           ),
@@ -280,7 +286,13 @@ class _DashboardScreenState extends State<DashboardScreen> {
                               decoration: BoxDecoration(
                                 color: Colors.white,
                                 borderRadius: BorderRadius.circular(12),
-                                border: Border.all(color: Colors.grey[300]!),
+                                boxShadow: [
+                                  BoxShadow(
+                                    color: Colors.black.withOpacity(0.1),
+                                    blurRadius: 8,
+                                    offset: Offset(0, 2),
+                                  ),
+                                ],
                               ),
                               child: Icon(
                                 Icons.tune,
@@ -294,6 +306,8 @@ class _DashboardScreenState extends State<DashboardScreen> {
                     ),
                     
                     const SizedBox(height: 20),
+                    
+
                     
                     // Category grid section
                     Container(
@@ -563,20 +577,25 @@ class _DashboardScreenState extends State<DashboardScreen> {
                 children: [
                   _buildBottomNavItem('Report', Icons.trending_up_outlined),
                   _buildBottomNavItem('Catalogue', Icons.list_alt_outlined),
-                  Container(
-                    padding: EdgeInsets.all(16),
-                    decoration: BoxDecoration(
-                      color: Color(0xFF1976D2),
-                      shape: BoxShape.circle,
-                    ),
-                    child: Icon(
-                      Icons.home,
-                      color: Colors.white,
-                      size: 28,
+                  GestureDetector(
+                    onTap: () {
+                      // Already on home screen, do nothing or show a message
+                    },
+                    child: Container(
+                      padding: EdgeInsets.all(16),
+                      decoration: BoxDecoration(
+                        color: Color(0xFF1976D2),
+                        shape: BoxShape.circle,
+                      ),
+                      child: Icon(
+                        Icons.home,
+                        color: Colors.white,
+                        size: 28,
+                      ),
                     ),
                   ),
-                  _buildBottomNavItem('Slip Box', Icons.inventory_outlined),
-                  _buildBottomNavItem('Poll Day', Icons.how_to_vote_outlined),
+                  _buildBottomNavItem('Slip', Icons.inventory_outlined),
+                  _buildBottomNavItem('Poll', Icons.how_to_vote_outlined),
                 ],
               ),
             ),
@@ -621,28 +640,34 @@ class _DashboardScreenState extends State<DashboardScreen> {
           }
         },
         child: Container(
-          padding: EdgeInsets.all(16),
+          padding: EdgeInsets.all(12),
           decoration: BoxDecoration(
             color: Colors.white,
             borderRadius: BorderRadius.circular(12),
             border: Border.all(color: Color(0xFF1976D2), width: 1.5),
           ),
           child: Column(
+            mainAxisAlignment: MainAxisAlignment.center,
             children: [
               Image.asset(
                 iconPath,
                 width: 32,
                 height: 32,
-                color: Color(0xFF1976D2),
+                color: Colors.black,
               ),
-              const SizedBox(height: 8),
-              Text(
-                title,
-                textAlign: TextAlign.center,
-                style: TextStyle(
-                  fontSize: 12,
-                  fontWeight: FontWeight.w500,
-                  color: Colors.black87,
+              const SizedBox(height: 6),
+              Flexible(
+                child: Text(
+                  title,
+                  textAlign: TextAlign.center,
+                  style: TextStyle(
+                    fontSize: 11,
+                    fontWeight: FontWeight.w500,
+                    color: Colors.black87,
+                    height: 1.2,
+                  ),
+                  maxLines: 2,
+                  overflow: TextOverflow.ellipsis,
                 ),
               ),
             ],
@@ -728,29 +753,18 @@ class _DashboardScreenState extends State<DashboardScreen> {
       },
       child: Column(
         children: [
-          Container(
+          Image.asset(
+            iconPath,
             width: 60,
             height: 60,
-            decoration: BoxDecoration(
-              color: color.withValues(alpha: 0.1),
-              borderRadius: BorderRadius.circular(12),
-            ),
-            child: Padding(
-              padding: const EdgeInsets.all(16),
-              child: Image.asset(
-                iconPath,
-                width: 28,
-                height: 28,
-                fit: BoxFit.contain,
-                errorBuilder: (context, error, stackTrace) {
-                  return Icon(
-                    Icons.image_not_supported,
-                    size: 28,
-                    color: color,
-                  );
-                },
-              ),
-            ),
+            fit: BoxFit.contain,
+            errorBuilder: (context, error, stackTrace) {
+              return Icon(
+                Icons.image_not_supported,
+                size: 60,
+                color: color,
+              );
+            },
           ),
           const SizedBox(height: 8),
           Text(
@@ -902,12 +916,12 @@ class _DashboardScreenState extends State<DashboardScreen> {
             context,
             MaterialPageRoute(builder: (context) => CatalogueScreen()),
           );
-        } else if (title == 'Slip Box') {
+        } else if (title == 'Slip') {
           Navigator.push(
             context,
             MaterialPageRoute(builder: (context) => SlipBoxScreen()),
           );
-        } else if (title == 'Poll Day') {
+        } else if (title == 'Poll') {
           Navigator.push(
             context,
             MaterialPageRoute(builder: (context) => PollDayScreen()),

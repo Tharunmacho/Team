@@ -32,7 +32,7 @@ class _ProfileScreenState extends State<ProfileScreen> {
                       style: TextStyle(
                         fontSize: 24,
                         fontWeight: FontWeight.bold,
-                        color: Color(0xFF1976D2),
+                        color: Colors.black,
                       ),
                     ),
                   ),
@@ -85,7 +85,7 @@ class _ProfileScreenState extends State<ProfileScreen> {
                           ScaffoldMessenger.of(context).showSnackBar(
                             SnackBar(
                               content: Text('Profile updated successfully!'),
-                              backgroundColor: Color(0xFF1976D2),
+                              backgroundColor: Colors.black,
                             ),
                           );
                         },
@@ -126,7 +126,7 @@ class _ProfileScreenState extends State<ProfileScreen> {
           style: TextStyle(
             fontSize: 16,
             fontWeight: FontWeight.w500,
-            color: Colors.black87,
+            color: Colors.black,
           ),
         ),
         const SizedBox(height: 8),
@@ -135,8 +135,8 @@ class _ProfileScreenState extends State<ProfileScreen> {
           enabled: isEditable,
           style: TextStyle(
             fontSize: 16,
-            fontWeight: FontWeight.bold,
-            color: isEditable ? Colors.black87 : Colors.grey[600],
+            fontWeight: FontWeight.w500,
+            color: isEditable ? Colors.black : Colors.grey[600],
           ),
           decoration: InputDecoration(
             border: OutlineInputBorder(
@@ -149,7 +149,7 @@ class _ProfileScreenState extends State<ProfileScreen> {
             ),
             focusedBorder: OutlineInputBorder(
               borderRadius: BorderRadius.circular(8),
-              borderSide: BorderSide(color: Color(0xFF1976D2), width: 2),
+              borderSide: BorderSide(color: Colors.black, width: 2),
             ),
             disabledBorder: OutlineInputBorder(
               borderRadius: BorderRadius.circular(8),

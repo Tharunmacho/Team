@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:url_launcher/url_launcher.dart';
 import 'voter_info_screen.dart';
 
 class PollDayDetailsScreen extends StatefulWidget {
@@ -737,6 +738,25 @@ class _PollDayDetailsScreenState extends State<PollDayDetailsScreen> {
                     
                     const SizedBox(height: 8),
                     
+                    // Phone call button
+                    GestureDetector(
+                      onTap: () => _makePhoneCall(voter['phoneNumber'] ?? '9965161134'),
+                      child: Container(
+                        padding: EdgeInsets.all(8),
+                        decoration: BoxDecoration(
+                          color: Colors.blue.withOpacity(0.1),
+                          shape: BoxShape.circle,
+                        ),
+                        child: Icon(
+                          Icons.phone,
+                          color: Colors.blue,
+                          size: 16,
+                        ),
+                      ),
+                    ),
+                    
+                    const SizedBox(height: 8),
+                    
                     // Family count
                     Container(
                       padding: EdgeInsets.all(8),
@@ -789,5 +809,19 @@ class _PollDayDetailsScreenState extends State<PollDayDetailsScreen> {
         duration: Duration(seconds: 1),
       ),
     );
+  }
+
+  void _makePhoneCall(String phoneNumber) async {
+    final Uri launchUri = Uri(
+      scheme: 'tel',
+      path: phoneNumber,
+    );
+    try {
+      await launchUrl(launchUri);
+    } catch (e) {
+      ScaffoldMessenger.of(context).showSnackBar(
+        SnackBar(content: Text('Could not launch phone dialer')),
+      );
+    }
   }
 }

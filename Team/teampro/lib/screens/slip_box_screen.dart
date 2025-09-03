@@ -1,5 +1,7 @@
 import 'package:flutter/material.dart';
 import 'voter_slip_screen.dart';
+import 'catalogue_screen.dart';
+import 'poll_day_screen.dart';
 
 class SlipBoxScreen extends StatefulWidget {
   const SlipBoxScreen({super.key});
@@ -170,20 +172,25 @@ class _SlipBoxScreenState extends State<SlipBoxScreen> {
                     children: [
                       _buildBottomNavItem('Report', Icons.trending_up_outlined, false),
                       _buildBottomNavItem('Catalogue', Icons.list_alt_outlined, false),
-                      Container(
-                        padding: EdgeInsets.all(16),
-                        decoration: BoxDecoration(
-                          color: Color(0xFF1976D2),
-                          shape: BoxShape.circle,
-                        ),
-                        child: Icon(
-                          Icons.home,
-                          color: Colors.white,
-                          size: 28,
+                      GestureDetector(
+                        onTap: () {
+                          Navigator.pop(context); // Go back to dashboard
+                        },
+                        child: Container(
+                          padding: EdgeInsets.all(16),
+                          decoration: BoxDecoration(
+                            color: Color(0xFF1976D2),
+                            shape: BoxShape.circle,
+                          ),
+                          child: Icon(
+                            Icons.home,
+                            color: Colors.white,
+                            size: 28,
+                          ),
                         ),
                       ),
-                      _buildBottomNavItem('Slip Box', Icons.inventory_outlined, true),
-                      _buildBottomNavItem('Poll Day', Icons.how_to_vote_outlined, false),
+                      _buildBottomNavItem('Slip', Icons.inventory_outlined, true),
+                      _buildBottomNavItem('Poll', Icons.how_to_vote_outlined, false),
                     ],
                   ),
                 ),
@@ -406,24 +413,46 @@ class _SlipBoxScreenState extends State<SlipBoxScreen> {
   }
 
   Widget _buildBottomNavItem(String title, IconData icon, bool isSelected) {
-    return Column(
-      mainAxisSize: MainAxisSize.min,
-      children: [
-        Icon(
-          icon,
-          size: 24,
-          color: isSelected ? Color(0xFF1976D2) : Colors.black54,
-        ),
-        const SizedBox(height: 4),
-        Text(
-          title,
-          style: TextStyle(
-            fontSize: 10,
+    return GestureDetector(
+      onTap: () {
+        if (title == 'Catalogue') {
+          Navigator.pushReplacement(
+            context,
+            MaterialPageRoute(builder: (context) => CatalogueScreen()),
+          );
+        } else if (title == 'Poll') {
+          Navigator.pushReplacement(
+            context,
+            MaterialPageRoute(builder: (context) => PollDayScreen()),
+          );
+        } else if (!isSelected) {
+          ScaffoldMessenger.of(context).showSnackBar(
+            SnackBar(
+              content: Text('$title - Coming Soon!'),
+              duration: Duration(seconds: 1),
+            ),
+          );
+        }
+      },
+      child: Column(
+        mainAxisSize: MainAxisSize.min,
+        children: [
+          Icon(
+            icon,
+            size: 24,
             color: isSelected ? Color(0xFF1976D2) : Colors.black54,
-            fontWeight: isSelected ? FontWeight.bold : FontWeight.normal,
           ),
-        ),
-      ],
+          const SizedBox(height: 4),
+          Text(
+            title,
+            style: TextStyle(
+              fontSize: 10,
+              color: isSelected ? Color(0xFF1976D2) : Colors.black54,
+              fontWeight: isSelected ? FontWeight.bold : FontWeight.normal,
+            ),
+          ),
+        ],
+      ),
     );
   }
 }

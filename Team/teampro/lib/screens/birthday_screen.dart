@@ -592,22 +592,7 @@ class _BirthdayScreenState extends State<BirthdayScreen> {
                 mainAxisSize: MainAxisSize.min,
                 children: [
                   GestureDetector(
-                    onTap: () {
-                      Navigator.push(
-                        context,
-                        MaterialPageRoute(
-                          builder: (context) => PhoneCallScreen(
-                            voterName: voter.name,
-                            voterTamilName: voter.tamilName,
-                            phoneNumber: voter.mobileNumber,
-                            voterId: voter.voterId,
-                            doorNo: voter.doorNo,
-                            age: voter.age,
-                            gender: voter.gender,
-                          ),
-                        ),
-                      );
-                    },
+                    onTap: () => _makePhoneCall(voter.mobileNumber),
                     child: Container(
                       padding: EdgeInsets.all(8),
                       decoration: BoxDecoration(
@@ -722,82 +707,24 @@ class _BirthdayScreenState extends State<BirthdayScreen> {
   }
 
   void _showDatePicker() {
-    showModalBottomSheet(
+    showDatePicker(
       context: context,
-      isScrollControlled: true,
-      backgroundColor: Colors.transparent,
-      builder: (context) => Container(
-        height: MediaQuery.of(context).size.height * 0.85,
-        decoration: BoxDecoration(
-          color: Colors.white,
-          borderRadius: BorderRadius.only(
-            topLeft: Radius.circular(20),
-            topRight: Radius.circular(20),
-          ),
-        ),
-        child: Column(
-          children: [
-            // Header with close button
-            Container(
-              padding: EdgeInsets.all(20),
-              child: Row(
-                        children: [
-                          Text(
-                    'Birthday Calendar',
-                            style: TextStyle(
-                      fontSize: 20,
-                              fontWeight: FontWeight.bold,
-                            ),
-                          ),
-                  Spacer(),
-                  GestureDetector(
-                    onTap: () => Navigator.pop(context),
-                    child: Icon(Icons.close, size: 24),
-                          ),
-                        ],
-                      ),
-                    ),
-                    
-                    Expanded(
-              child: SingleChildScrollView(
-                padding: EdgeInsets.symmetric(horizontal: 20),
-                child: Column(
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  children: [
-                    // Quick date filters
-                    _buildQuickFilters(),
-                    const SizedBox(height: 24),
-                    
-                    // Month selector
-                    _buildMonthSelector(),
-                    const SizedBox(height: 24),
-                    
-                    // Age group filter
-                    _buildAgeGroupFilter(),
-                    const SizedBox(height: 24),
-                    
-                    // Upcoming birthdays toggle
-                    _buildUpcomingBirthdaysToggle(),
-                    const SizedBox(height: 24),
-                    
-                    // Calendar grid
-                    _buildCalendarGrid(),
-                    const SizedBox(height: 24),
-                    
-                    // Birthday statistics
-                    _buildBirthdayStatistics(),
-                    const SizedBox(height: 24),
-                    
-                    // Action buttons
-                    _buildActionButtons(),
-                  ],
-                ),
-              ),
-            ),
-          ],
-        ),
-      ),
-    );
+      initialDate: customSelectedDate ?? DateTime.now(),
+      firstDate: DateTime(1900),
+      lastDate: DateTime.now().add(Duration(days: 365)),
+      helpText: 'Select Birthday Date',
+      cancelText: 'Cancel',
+      confirmText: 'Select',
+    ).then((pickedDate) {
+      if (pickedDate != null) {
+        setState(() {
+          customSelectedDate = pickedDate;
+          selectedDateFilter = 'Custom';
+          // Filter voters for selected date
+          _applySimpleDateFilter();
+        });
+      }
+    });
   }
 
   Widget _buildDateFilterButton(String title) {
@@ -1331,32 +1258,31 @@ class _BirthdayScreenState extends State<BirthdayScreen> {
       path: phoneNumber,
     );
     try {
-      if (await canLaunchUrl(launchUri)) {
-        await launchUrl(launchUri);
-      } else {
-        if (mounted) {
-          ScaffoldMessenger.of(context).showSnackBar(
-            SnackBar(
-              content: Text('Could not launch phone dialer'),
-              backgroundColor: Colors.red,
-            ),
-          );
-        }
-      }
+      await launchUrl(launchUri);
     } catch (e) {
       if (mounted) {
         ScaffoldMessenger.of(context).showSnackBar(
-          SnackBar(
-            content: Text('Could not launch phone dialer'),
-            backgroundColor: Colors.red,
-          ),
+          SnackBar(content: Text('Could not launch phone dialer')),
         );
       }
     }
   }
 
+  void _applySimpleDateFilter() {
+    setState(() {
+      if (customSelectedDate != null) {
+        filteredVoters = allVoters.where((voter) {
+          return voter.birthDate.month == customSelectedDate!.month &&
+                 voter.birthDate.day == customSelectedDate!.day;
+        }).toList();
+      } else {
+        filteredVoters = allVoters;
+      }
+    });
+  }
 
-  // Enhanced calendar helper methods
+
+  // Simple calendar helper methods
   Widget _buildQuickFilters() {
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,

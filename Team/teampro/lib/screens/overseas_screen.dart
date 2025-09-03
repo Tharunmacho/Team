@@ -514,20 +514,7 @@ class _OverseasScreenState extends State<OverseasScreen> {
             mainAxisAlignment: MainAxisAlignment.spaceEvenly,
             children: [
               _buildCompactActionButton(Icons.call, () {
-                Navigator.push(
-                  context,
-                  MaterialPageRoute(
-                    builder: (context) => PhoneCallScreen(
-                      voterName: voter.name,
-                      voterTamilName: voter.tamilName,
-                      phoneNumber: voter.mobileNumber,
-                      voterId: voter.voterId,
-                      doorNo: voter.doorNo,
-                      age: voter.age,
-                      gender: voter.gender,
-                    ),
-                  ),
-                );
+                _makePhoneCall(voter.mobileNumber);
               }),
               _buildCompactActionButton(Icons.cake, () {
                 // Handle celebration
@@ -647,25 +634,11 @@ class _OverseasScreenState extends State<OverseasScreen> {
       path: phoneNumber,
     );
     try {
-      if (await canLaunchUrl(launchUri)) {
-        await launchUrl(launchUri);
-      } else {
-        if (mounted) {
-          ScaffoldMessenger.of(context).showSnackBar(
-            SnackBar(
-              content: Text('Could not launch phone dialer'),
-              backgroundColor: Colors.red,
-            ),
-          );
-        }
-      }
+      await launchUrl(launchUri);
     } catch (e) {
       if (mounted) {
         ScaffoldMessenger.of(context).showSnackBar(
-          SnackBar(
-            content: Text('Could not launch phone dialer'),
-            backgroundColor: Colors.red,
-          ),
+          SnackBar(content: Text('Could not launch phone dialer')),
         );
       }
     }
