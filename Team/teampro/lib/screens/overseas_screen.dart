@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:url_launcher/url_launcher.dart';
 import 'voter_info_screen.dart';
+import 'phone_call_screen.dart';
 
 class OverseasVoter {
   final int serialNo;
@@ -513,7 +514,20 @@ class _OverseasScreenState extends State<OverseasScreen> {
             mainAxisAlignment: MainAxisAlignment.spaceEvenly,
             children: [
               _buildCompactActionButton(Icons.call, () {
-                _makePhoneCall(voter.mobileNumber);
+                Navigator.push(
+                  context,
+                  MaterialPageRoute(
+                    builder: (context) => PhoneCallScreen(
+                      voterName: voter.name,
+                      voterTamilName: voter.tamilName,
+                      phoneNumber: voter.mobileNumber,
+                      voterId: voter.voterId,
+                      doorNo: voter.doorNo,
+                      age: voter.age,
+                      gender: voter.gender,
+                    ),
+                  ),
+                );
               }),
               _buildCompactActionButton(Icons.cake, () {
                 // Handle celebration
@@ -587,17 +601,19 @@ class _OverseasScreenState extends State<OverseasScreen> {
   }
 
   Widget _buildCompactActionButton(IconData icon, VoidCallback onTap) {
+    // Use green color for call button, orange for others
+    Color buttonColor = icon == Icons.call ? Colors.green : Colors.orange;
     return GestureDetector(
       onTap: onTap,
       child: Container(
         padding: EdgeInsets.all(8),
         decoration: BoxDecoration(
-          color: Colors.grey[100],
+          color: buttonColor,
           shape: BoxShape.circle,
         ),
         child: Icon(
           icon,
-          color: Colors.black54,
+          color: Colors.white,
           size: 18,
         ),
       ),
@@ -637,7 +653,7 @@ class _OverseasScreenState extends State<OverseasScreen> {
         if (mounted) {
           ScaffoldMessenger.of(context).showSnackBar(
             SnackBar(
-              content: Text('Could not launch phone app'),
+              content: Text('Could not launch phone dialer'),
               backgroundColor: Colors.red,
             ),
           );
@@ -647,7 +663,7 @@ class _OverseasScreenState extends State<OverseasScreen> {
       if (mounted) {
         ScaffoldMessenger.of(context).showSnackBar(
           SnackBar(
-            content: Text('Error making phone call: $e'),
+            content: Text('Could not launch phone dialer'),
             backgroundColor: Colors.red,
           ),
         );

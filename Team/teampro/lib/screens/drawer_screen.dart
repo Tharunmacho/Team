@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'profile_screen.dart';
 import 'catalogue_screen.dart';
+import 'elections_screen.dart';
 import 'settings_screen.dart';
 import 'language_screen.dart';
 import 'help_screen.dart';
@@ -18,21 +19,30 @@ class DrawerScreen extends StatelessWidget {
       body: SafeArea(
         child: Column(
           children: [
-            // Profile Header Section with Light Blue Background
+            // Modern Header with Wavy Background
             Container(
-              height: 280,
-              decoration: BoxDecoration(
-                gradient: LinearGradient(
-                  begin: Alignment.topCenter,
-                  end: Alignment.bottomCenter,
-                  colors: [
-                    Color(0xFFDBEAFE), // Light blue top
-                    Color(0xFFEFF6FF), // Lighter blue bottom
-                  ],
-                ),
-              ),
+              height: 200,
               child: Stack(
                 children: [
+                  // Wavy gradient background
+                  ClipPath(
+                    clipper: WaveClipper(),
+                    child: Container(
+                      height: 180,
+                      decoration: BoxDecoration(
+                        gradient: LinearGradient(
+                          begin: Alignment.topLeft,
+                          end: Alignment.bottomRight,
+                          colors: [
+                            Color(0xFF87CEEB), // Sky blue
+                            Color(0xFFE0F6FF), // Very light blue
+                            Color(0xFFB3E5FC), // Light blue
+                          ],
+                          stops: [0.0, 0.5, 1.0],
+                        ),
+                      ),
+                    ),
+                  ),
                   // Close button
                   Positioned(
                     top: 20,
@@ -43,12 +53,12 @@ class DrawerScreen extends StatelessWidget {
                         width: 36,
                         height: 36,
                         decoration: BoxDecoration(
-                          color: Colors.grey[300],
+                          color: Colors.white.withOpacity(0.9),
                           shape: BoxShape.circle,
                           boxShadow: [
                             BoxShadow(
-                              color: Colors.black.withValues(alpha: 0.1),
-                              blurRadius: 4,
+                              color: Colors.black.withOpacity(0.1),
+                              blurRadius: 8,
                               offset: Offset(0, 2),
                             ),
                           ],
@@ -61,48 +71,104 @@ class DrawerScreen extends StatelessWidget {
                       ),
                     ),
                   ),
-                  // Centered Profile content
+                  // Profile section with left-aligned layout
                   Positioned(
-                    top: 80,
-                    left: 0,
-                    right: 0,
-                    child: Column(
+                    top: 70,
+                    left: 24,
+                    right: 24,
+                    child: Row(
                       children: [
-                        // Profile picture - centered
-                        Container(
-                          width: 100,
-                          height: 100,
-                          decoration: BoxDecoration(
-                            shape: BoxShape.circle,
-                            color: Color(0xFF1976D2),
-                          ),
-                          child: Icon(
-                            Icons.person,
-                            color: Colors.white,
-                            size: 60,
-                          ),
+                        // Profile picture with camera icon
+                        Stack(
+                          children: [
+                            Container(
+                              width: 80,
+                              height: 80,
+                              decoration: BoxDecoration(
+                                shape: BoxShape.circle,
+                                color: Colors.white,
+                                boxShadow: [
+                                  BoxShadow(
+                                    color: Colors.black.withOpacity(0.15),
+                                    blurRadius: 12,
+                                    offset: Offset(0, 4),
+                                  ),
+                                ],
+                                border: Border.all(
+                                  color: Colors.white,
+                                  width: 3,
+                                ),
+                              ),
+                              child: ClipOval(
+                                child: Container(
+                                  color: Color(0xFF1976D2),
+                                  child: Icon(
+                                    Icons.person,
+                                    color: Colors.white,
+                                    size: 45,
+                                  ),
+                                ),
+                              ),
+                            ),
+                            // Camera icon overlay
+                            Positioned(
+                              bottom: 2,
+                              right: 2,
+                              child: Container(
+                                width: 24,
+                                height: 24,
+                                decoration: BoxDecoration(
+                                  color: Color(0xFF1976D2),
+                                  shape: BoxShape.circle,
+                                  border: Border.all(
+                                    color: Colors.white,
+                                    width: 2,
+                                  ),
+                                  boxShadow: [
+                                    BoxShadow(
+                                      color: Colors.black.withOpacity(0.2),
+                                      blurRadius: 4,
+                                      offset: Offset(0, 2),
+                                    ),
+                                  ],
+                                ),
+                                child: Icon(
+                                  Icons.camera_alt,
+                                  color: Colors.white,
+                                  size: 12,
+                                ),
+                              ),
+                            ),
+                          ],
                         ),
-                        const SizedBox(height: 20),
-                        // Name - centered
-                        Text(
-                          'ramachandran A...',
-                          style: TextStyle(
-                            fontSize: 22,
-                            fontWeight: FontWeight.bold,
-                            color: Colors.black87,
+                        const SizedBox(width: 16),
+                        // User info section
+                        Expanded(
+                          child: Column(
+                            crossAxisAlignment: CrossAxisAlignment.start,
+                            children: [
+                              // User name
+                              Text(
+                                'ramachandran A...',
+                                style: TextStyle(
+                                  fontSize: 20,
+                                  fontWeight: FontWeight.bold,
+                                  color: Colors.black,
+                                  letterSpacing: 0.5,
+                                ),
+                              ),
+                              const SizedBox(height: 4),
+                              // Role
+                              Text(
+                                'Super Admin',
+                                style: TextStyle(
+                                  fontSize: 14,
+                                  color: Colors.grey[600],
+                                  fontWeight: FontWeight.w500,
+                                ),
+                              ),
+                            ],
                           ),
-                          textAlign: TextAlign.center,
-                        ),
-                        const SizedBox(height: 8),
-                        // Role - centered
-                        Text(
-                          'Super Admin',
-                          style: TextStyle(
-                            fontSize: 16,
-                            color: Colors.grey[700],
-                            fontWeight: FontWeight.w500,
-                          ),
-                          textAlign: TextAlign.center,
                         ),
                       ],
                     ),
@@ -139,7 +205,7 @@ class DrawerScreen extends StatelessWidget {
                         Navigator.push(
                           context,
                           MaterialPageRoute(
-                            builder: (context) => const CatalogueScreen(),
+                            builder: (context) => const ElectionsScreen(),
                           ),
                         );
                       },
@@ -388,4 +454,46 @@ void _showChangePasswordDialog(BuildContext context) {
       );
     },
   );
+}
+
+// Custom clipper for wavy background
+class WaveClipper extends CustomClipper<Path> {
+  @override
+  Path getClip(Size size) {
+    var path = Path();
+    
+    // Start from top-left
+    path.lineTo(0.0, size.height - 30);
+    
+    // Create first wave
+    var firstControlPoint = Offset(size.width * 0.25, size.height - 50);
+    var firstEndPoint = Offset(size.width * 0.5, size.height - 30);
+    path.quadraticBezierTo(
+      firstControlPoint.dx, 
+      firstControlPoint.dy, 
+      firstEndPoint.dx, 
+      firstEndPoint.dy
+    );
+    
+    // Create second wave
+    var secondControlPoint = Offset(size.width * 0.75, size.height - 10);
+    var secondEndPoint = Offset(size.width, size.height - 30);
+    path.quadraticBezierTo(
+      secondControlPoint.dx, 
+      secondControlPoint.dy, 
+      secondEndPoint.dx, 
+      secondEndPoint.dy
+    );
+    
+    // Complete the path
+    path.lineTo(size.width, 0.0);
+    path.close();
+    
+    return path;
+  }
+
+  @override
+  bool shouldReclip(CustomClipper<Path> oldClipper) {
+    return false;
+  }
 }

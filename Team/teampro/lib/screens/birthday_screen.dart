@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:url_launcher/url_launcher.dart';
 import 'voter_info_screen.dart';
+import 'phone_call_screen.dart';
 
 class BirthdayVoter {
   final int serialNo;
@@ -591,7 +592,22 @@ class _BirthdayScreenState extends State<BirthdayScreen> {
                 mainAxisSize: MainAxisSize.min,
                 children: [
                   GestureDetector(
-                    onTap: () => _makePhoneCall(voter.mobileNumber),
+                    onTap: () {
+                      Navigator.push(
+                        context,
+                        MaterialPageRoute(
+                          builder: (context) => PhoneCallScreen(
+                            voterName: voter.name,
+                            voterTamilName: voter.tamilName,
+                            phoneNumber: voter.mobileNumber,
+                            voterId: voter.voterId,
+                            doorNo: voter.doorNo,
+                            age: voter.age,
+                            gender: voter.gender,
+                          ),
+                        ),
+                      );
+                    },
                     child: Container(
                       padding: EdgeInsets.all(8),
                       decoration: BoxDecoration(
@@ -1316,12 +1332,12 @@ class _BirthdayScreenState extends State<BirthdayScreen> {
     );
     try {
       if (await canLaunchUrl(launchUri)) {
-      await launchUrl(launchUri);
+        await launchUrl(launchUri);
       } else {
         if (mounted) {
           ScaffoldMessenger.of(context).showSnackBar(
             SnackBar(
-              content: Text('Could not launch phone app'),
+              content: Text('Could not launch phone dialer'),
               backgroundColor: Colors.red,
             ),
           );
@@ -1329,9 +1345,9 @@ class _BirthdayScreenState extends State<BirthdayScreen> {
       }
     } catch (e) {
       if (mounted) {
-      ScaffoldMessenger.of(context).showSnackBar(
+        ScaffoldMessenger.of(context).showSnackBar(
           SnackBar(
-            content: Text('Error making phone call: $e'),
+            content: Text('Could not launch phone dialer'),
             backgroundColor: Colors.red,
           ),
         );

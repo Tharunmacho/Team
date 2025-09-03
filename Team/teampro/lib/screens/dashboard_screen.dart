@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'dart:async';
 import 'part_numbers_screen.dart';
 import 'family_manager_screen.dart';
 import 'survey_screen.dart';
@@ -33,6 +34,7 @@ class _DashboardScreenState extends State<DashboardScreen> {
   final PageController _pageController = PageController();
   int _currentPage = 0;
   final GlobalKey<ScaffoldState> _scaffoldKey = GlobalKey<ScaffoldState>();
+  Timer? _autoSwipeTimer;
   
   // Election dropdown state
   String selectedElection = '119 - Thondamuthur';
@@ -69,87 +71,159 @@ class _DashboardScreenState extends State<DashboardScreen> {
   final TextEditingController _ageController = TextEditingController();
 
   @override
+  void initState() {
+    super.initState();
+    _startAutoSwipe();
+  }
+
+  @override
+  void dispose() {
+    _autoSwipeTimer?.cancel();
+    _pageController.dispose();
+    _searchController.dispose();
+    _mobileController.dispose();
+    _partNoController.dispose();
+    _serialNoController.dispose();
+    _epicIdController.dispose();
+    _voterFirstNameController.dispose();
+    _voterLastNameController.dispose();
+    _relationFirstNameController.dispose();
+    _relationLastNameController.dispose();
+    _ageController.dispose();
+    super.dispose();
+  }
+
+  void _startAutoSwipe() {
+    _autoSwipeTimer = Timer.periodic(Duration(seconds: 3), (timer) {
+      if (_pageController.hasClients && mounted) {
+        int nextPage = (_currentPage + 1) % 2; // 2 pages in carousel
+        _pageController.animateToPage(
+          nextPage,
+          duration: Duration(milliseconds: 500),
+          curve: Curves.easeInOut,
+        );
+      }
+    });
+  }
+
+  void _resetAutoSwipe() {
+    _autoSwipeTimer?.cancel();
+    _startAutoSwipe();
+  }
+
+  @override
   Widget build(BuildContext context) {
     return Scaffold(
       backgroundColor: Color(0xFFF5F7FA),
       body: SafeArea(
         child: Column(
           children: [
-            // Header section
+            // Combined Header and Manager cards section with blue background
             Container(
-              padding: const EdgeInsets.all(16),
-              child: Row(
+              width: double.infinity,
+              decoration: BoxDecoration(
+                color: Color(0xFFE3F2FD), // Light blue background
+                borderRadius: BorderRadius.only(
+                  bottomLeft: Radius.circular(20),
+                  bottomRight: Radius.circular(20),
+                ),
+              ),
+              child: Column(
                 children: [
-                  // Menu icon
-                  GestureDetector(
-                    onTap: () {
-                      Navigator.push(
-                        context,
-                        MaterialPageRoute(
-                          builder: (context) => DrawerScreen(),
+                  // Header section
+                  Container(
+                    padding: const EdgeInsets.all(16),
+                    child: Row(
+                      children: [
+                        // Menu icon
+                        GestureDetector(
+                          onTap: () {
+                            Navigator.push(
+                              context,
+                              MaterialPageRoute(
+                                builder: (context) => DrawerScreen(),
+                              ),
+                            );
+                          },
+                          child: Icon(
+                            Icons.menu,
+                            size: 28,
+                            color: Colors.black87,
+                          ),
                         ),
-                      );
-                    },
-                    child: Icon(
-                      Icons.menu,
-                      size: 28,
-                      color: Colors.black87,
-                    ),
-                  ),
-                  const SizedBox(width: 16),
-                  // Location dropdown
-                  Expanded(
-                    child: GestureDetector(
-                      onTap: () => _showElectionModal(),
-                      child: Container(
-                        padding: EdgeInsets.symmetric(horizontal: 12, vertical: 8),
-                        decoration: BoxDecoration(
-                          color: Colors.white,
-                          borderRadius: BorderRadius.circular(8),
-                          border: Border.all(color: Colors.grey[300]!),
-                        ),
-                        child: Row(
-                          children: [
-                            Text(
-                              selectedElection,
-                              style: TextStyle(
-                                fontSize: 16,
-                                fontWeight: FontWeight.w500,
-                                color: Colors.black87,
+                        const SizedBox(width: 16),
+                        // Location dropdown
+                        Expanded(
+                          child: GestureDetector(
+                            onTap: () => _showElectionModal(),
+                            child: Container(
+                              padding: EdgeInsets.symmetric(horizontal: 12, vertical: 8),
+                              decoration: BoxDecoration(
+                                color: Colors.white,
+                                borderRadius: BorderRadius.circular(8),
+                                border: Border.all(color: Colors.grey[300]!),
+                              ),
+                              child: Row(
+                                children: [
+                                  Text(
+                                    selectedElection,
+                                    style: TextStyle(
+                                      fontSize: 16,
+                                      fontWeight: FontWeight.w500,
+                                      color: Colors.black87,
+                                    ),
+                                  ),
+                                  Spacer(),
+                                  Icon(
+                                    Icons.keyboard_arrow_down,
+                                    color: Colors.black54,
+                                  ),
+                                ],
                               ),
                             ),
-                            Spacer(),
-                            Icon(
-                              Icons.keyboard_arrow_down,
-                              color: Colors.black54,
-                            ),
-                          ],
+                          ),
                         ),
-                      ),
+                        const SizedBox(width: 16),
+                        // Notification icon
+                        GestureDetector(
+                          onTap: () {
+                            Navigator.push(
+                              context,
+                              MaterialPageRoute(
+                                builder: (context) => NotificationsScreen(),
+                              ),
+                            );
+                          },
+                          child: Container(
+                            padding: EdgeInsets.all(8),
+                            decoration: BoxDecoration(
+                              color: Colors.black87,
+                              borderRadius: BorderRadius.circular(8),
+                            ),
+                            child: Icon(
+                              Icons.notifications_outlined,
+                              color: Colors.white,
+                              size: 24,
+                            ),
+                          ),
+                        ),
+                      ],
                     ),
                   ),
-                  const SizedBox(width: 16),
-                  // Notification icon
-                  GestureDetector(
-                    onTap: () {
-                      Navigator.push(
-                        context,
-                        MaterialPageRoute(
-                          builder: (context) => NotificationsScreen(),
-                        ),
-                      );
-                    },
-                    child: Container(
-                      padding: EdgeInsets.all(8),
-                      decoration: BoxDecoration(
-                        color: Colors.black87,
-                        borderRadius: BorderRadius.circular(8),
-                      ),
-                      child: Icon(
-                        Icons.notifications_outlined,
-                        color: Colors.white,
-                        size: 24,
-                      ),
+                  
+                  // Manager cards section
+                  Container(
+                    padding: const EdgeInsets.fromLTRB(16, 0, 16, 25),
+                    child: Row(
+                      children: [
+                        _buildManagerCard('Cadre\nManager', 'assets/icons/cadre.png'),
+                        const SizedBox(width: 12),
+                        _buildManagerCard('Voter\nManager', 'assets/icons/voter.png'),
+                        const SizedBox(width: 12),
+                        _buildManagerCard('Family\nManager', 'assets/icons/part.png'),
+                        const SizedBox(width: 12),
+                        _buildManagerCard('Survey\nManager', 'assets/icons/New.png'),
+                      ],
                     ),
                   ),
                 ],
@@ -163,7 +237,9 @@ class _DashboardScreenState extends State<DashboardScreen> {
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
                     
-                    // Search section
+                    const SizedBox(height: 20),
+                    
+                    // Search section (moved below manager cards)
                     Container(
                       padding: const EdgeInsets.symmetric(horizontal: 16),
                       child: Row(
@@ -219,24 +295,6 @@ class _DashboardScreenState extends State<DashboardScreen> {
                     
                     const SizedBox(height: 20),
                     
-                    // Manager cards section (like Image 2)
-                    Container(
-                      padding: const EdgeInsets.symmetric(horizontal: 16),
-                      child: Row(
-                        children: [
-                          _buildManagerCard('Cadre\nManager', 'assets/icons/cadre.png'),
-                          const SizedBox(width: 12),
-                          _buildManagerCard('Voter\nManager', 'assets/icons/voter.png'),
-                          const SizedBox(width: 12),
-                          _buildManagerCard('Family\nManager', 'assets/icons/part.png'),
-                          const SizedBox(width: 12),
-                          _buildManagerCard('Survey\nManager', 'assets/icons/New.png'),
-                        ],
-                      ),
-                    ),
-                    
-                    const SizedBox(height: 20),
-                    
                     // Category grid section
                     Container(
                       padding: const EdgeInsets.symmetric(horizontal: 16),
@@ -275,6 +333,8 @@ class _DashboardScreenState extends State<DashboardScreen> {
                           setState(() {
                             _currentPage = index;
                           });
+                          // Reset auto-swipe timer when user manually swipes
+                          _resetAutoSwipe();
                         },
                         children: [
                           Container(
@@ -395,8 +455,11 @@ class _DashboardScreenState extends State<DashboardScreen> {
                           ),
                           const SizedBox(height: 16),
                           Row(
+                            crossAxisAlignment: CrossAxisAlignment.start,
                             children: [
+                              // Large Total Cadres card on the left
                               Expanded(
+                                flex: 2,
                                 child: GestureDetector(
                                   onTap: () {
                                     Navigator.push(
@@ -404,7 +467,7 @@ class _DashboardScreenState extends State<DashboardScreen> {
                                       MaterialPageRoute(builder: (context) => MyCadreScreen()),
                                     );
                                   },
-                                  child: _buildStatCard(
+                                  child: _buildLargeStatCard(
                                     'Total\nCadres',
                                     '0',
                                     Color(0xFF1976D2),
@@ -413,61 +476,71 @@ class _DashboardScreenState extends State<DashboardScreen> {
                                 ),
                               ),
                               const SizedBox(width: 12),
+                              // 2x2 grid of smaller cards on the right
                               Expanded(
-                                child: GestureDetector(
-                                  onTap: () {
-                                    Navigator.push(
-                                      context,
-                                      MaterialPageRoute(builder: (context) => MyCadreScreen()),
-                                    );
-                                  },
-                                  child: _buildStatCard(
-                                    'Cadre\nActive',
-                                    '0',
-                                    Color(0xFF4CAF50),
-                                    null,
-                                  ),
-                                ),
-                              ),
-                              const SizedBox(width: 12),
-                              Expanded(
-                                child: GestureDetector(
-                                  onTap: () {
-                                    Navigator.push(
-                                      context,
-                                      MaterialPageRoute(builder: (context) => MyCadreScreen()),
-                                    );
-                                  },
-                                  child: _buildStatCard(
-                                    'Cadre\nInActive',
-                                    '0',
-                                    Color(0xFFF44336),
-                                    null,
-                                  ),
-                                ),
-                              ),
-                            ],
-                          ),
-                          const SizedBox(height: 12),
-                          Row(
-                            children: [
-                              Expanded(child: Container()), // Empty space
-                              const SizedBox(width: 12),
-                              Expanded(
-                                child: _buildStatCard(
-                                  'Logged\nIn',
-                                  '0',
-                                  Color(0xFF4CAF50),
-                                  null,
-                                ),
-                              ),
-                              const SizedBox(width: 12),
-                              Expanded(
-                                child: _buildStatCard(
-                                  'Not\nLogged',
-                                  '0',
-                                  Color(0xFFF44336),
-                                  null,
+                                flex: 3,
+                                child: Column(
+                                  children: [
+                                    Row(
+                                      children: [
+                                        Expanded(
+                                          child: GestureDetector(
+                                            onTap: () {
+                                              Navigator.push(
+                                                context,
+                                                MaterialPageRoute(builder: (context) => MyCadreScreen()),
+                                              );
+                                            },
+                                            child: _buildStatCard(
+                                              'Cadre\nActive',
+                                              '0',
+                                              Color(0xFF4CAF50),
+                                              null,
+                                            ),
+                                          ),
+                                        ),
+                                        const SizedBox(width: 12),
+                                        Expanded(
+                                          child: GestureDetector(
+                                            onTap: () {
+                                              Navigator.push(
+                                                context,
+                                                MaterialPageRoute(builder: (context) => MyCadreScreen()),
+                                              );
+                                            },
+                                            child: _buildStatCard(
+                                              'Cadre\nInActive',
+                                              '0',
+                                              Color(0xFFF44336),
+                                              null,
+                                            ),
+                                          ),
+                                        ),
+                                      ],
+                                    ),
+                                    const SizedBox(height: 12),
+                                    Row(
+                                      children: [
+                                        Expanded(
+                                          child: _buildStatCard(
+                                            'Logged\nIn',
+                                            '0',
+                                            Color(0xFF4CAF50),
+                                            null,
+                                          ),
+                                        ),
+                                        const SizedBox(width: 12),
+                                        Expanded(
+                                          child: _buildStatCard(
+                                            'Not\nLogged',
+                                            '0',
+                                            Color(0xFFF44336),
+                                            null,
+                                          ),
+                                        ),
+                                      ],
+                                    ),
+                                  ],
                                 ),
                               ),
                             ],
@@ -662,11 +735,21 @@ class _DashboardScreenState extends State<DashboardScreen> {
               color: color.withValues(alpha: 0.1),
               borderRadius: BorderRadius.circular(12),
             ),
-            child: Image.asset(
-              iconPath,
-              width: 28,
-              height: 28,
-              color: color,
+            child: Padding(
+              padding: const EdgeInsets.all(16),
+              child: Image.asset(
+                iconPath,
+                width: 28,
+                height: 28,
+                fit: BoxFit.contain,
+                errorBuilder: (context, error, stackTrace) {
+                  return Icon(
+                    Icons.image_not_supported,
+                    size: 28,
+                    color: color,
+                  );
+                },
+              ),
             ),
           ),
           const SizedBox(height: 8),
@@ -686,7 +769,11 @@ class _DashboardScreenState extends State<DashboardScreen> {
 
   Widget _buildStatCard(String title, String value, Color color, IconData? icon) {
     return Container(
-      padding: EdgeInsets.all(16),
+      constraints: BoxConstraints(
+        minHeight: 100,
+        maxHeight: 130,
+      ),
+      padding: EdgeInsets.all(12),
       decoration: BoxDecoration(
         color: Colors.white,
         borderRadius: BorderRadius.circular(12),
@@ -699,24 +786,32 @@ class _DashboardScreenState extends State<DashboardScreen> {
         ],
       ),
       child: Column(
+        mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+        mainAxisSize: MainAxisSize.min,
         children: [
-          if (icon != null) ...[
+          if (icon != null)
             Icon(
               icon,
-              size: 32,
+              size: 24,
               color: color,
-            ),
-            const SizedBox(height: 8),
-          ],
-          Text(
-            title,
-            textAlign: TextAlign.center,
-            style: TextStyle(
-              fontSize: 12,
-              color: Colors.black54,
+            )
+          else
+            SizedBox(height: 24), // Consistent spacing for cards without icons
+          
+          Flexible(
+            child: Text(
+              title,
+              textAlign: TextAlign.center,
+              style: TextStyle(
+                fontSize: 11,
+                color: Colors.black54,
+                fontWeight: FontWeight.w500,
+              ),
+              maxLines: 2,
+              overflow: TextOverflow.ellipsis,
             ),
           ),
-          const SizedBox(height: 4),
+          
           Container(
             width: 24,
             height: 24,
@@ -729,6 +824,65 @@ class _DashboardScreenState extends State<DashboardScreen> {
                 value,
                 style: TextStyle(
                   fontSize: 14,
+                  fontWeight: FontWeight.bold,
+                  color: Colors.white,
+                ),
+              ),
+            ),
+          ),
+        ],
+      ),
+    );
+  }
+
+  Widget _buildLargeStatCard(String title, String value, Color color, IconData? icon) {
+    return Container(
+      height: 220, // Taller to match the 2x2 grid height
+      padding: EdgeInsets.all(20),
+      decoration: BoxDecoration(
+        color: Colors.white,
+        borderRadius: BorderRadius.circular(12),
+        boxShadow: [
+          BoxShadow(
+            color: Colors.black.withValues(alpha: 0.05),
+            blurRadius: 10,
+            offset: Offset(0, 2),
+          ),
+        ],
+      ),
+      child: Column(
+        mainAxisAlignment: MainAxisAlignment.center,
+        children: [
+          if (icon != null) ...[
+            Icon(
+              icon,
+              size: 48,
+              color: color,
+            ),
+            const SizedBox(height: 16),
+          ],
+          Text(
+            title,
+            textAlign: TextAlign.center,
+            style: TextStyle(
+              fontSize: 16,
+              color: Colors.black54,
+              fontWeight: FontWeight.w500,
+            ),
+          ),
+          const SizedBox(height: 16),
+          Container(
+            width: 48,
+            height: 48,
+            decoration: BoxDecoration(
+              color: color,
+              borderRadius: BorderRadius.circular(8),
+            ),
+            child: Center(
+              child: Text(
+                value,
+                style: TextStyle(
+                  fontSize: 24,
                   fontWeight: FontWeight.bold,
                   color: Colors.white,
                 ),
@@ -1055,19 +1209,4 @@ class _DashboardScreenState extends State<DashboardScreen> {
     );
   }
 
-  @override
-  void dispose() {
-    _searchController.dispose();
-    _pageController.dispose();
-    _mobileController.dispose();
-    _partNoController.dispose();
-    _serialNoController.dispose();
-    _epicIdController.dispose();
-    _voterFirstNameController.dispose();
-    _voterLastNameController.dispose();
-    _relationFirstNameController.dispose();
-    _relationLastNameController.dispose();
-    _ageController.dispose();
-    super.dispose();
-  }
 }

@@ -1,5 +1,4 @@
 import 'package:flutter/material.dart';
-import 'package:url_launcher/url_launcher.dart';
 import 'voter_info_screen.dart';
 import 'phone_call_screen.dart';
 
@@ -140,9 +139,9 @@ class _GuardianScreenState extends State<GuardianScreen> {
                   Row(
                     children: [
                       GestureDetector(
-                        onTap: () => _showCustomDrawer(),
+                        onTap: () => Navigator.pop(context),
                         child: Icon(
-                          Icons.menu,
+                          Icons.arrow_back,
                           size: 28,
                           color: Colors.black87,
                         ),
@@ -549,7 +548,22 @@ class _GuardianScreenState extends State<GuardianScreen> {
                 mainAxisSize: MainAxisSize.min,
                 children: [
                   GestureDetector(
-                    onTap: () => _makePhoneCall(voter.mobileNumber),
+                    onTap: () {
+                      Navigator.push(
+                        context,
+                        MaterialPageRoute(
+                          builder: (context) => PhoneCallScreen(
+                            voterName: voter.name,
+                            voterTamilName: voter.tamilName,
+                            phoneNumber: voter.mobileNumber,
+                            voterId: voter.voterId,
+                            doorNo: voter.doorNo,
+                            age: voter.age,
+                            gender: voter.gender,
+                          ),
+                        ),
+                      );
+                    },
                     child: Container(
                       padding: EdgeInsets.all(8),
                       decoration: BoxDecoration(
@@ -1473,35 +1487,7 @@ class _GuardianScreenState extends State<GuardianScreen> {
     super.dispose();
   }
 
-  void _makePhoneCall(String phoneNumber) async {
-    final Uri launchUri = Uri(
-      scheme: 'tel',
-      path: phoneNumber,
-    );
-    try {
-      if (await canLaunchUrl(launchUri)) {
-        await launchUrl(launchUri);
-      } else {
-        if (mounted) {
-          ScaffoldMessenger.of(context).showSnackBar(
-            SnackBar(
-              content: Text('Could not launch phone app'),
-              backgroundColor: Colors.red,
-            ),
-          );
-        }
-      }
-    } catch (e) {
-      if (mounted) {
-        ScaffoldMessenger.of(context).showSnackBar(
-          SnackBar(
-            content: Text('Error making phone call: $e'),
-            backgroundColor: Colors.red,
-          ),
-        );
-      }
-    }
-  }
+
 }
 
 class GuardianVoter {
